@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+     {% if title %}
+        <title>{{ title }} - A1 Base Page</title>
+        {% else %}
+        <title>A1 Base Page!</title>
+     {% endif %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+</head>
+<body>
+        <div>
+            <a href="{{ url_for('main') }}">Home Page</a>
+            <a href="{{ url_for('login') }}">Login</a>
+        </div>
+        <hr>
+        {% with messaes = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for messages in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+</body>
+</html>
