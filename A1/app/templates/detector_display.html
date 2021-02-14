@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+   <div>
+    <!-- <img src="https://1onjea25cyhx3uvxgs4vu325-wpengine.netdna-ssl.com/wp-content/uploads/2020/06/HTML_Blog-scaled.jpeg" style="width: 100%"> -->
+    <h4> Total faces detected: {{display_dict['total_detected']}}  Total masked: {{display_dict['total_masked']}}</h4><br/>
+    <img src = "{{ display_dict['img_path'] }}" >
+   </div>
+{% endblock %}
+
+

@@ -13,6 +13,7 @@
         <div>
             <a href="{{ url_for('main') }}">Home Page</a>
             <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{url_for('detector_upload')}}">Upload</a>
         </div>
         <hr>
         {% with messaes = get_flashed_messages() %}
