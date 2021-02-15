@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Account For: {{ current_user.username }}!</h1>
+     <p class="change" align="Left"><a href="{{ url_for('change_password') }}">Change Password?</a></p>
+{% endblock %}

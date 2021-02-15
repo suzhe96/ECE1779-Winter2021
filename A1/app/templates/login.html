@@ -17,6 +17,7 @@
                 {% endfor %}
             </p>
             <p>{{ form.submit(class_="submit",placeholder='Submit') }}</p>
+            <p class="forgot" align="center"><a href="{{ url_for('forget_password') }}">Forgot Password?</a></p>
         </form>
  </div>
 {% endblock %}
