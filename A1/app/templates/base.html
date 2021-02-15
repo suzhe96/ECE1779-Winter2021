@@ -11,15 +11,23 @@
 </head>
 <body>
         <div>
-            <a href="{{ url_for('main') }}">Home Page</a>
+            <a href="{{ url_for('main') }}">Home</a>
+            {% if current_user.is_anonymous %}
             <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('register') }}">Register</a>
+            {% else %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+            <a href="{{ url_for('my_account') }}">My Account</a>
+            {% endif %}
         </div>
         <hr>
-        {% with messaes = get_flashed_messages() %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
         <ul>
-            {% for messages in messages %}
-            <li>{{ message }}</li>
+            {% for caterory, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
             {% endfor %}
         </ul>
         {% endif %}

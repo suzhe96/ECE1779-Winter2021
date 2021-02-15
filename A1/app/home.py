@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for
+from flask import render_template
 from app import a1_webapp
 
 
