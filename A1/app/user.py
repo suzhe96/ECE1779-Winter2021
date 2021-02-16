@@ -119,8 +119,6 @@ def reset_password(token):
 
 @a1_webapp.route('/register', methods=['GET', 'POST'])
 def register():
-    if current_user.is_authenticated:
-        return redirect(url_for('main'))
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -133,6 +131,7 @@ def register():
             return redirect('register')
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
+        user.is_admin = user.username in current_app.config["ADMIN_USER"]
         db.session.add(user)
         db.session.commit()
         flash('Congratulations, you Have Successfully Registered!')

@@ -1,8 +1,10 @@
-      body {
-        background-color: #F3EBF6;
-        font-family: 'Ubuntu', sans-serif;
+   body {
+      background: url('../image/background_a1.jpg') no-repeat center center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      background-size: cover;
+      -o-background-size: cover;
     }
-
     .main {
         background-color: #FFFFFF;
         width: 400px;
@@ -103,3 +105,5 @@
             border-radius: 0px;
         }
     }
+
+    .dropdown-menu .dropdown-item {display: inline-block; width: 100%; padding: 10px 5px;}

@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>Account For: {{ current_user.username }}!</h1>
-     <p class="change" align="Left"><a href="{{ url_for('change_password') }}">Change Password?</a></p>
+     <div class="home_text_box">
+        <div class="container">
+          <div class="card border-0 shadow my-5">
+            <div class="card-body p-5">
+              <h1 class="font-weight-light">Hi {{ current_user.username }}!</h1>
+                    <p class="lead">Below You Could Find Your Update History</p>
+            </div>
+          </div>
+        </div>
+    </div>
 {% endblock %}
