@@ -1,4 +1,5 @@
 import os
+import pymysql
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -18,3 +19,51 @@ class Config(object):
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
     ADMIN_USER = 'admin'
+
+ 
+'''
+Database initialization
+'''
+db_conn = None
+cur_config = None
+# will need to install mysql and set up user info
+# run the schema.sql to set up the database with schema tables and initial data
+
+
+DATABASE_LOCAL_CONFIG = {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "user": "admin",
+    "password": "ece1779pass",
+    "db": "a1db"
+}
+DATABASE_AWS_RDS_CONFIG = {
+    "host": "mydb.csj4dy0yam3g.us-east-1.rds.amazonaws.com",
+    "port": 3306,
+    "user": "admin",
+    "password": "ece1779pass",
+    "db": "mydb"
+}
+
+# initialize the database connection with app
+def init_db(env):
+    global db_conn
+    global cur_config
+
+    #db_conn = pymysql.connect(**DATABASE_LOCAL_CONFIG)
+    #cur_config = DATABASE_LOCAL_CONFIG
+
+    # AWS RDS set up
+    db_conn = pymysql.connect(**DATABASE_AWS_RDS_CONFIG)
+    cur_config = DATABASE_AWS_RDS_CONFIG
+
+def get_conn():
+    global db_conn
+    global cur_config
+    if not db_conn or not db_conn.open:
+        db_conn = pymysql.connect(**cur_config)
+    return db_conn
+
+# close database connection
+def close_db():
+    db_conn.close()
