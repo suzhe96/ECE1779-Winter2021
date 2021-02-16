@@ -1,4 +1,6 @@
 import os
+import sys
+import json
 import tempfile
 import cv2
 import requests
@@ -15,7 +17,7 @@ from FaceMaskDetection import pytorch_infer
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
 
-# https://stackoverflow.com/questions/10543940/check-if-a-url-to-an-image-is-up-and-exists-in-python
+# Ref: https://stackoverflow.com/questions/10543940/check-if-a-url-to-an-image-is-up-and-exists-in-python
 def __is_url_image(image_url):
     image_formats = ("image/png", "image/jpeg", "image/jpg")
     r = requests.head(image_url)
@@ -24,6 +26,9 @@ def __is_url_image(image_url):
     print("Not a image URL")
     return False
 
+def __get_render_template(html, title_in, param_in=None, error_in=None):
+    return render_template(html, title=title_in, param=param_in, error=error_in)
+
 
 @a1_webapp.route('/detector_upload_route', methods=['GET', 'POST'])
 def detector_upload():
@@ -31,27 +36,71 @@ def detector_upload():
         image_url = request.form['upload_url']
         image_file = request.files['upload_image']
         if image_url != '' and image_file.filename != '':
-            return render_template("detector_upload.html", title="Upload Image", error="Error: Mutiple input sources")
+            return __get_render_template("detector_upload.html", "Upload Image", error_in = "Error: Mutiple input sources")
         if image_url == '' and image_file.filename == '':
-            return render_template("detector_upload.html", title="Upload Image", error="Error: Empty input sources")
+            return __get_render_template("detector_upload.html", "Upload Image", error_in = "Error: Empty input sources")
 
         file_handle, path = tempfile.mkstemp()
         filename_original = path+"_original.jpeg"
         filename_detected = path+"_detected.png" 
         if image_url != '' and image_file.filename == '':
             if not validators.url(image_url) or not __is_url_image(image_url):
-                return render_template("detector_upload.html", title="Upload Image", error="Error: Invalid Image URL")
-            im = PILImage.open(urlopen(image_url))
-            im.save(filename_original) 
+                return __get_render_template("detector_upload.html", "Upload Image", error_in = "Error: Invalid Image URL")
+            try:
+                im = PILImage.open(urlopen(image_url))
+                im.save(filename_original) 
+            except:
+               return __get_render_template("detector_upload.html", "Upload Image", error_in = "Error: Bad image file from URL") 
         if image_url == '' and image_file.filename != '':
-            with Image(file=image_file) as img:
-                img.save(filename=filename_original)
-
-        total_detected, total_masked, image = pytorch_infer.entry(filename_original)
+            try:
+                with Image(file=image_file) as img:
+                    img.save(filename=filename_original)
+            except:
+                return __get_render_template("detector_upload.html", "Upload Image", error_in = "Error: Bad Image file")
+        
+        try:
+            total_detected, total_masked, image = pytorch_infer.entry(filename_original)
+        except:
+            return __get_render_template("detector_upload.html", "Upload Image", error_in = "Error: Face detection exception - try another image")
         cv2.imwrite(filename_detected, image)
-        display_dict = {"img_path": filename_detected, "total_detected": total_detected, "total_masked": total_masked}
-        os.remove(path)
+        param = {"img_path": filename_detected, "total_detected": total_detected, "total_masked": total_masked}
+        
 
         # TODO: DETECTED IMAGE QUERY FROM DB
-        return render_template("detector_display.html", title="Display Model Image", display_dict=display_dict)
-    return render_template("detector_upload.html", title="Upload Image", error='')
+
+        os.remove(path)
+        os.remove(filename_original)
+        os.remove(filename_detected)
+        return __get_render_template("detector_display.html", "Display Model Image", param_in = param)
+    if request.method == 'GET':
+        return __get_render_template("detector_upload.html", "Upload Image", error_in = None)
+
+@a1_webapp.route('/api/upload', methods=['GET','POST'])
+def api_upload():
+    failure_dict = {"success": "false", "error": {"code": 500, "message" : None}}
+    success_dict = {"success": "true", "payload": {"num_faces" : None, "num_masked": None, "num_unmasked" : None}}
+    if request.method == 'GET':
+        return __get_render_template("api_upload.html", "API upload for testing", error_in = None)
+    if request.method == 'POST':
+        image_file = request.files['file']
+        file_handle, path = tempfile.mkstemp()
+        filename_api = path+"_api.jpeg"
+        print(path)
+        try:
+            with Image(file=image_file) as img:
+                img.save(filename=filename_api)
+        except:
+            failure_dict["error"]["message"] = "Open image file error"
+            return json.dumps(failure_dict)
+
+        try: 
+            total_detected, total_masked, image = pytorch_infer.entry(filename_api)
+        except:
+            failure_dict["error"]["message"] = "Face Detector Error"
+            return json.dumps(failure_dict)
+        os.remove(path)
+        os.remove(filename_api)
+        success_dict["payload"]["num_faces"] = total_detected
+        success_dict["payload"]["num_masked"] = total_masked
+        success_dict["payload"]["num_unmasked"] = total_detected - total_masked
+        return json.dumps(success_dict)

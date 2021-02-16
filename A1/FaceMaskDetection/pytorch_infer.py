@@ -100,5 +100,8 @@ def inference(image,
 def entry(imgPath):
     img = cv2.imread(imgPath)
     # img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    l, total_masked, image = inference(img, show_result=False, target_shape=(360, 360))
+    try:
+        l, total_masked, image = inference(img, show_result=False, target_shape=(360, 360))
+    except:
+        raise Exception("pytorch infer exception")
     return len(l), total_masked, image
