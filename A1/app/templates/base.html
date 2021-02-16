@@ -7,26 +7,77 @@
         {% else %}
         <title>A1 Base Page!</title>
      {% endif %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <style>
+        div.home_text_box{
+        background-color:whitesmoke;
+        height: 700px;
+        width: 1300px;
+        text-align: center;
+        margin: 7em auto;
+        border-radius: 1.5em;
+    }
+    div.custom-file {
+      overflow: hidden;
+      text-align: center;
+    }
+
+    div.custom-file-input {
+      white-space: nowrap;
+    }
+
+    </style>
 </head>
 <body>
-        <div>
-            <a href="{{ url_for('main') }}">Home</a>
-            {% if current_user.is_anonymous %}
-            <a href="{{ url_for('login') }}">Login</a>
-            <a href="{{ url_for('register') }}">Register</a>
-            {% else %}
-            <a href="{{url_for('detector_upload')}}">Upload</a>
-            <a href="{{ url_for('logout') }}">Logout</a>
-            <a href="{{ url_for('my_account') }}">My Account</a>
-            {% endif %}
-        </div>
+        <nav class="navbar navbar-inverse">
+          <div class="container-fluid">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="#">ECE1779 FaceDetection</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="{{ url_for('main') }}">Home</a></li>
+                  {% if current_user.is_admin %}
+                      <li><a href="{{url_for('detector_upload')}}">Upload</a></li>
+                      <li><a href="{{ url_for('register') }}">Register</a></li>
+                      <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                       <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              My Account
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item" href="{{ url_for('change_password') }}">Forgot Password</a><br>
+                              <a class="dropdown_item" href="{{ url_for('my_account') }}">Your Account Info</a>
+
+                            </div>
+                      </li>
+                  {% elif current_user.is_anonymous %}
+                      <li><a href="{{ url_for('login') }}">Login</a><li>
+                  {% else %}
+                      <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                       <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              My Account
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item" href="{{ url_for('change_password') }}">Forgot Password</a><br>
+                              <a class="dropdown_item" href="{{ url_for('my_account') }}">Your Account Info</a>
+
+                            </div>
+                      </li>
+                  {% endif %}
+            </ul>
+          </div>
+        </nav>
         <hr>
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
         <ul>
             {% for caterory, message in messages %}
-                <div class="alert alert-{{ category }}">
+                <div class="alert alert-{{ category }}" align="center" style="color:red; font-size:30px;">
                     {{ message }}
                 </div>
             {% endfor %}

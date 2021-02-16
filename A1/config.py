@@ -17,3 +17,4 @@ class Config(object):
     MAIL_PASSWORD = '88admin88'
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
+    ADMIN_USER = 'admin'
