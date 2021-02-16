@@ -11,6 +11,13 @@ class user_list(db.Model):
         
 
 class image_list(db.Model):
-    imagename = db.Column(db.String(100), unique=True, nullable=False, primary_key=True)
-    username = db.Column(db.String(20), unique=True, nullable=False)
+	__tablename__ = 'Image'
 
+	username = db.Column(db.String(20), unique=True, nullable=False)
+    imagename = db.Column(db.String(100), unique=True, nullable=False, primary_key=True)
+    image_url=db.Column(db.String(100), primary_key=True)
+    upload_hist = db.Column(db.Integer)
+        # 0 : image with no faces
+        # 1 : image with all faces are wearing mask
+        # 2 : image with no faces are wearing mask
+        # 3 : image with only some faces
