@@ -5,6 +5,8 @@ from app.models import User
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from flask_mail import Mail, Message
+from threading import Thread
+import json
 
 
 @a1_webapp.route('/user_login', methods=['GET', 'POST'])
@@ -17,7 +19,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
+            flash('Invalid username or password', 'warning')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
@@ -34,16 +36,22 @@ def logout():
     return redirect(url_for('main'))
 
 
-def send_email(recipient, subject, template, **kwargs):
+def send_async_email(app, msg):
     mail = Mail(a1_webapp)
+    with app.app_context():
+        mail.send(msg)
 
+
+def send_email(recipient, subject, template, **kwargs):
+ #   mail = Mail(a1_webapp)
     msg = Message(
         current_app.config['EMAIL_SUBJECT_PREFIX'] + ' ' + subject,
         sender='kevingarnett03@gmail.com',
         recipients=[recipient])
     msg.body = render_template(template + '.txt', **kwargs)
     msg.html = render_template(template + '.html', **kwargs)
-    mail.send(msg)
+#    mail.send(msg)
+    Thread(target=send_async_email, args=(a1_webapp, msg)).start()
 
 
 @a1_webapp.route('/forget_password', methods=['GET', 'POST'])
@@ -54,7 +62,7 @@ def forget_password():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user is None:
-            flash('Invalid Email Address')
+            flash('Invalid Email Address', 'danger')
             return render_template('email_reset_password.html', form=form)
         else:
             token = user.generate_password_reset_token()
@@ -68,7 +76,7 @@ def forget_password():
                 next=request.args.get('next'))
         flash(
             'A password reset link has been sent to {}.'.format(
-                form.email.data), 'warning')
+                form.email.data), 'info')
         return redirect(url_for('login'))
     return render_template('email_reset_password.html', form=form)
 
@@ -77,17 +85,16 @@ def forget_password():
 @login_required
 def change_password():
     """Change an existing user's password."""
-    badge_list = []
     form = ChangePasswordForm()
     if form.validate_on_submit():
         if current_user.check_password(form.old_password.data):
             current_user.set_password(form.new_password.data)
             db.session.add(current_user)
             db.session.commit()
-            flash('Your password has been updated.', 'form-success')
+            flash('Your password has been updated.', "success")
             return redirect(url_for('main'))
         else:
-            flash('Original password is invalid.', 'form-error')
+            flash('Original password is invalid/Username is not assigned to you.', 'danger')
     return render_template(
         'change_password.html',
         title='change password',
@@ -104,14 +111,14 @@ def reset_password(token):
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user is None:
-            flash('Invalid email address.', 'form-error')
+            flash('Invalid email address.', 'danger')
             return redirect(url_for('main'))
         if user.reset_password(token, form.new_password.data):
-            flash('Your password has been updated.', 'form-success')
+            flash('Your password has been updated.', 'success')
             return redirect(url_for('login'))
         else:
             flash('The password reset link is invalid or has expired.',
-                  'form-error')
+                  'danger')
             return redirect(url_for('main'))
     return render_template(
         'reset_password.html', form=form)
@@ -123,18 +130,18 @@ def register():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user is not None and user.email == form.email.data:
-            flash('The Username Already Existed')
+            flash('The Username Already Existed', 'danger')
             return redirect('register')
         user = User.query.filter_by(username=form.username.data).first()
         if user is not None and user.username == form.username.data:
-            flash('The Email Already Registered')
+            flash('The Email Already Registered', "danger")
             return redirect('register')
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
         user.is_admin = user.username in current_app.config["ADMIN_USER"]
         db.session.add(user)
         db.session.commit()
-        flash('Congratulations, you Have Successfully Registered!')
+        flash('Congratulations, you Have Successfully Registered!', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -142,3 +149,27 @@ def register():
 @a1_webapp.route('/account', methods=['GET'])
 def my_account():
     return render_template('account.html', title='My_Account')
+
+
+@a1_webapp.route('/api/register', methods=['POST'])
+def api_register():
+    '''
+    this is for the project tester usage
+    :return:
+    '''
+
+    failure_dict = {"success": "false", "error": {"code": 500, "message": "Register Error!"}}
+    success_dict = {"success": "true"}
+    data = request.form
+    tester_username = data['username']
+    tester_password = data['password']
+    user = User.query.filter_by(username=tester_username).first()
+    if user is not None and user.username == tester_username:
+        return json.dumps(failure_dict)
+    user = User(username=tester_username)
+    user.set_password(tester_password)
+    user.is_admin = user.username in current_app.config["ADMIN_USER"]
+    db.session.add(user)
+    db.session.commit()
+    return json.dumps(success_dict)
+

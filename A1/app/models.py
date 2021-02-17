@@ -1,4 +1,4 @@
-from app import db
+from app import db, bcrypt
 from flask_login import UserMixin
 from app import login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -23,10 +23,10 @@ class User(db.Model, UserMixin):
         return '<User {}>'.format(self.username)
 
     def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
+        self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
 
     def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
+        return bcrypt.check_password_hash(self.password_hash, password)
 
     def generate_password_reset_token(self, expiration=3600):
         '''
@@ -44,7 +44,7 @@ class User(db.Model, UserMixin):
             return False
         if data.get('reset') != self.id:
             return False
-        self.password_hash = generate_password_hash(new_password)
+        self.password_hash = bcrypt.generate_password_hash(new_password).decode('utf-8')
         db.session.add(self)
         db.session.commit()
         return True
