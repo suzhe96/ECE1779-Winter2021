@@ -49,6 +49,6 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 START TRANSACTION;
 USE `ECE1779_A1_DB`;
 INSERT INTO `ECE1779_A1_DB`.`users` (`id`, `username`, `email`, `password_hash`, `is_admin`) 
-VALUES (1, 'admin', 'ece1779a1winter2021@gmail.com', 'hashed', TRUE);
+VALUES (1, 'admin', 'ece1779a1winter2021@gmail.com', '$2b$12$ahjRDXT303iFeMmu8Dm3GeAw9lNd7Qjmy9d7gjvibzRhMyUDDSBi2', TRUE);
 
 COMMIT;

@@ -12,7 +12,8 @@ from PIL import Image as PILImage
 from wand.image import Image
 from flask import render_template, request, session, redirect, url_for, g
 from flask_login import current_user
-from app import a1_webapp
+from app import a1_webapp, db
+from app.models import Users
 from app.dbhandler import get_db
 from FaceMaskDetection import pytorch_infer
 
@@ -122,6 +123,14 @@ def api_upload():
         return __get_render_template("api_upload.html", "API upload for testing", error_in = None)
     if request.method == 'POST':
         image_file = request.files['file']
+        __username = request.form['username']
+        __password = request.form['password']
+
+        user = Users.query.filter_by(username=__username).first()
+        if user is None or not user.check_password(__password):
+            failure_dict["error"]["message"] = "Invalid authentication"
+            return json.dumps(failure_dict) 
+
         file_handle, path = tempfile.mkstemp()
         filename_api = path+"_api.jpeg"
         print(path)

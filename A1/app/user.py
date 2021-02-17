@@ -18,9 +18,9 @@ def login():
     # below if statement check if forms field non empty
     if form.validate_on_submit():
         user = Users.query.filter_by(username=form.username.data).first()
-        # if user is None or not user.check_password(form.password.data):
-        #     flash('Invalid username or password', 'warning')
-        #     return redirect(url_for('login'))
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password', 'warning')
+            return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
