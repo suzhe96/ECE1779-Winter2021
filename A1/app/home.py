@@ -20,7 +20,8 @@ def main():
         cursor.execute(query, (__username,))
         row = cursor.fetchall()
         if not row:
-            raise Exception('Get image empty row')
+            print("Get image empty row")
+            # raise Exception('Get image empty row')
     except:
         raise Exception('Get query from RDB exception')
 

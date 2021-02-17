@@ -3,7 +3,7 @@ from app import a1_webapp
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, ValidationError, DataRequired, Email, EqualTo, InputRequired, Length
-from app.models import User
+from app.models import Users
 from wtforms.fields.html5 import EmailField
 
 
@@ -22,12 +22,12 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
     def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
+        user = Users.query.filter_by(username=username.data).first()
         if user is not None:
             raise ValidationError('User Name Already Existed.')
 
     def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
+        user = Users.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('Email Address Is Already Registered')
 
@@ -70,5 +70,5 @@ class ResetPasswordForm(FlaskForm):
     submit = SubmitField('Reset password')
 
     def validate_email(self, field):
-        if User.query.filter_by(email=field.data).first() is None:
+        if Users.query.filter_by(email=field.data).first() is None:
             raise ValidationError('Unknown email address.')

@@ -1,8 +1,8 @@
 DATABASE_LOCAL_CONFIG = {
     "host": "127.0.0.1",
     "port": 3306,
-    "user": "NAME",
-    "password": "PWD",
+    "user": "USERNAME",
+    "password": "PASSWORD",
     "db": "ECE1779_A1_DB"
 }
 
