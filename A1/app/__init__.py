@@ -1,18 +1,15 @@
 from flask import Flask
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
-# FIXME,delete flask_migrate after
-from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 
 
 a1_webapp = Flask(__name__)
 a1_webapp.config.from_object(Config)
-a1_webapp.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://USERNAME:PASSWORD@localhost/ECE1779_A1_DB'
+a1_webapp.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:ece1779pass@localhost/ECE1779_A1_DB'
 db = SQLAlchemy(a1_webapp)
 bcrypt = Bcrypt(a1_webapp)
-migrate = Migrate(a1_webapp, db)
 login_manager = LoginManager(a1_webapp)
 login_manager.login_view = 'login'
 
