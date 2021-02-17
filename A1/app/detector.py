@@ -12,10 +12,11 @@ from PIL import Image as PILImage
 from wand.image import Image
 from flask import render_template, request, session, redirect, url_for, g
 from flask_login import current_user
-from app import a1_webapp, db
-from app.models import Users
-from app.dbhandler import get_db
+from app import a1_webapp
+from app.dbhandler import get_db, s3, BUCKET_NAME
 from FaceMaskDetection import pytorch_infer
+from werkzeug.utils import secure_filename
+
 
 '''TODO: TRY TO REMOVE THE LINE AFTER DEPLOY TO EC2
 '''
@@ -91,6 +92,18 @@ def detector_upload():
         
 
         # TODO: DETECTED IMAGE QUERY FROM DB
+        if image_file:
+            filename = secure_filename(image_file.filename)
+            image_file.save(filename)
+            s3.upload_file(
+                Bucket = BUCKET_NAME,
+                Filename=filename,
+                Key = filename
+            )
+            msg = "Upload Done !"
+        
+        
+        
         __username = current_user.username
         print("__username:{}".format(__username))
         cnx = get_db(Debug=True)
@@ -111,7 +124,7 @@ def detector_upload():
         os.remove(path)
         os.remove(filename_original)
         os.remove(filename_detected)
-        return __get_render_template("detector_display.html", "Display Model Image", param_in = param)
+        return __get_render_template("detector_display.html", "Display Model Image", param_in = param, msg = msg)
     if request.method == 'GET':
         return __get_render_template("detector_upload.html", "Upload Image", error_in = None)
 
@@ -123,14 +136,6 @@ def api_upload():
         return __get_render_template("api_upload.html", "API upload for testing", error_in = None)
     if request.method == 'POST':
         image_file = request.files['file']
-        __username = request.form['username']
-        __password = request.form['password']
-
-        user = Users.query.filter_by(username=__username).first()
-        if user is None or not user.check_password(__password):
-            failure_dict["error"]["message"] = "Invalid authentication"
-            return json.dumps(failure_dict) 
-
         file_handle, path = tempfile.mkstemp()
         filename_api = path+"_api.jpeg"
         print(path)
