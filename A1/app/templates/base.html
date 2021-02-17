@@ -12,6 +12,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/alert.css') }}">
     <style>
         div.home_text_box{
         background-color:whitesmoke;
@@ -29,7 +30,6 @@
     div.custom-file-input {
       white-space: nowrap;
     }
-
     </style>
 </head>
 <body>
@@ -49,7 +49,7 @@
                               My Account
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                              <a class="dropdown-item" href="{{ url_for('change_password') }}">Forgot Password</a><br>
+                              <a class="dropdown-item" href="{{ url_for('change_password') }}">Change Password</a><br>
                               <a class="dropdown_item" href="{{ url_for('my_account') }}">Your Account Info</a>
 
                             </div>
@@ -63,7 +63,7 @@
                               My Account
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                              <a class="dropdown-item" href="{{ url_for('change_password') }}">Forgot Password</a><br>
+                              <a class="dropdown-item" href="{{ url_for('change_password') }}">Change Password</a><br>
                               <a class="dropdown_item" href="{{ url_for('my_account') }}">Your Account Info</a>
 
                             </div>
@@ -73,17 +73,19 @@
           </div>
         </nav>
         <hr>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        <ul>
-            {% for caterory, message in messages %}
-                <div class="alert alert-{{ category }}" align="center" style="color:red; font-size:30px;">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
+        <div class = "container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                <ul>
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{category}}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {% endwith %}
+        </div>
         {% block content %}{% endblock %}
 </body>
 </html>
