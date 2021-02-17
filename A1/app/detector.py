@@ -3,13 +3,17 @@ import sys
 import json
 import tempfile
 import cv2
+import time
 import requests
 import validators
+import mysql.connector
 from urllib.request import urlopen
 from PIL import Image as PILImage
 from wand.image import Image
-from flask import render_template, request, session, redirect, url_for
+from flask import render_template, request, session, redirect, url_for, g
+from flask_login import current_user
 from app import a1_webapp
+from app.dbhandler import get_db
 from FaceMaskDetection import pytorch_infer
 
 '''TODO: TRY TO REMOVE THE LINE AFTER DEPLOY TO EC2
@@ -26,8 +30,27 @@ def __is_url_image(image_url):
     print("Not a image URL")
     return False
 
+
 def __get_render_template(html, title_in, param_in=None, error_in=None):
     return render_template(html, title=title_in, param=param_in, error=error_in)
+
+
+def __get_image_category(total_detected, total_masked):
+    '''
+    1: Images with no faces detected
+    2: Images with all faces masked
+    3: Images with no face masked
+    4: Images with some faces masked
+    '''
+    if total_detected == 0: return 1
+    if total_detected == total_masked: return 2
+    if total_masked == 0: return 3
+    return 4
+
+
+def __get_timestamp_string():
+    timestamp = time.time()
+    return str(timestamp).split('.')[0] + str(timestamp).split('.')[1]
 
 
 @a1_webapp.route('/detector_upload_route', methods=['GET', 'POST'])
@@ -67,6 +90,22 @@ def detector_upload():
         
 
         # TODO: DETECTED IMAGE QUERY FROM DB
+        __username = current_user.username
+        print("__username:{}".format(__username))
+        cnx = get_db(Debug=True)
+        cursor = cnx.cursor()
+
+        query = '''SELECT id FROM users WHERE username = %s'''
+        cursor.execute(query, (__username,))
+        __user_id = cursor.fetchone()[0]
+        print("__user_id:{}".format(__user_id))
+        __category = __get_image_category(total_detected, total_masked)
+        print("__category:{}".format(__category))
+        __image_key = __get_timestamp_string()
+        print("__image_key:{}".format(__image_key))
+        query = '''INSERT INTO images (category, user_id, image_key) VALUES (%s,%s,%s)'''
+        cursor.execute(query, (__category,__user_id,__image_key))
+        cnx.commit()
 
         os.remove(path)
         os.remove(filename_original)
