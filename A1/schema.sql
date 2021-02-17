@@ -20,7 +20,7 @@ DROP TABLE IF EXISTS `ECE1779_A1_DB`.`users`;
 CREATE TABLE IF NOT EXISTS `users` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `username` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255) NULL,
     `password_hash` VARCHAR(255) NOT NULL,
     `is_admin` BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (`id`)

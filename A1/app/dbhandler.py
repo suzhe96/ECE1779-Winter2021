@@ -4,6 +4,7 @@ from app import a1_webapp
 from app.dbconfig import *
 import boto3, botocore
 
+
 def connect_to_database_debug():
     return mysql.connector.connect(user=DATABASE_LOCAL_CONFIG['user'],
                                    password=DATABASE_LOCAL_CONFIG['password'],

@@ -10,7 +10,7 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     EMAIL_SUBJECT_PREFIX = '{app_name} Admin <{email}>'.format(
-        app_name=APP_NAME, email='kevingarnett03@gmail.com')
+        app_name=APP_NAME, email='ece1779a1winter2021.com')
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 465
     MAIL_USERNAME = 'ece1779a1winter2021@gmail.com'

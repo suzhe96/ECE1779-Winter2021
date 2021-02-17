@@ -62,7 +62,7 @@ def forget_password():
     if form.validate_on_submit():
         user = Users.query.filter_by(email=form.email.data).first()
         if user is None:
-            flash('Invalid Email Address', 'danger')
+            flash('Invalid Email Address]', 'danger')
             return render_template('email_reset_password.html', form=form)
         else:
             token = user.generate_password_reset_token()
@@ -161,8 +161,10 @@ def api_register():
     failure_dict = {"success": "false", "error": {"code": 500, "message": "Register Error!"}}
     success_dict = {"success": "true"}
     data = request.form
-    tester_username = data['username']
-    tester_password = data['password']
+    tester_username = request.form['username']
+    tester_password = request.form['password']
+    if not tester_username or not tester_password:
+        return json.dumps(failure_dict)
     user = Users.query.filter_by(username=tester_username).first()
     if user is not None and user.username == tester_username:
         return json.dumps(failure_dict)
