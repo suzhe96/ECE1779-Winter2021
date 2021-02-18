@@ -42,4 +42,4 @@ s3 = boto3.client(
     aws_secret_access_key='AWS_SECRET_ACCESS_KEY'
 )
 
-BUCKET_NAME = 'a1container'
+BUCKET_NAME = 'a1-db'
