@@ -13,7 +13,7 @@ from wand.image import Image
 from flask import render_template, request, session, redirect, url_for, g
 from flask_login import current_user
 from app import a1_webapp
-from app.dbhandler import get_db, s3, BUCKET_NAME
+from app.dbhandler import get_db, s3, BUCKET_NAME, BUCKET_LOCATION
 from FaceMaskDetection import pytorch_infer
 from werkzeug.utils import secure_filename
 
@@ -98,12 +98,16 @@ def detector_upload():
             s3.upload_file(
                 Bucket = BUCKET_NAME,
                 Filename=filename,
-                Key = filename
+                Key = filename,
+                ExtraArgs={'ACL': 'public-read'}
             )
-            msg = "Upload Done !"
+            msg = "Upload Done!"
+         else Exception as e:
+        	print("upload failed ", e)
+        	return e
         
         
-        
+      
         __username = current_user.username
         print("__username:{}".format(__username))
         cnx = get_db(Debug=True)
