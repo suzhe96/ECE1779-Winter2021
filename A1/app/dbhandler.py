@@ -42,3 +42,4 @@ s3 = boto3.client(
 )
 
 BUCKET_NAME = 'a1-db'
+BUCKET_LOCATION = 'http://{}.s3.amazonaws.com/'.format(BUCKET_NAME)
