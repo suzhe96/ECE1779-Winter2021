@@ -8,6 +8,7 @@ DATABASE_LOCAL_CONFIG = {
     "db": "ECE1779_A1_DB"
 }
 
+# S3 bucket need to be pre-created as public access
 AWS_S3_CONFIG = {
     "aws_access_key": "AKIAUA6L6EDR3WYDNCPU",
     "aws_secret_access_key": "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",
