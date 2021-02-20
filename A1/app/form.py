@@ -1,10 +1,11 @@
 from flask import render_template, redirect, url_for
-from app import a1_webapp
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, ValidationError, DataRequired, Email, EqualTo, InputRequired, Length
-from app.models import Users
 from wtforms.fields.html5 import EmailField
+from wtforms.validators import DataRequired, ValidationError, DataRequired, Email, EqualTo, InputRequired, Length
+
+from app import a1_webapp
+from app.models import Users
 
 
 class LoginForm(FlaskForm):
@@ -30,6 +31,17 @@ class RegistrationForm(FlaskForm):
         user = Users.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('Email Address Is Already Registered')
+
+
+class DeletionForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    username_confirm = StringField(
+        'Username_confirm',
+        validators=[
+            InputRequired(),
+            EqualTo('username', 'username must match.')
+        ])
+    submit = SubmitField('Delete Acount')
 
 
 class ChangePasswordForm(FlaskForm):

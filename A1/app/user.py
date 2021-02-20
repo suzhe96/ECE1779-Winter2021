@@ -1,12 +1,27 @@
 from flask import render_template, redirect, flash, url_for, request, current_app
 from app import a1_webapp, db
-from app.form import LoginForm, RegistrationForm, ChangePasswordForm, RequestResetPasswordForm, ResetPasswordForm
+from app.form import LoginForm, RegistrationForm, ChangePasswordForm, RequestResetPasswordForm, ResetPasswordForm, DeletionForm
 from app.models import Users
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from flask_mail import Mail, Message
 from threading import Thread
 import json
+
+
+@a1_webapp.route('/delete_account', methods=['GET', 'POST'])
+def delete_account():
+    form = DeletionForm()
+    if form.validate_on_submit():
+        user = Users.query.filter_by(username=form.username.data).first()
+        if user is None:
+            flash('The Username Does Not Exist', 'danger')
+            return redirect('delete_account')
+        db.session.delete(user)
+        db.session.commit()
+        flash('Congratulations, you have successfully deleted the user account', 'success')
+        return redirect(url_for('delete_account'))
+    return render_template('delete_account.html', form=form)
 
 
 @a1_webapp.route('/user_login', methods=['GET', 'POST'])
