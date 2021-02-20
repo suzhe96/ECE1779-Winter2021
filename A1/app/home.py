@@ -16,7 +16,7 @@ def main():
     cnx = get_db(Debug=True)
     cursor = cnx.cursor()
     try:
-        query = '''SELECT images.image_key, images.category FROM users, images WHERE users.id = images.user_id AND users.username = %s;'''
+        query = '''SELECT images.image_url, images.category FROM users, images WHERE users.id = images.user_id AND users.username = %s;'''
         cursor.execute(query, (__username,))
         row = cursor.fetchall()
         if not row:
@@ -25,7 +25,11 @@ def main():
     except:
         raise Exception('Get query from RDB exception')
 
+    category1, category2, category3, category4 = [], [], [], []
     for i in row:
-        print('row: {}'.format(i))
-
-    return render_template("home.html", title="Home")
+        if (i[1] == 1): category1.append(i[0])
+        if (i[1] == 2): category2.append(i[0])
+        if (i[1] == 3): category3.append(i[0])
+        if (i[1] == 4): category4.append(i[0])
+    category_dict = {"1":category1, "2":category2, "3":category3, "4":category4}
+    return render_template("home.html", title="Home", param=category_dict)

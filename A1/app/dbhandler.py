@@ -12,11 +12,12 @@ def connect_to_database_debug():
                                    database=DATABASE_LOCAL_CONFIG['db'])
 
 
-def connect_to_database():
-    return mysql.connector.connect(user=DATABASE_AWS_RDS_CONFIG['user'],
-                                   password=DATABASE_AWS_RDS_CONFIG['password'],
-                                   host=DATABASE_AWS_RDS_CONFIG['host'],
-                                   database=DATABASE_AWS_RDS_CONFIG['db'])
+def initialize_s3_handler():
+    s3_client = boto3.client("s3",
+                      aws_access_key_id=AWS_S3_CONFIG['aws_access_key'],
+                      aws_secret_access_key=AWS_S3_CONFIG['aws_secret_access_key'])
+    # s3_client.create_bucket(Bucket=AWS_S3_CONFIG['aws_bucket_name'])
+    return s3_client
 
 
 def get_db(Debug=False):
@@ -27,6 +28,12 @@ def get_db(Debug=False):
         else:
             db = g._database = connect_to_database()
     return db
+
+def get_s3():
+    s3_client = getattr(g, '_s3_handler', None)
+    if s3_client is None:
+        s3_client = g._s3_handler = initialize_s3_handler()
+    return s3_client
 
 
 @a1_webapp.teardown_appcontext
