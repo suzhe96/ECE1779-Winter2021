@@ -6,6 +6,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from flask_mail import Mail, Message
 from threading import Thread
+from http import HTTPStatus
 import json
 
 
@@ -173,7 +174,7 @@ def api_register():
     :return:
     '''
 
-    failure_dict = {"success": "false", "error": {"code": 500, "message": "Register Error!"}}
+    failure_dict = {"success": "false", "error": {"code": HTTPStatus.INTERNAL_SERVER_ERROR, "message": "Register Error!"}}
     success_dict = {"success": "true"}
     data = request.form
     tester_username = request.form['username']

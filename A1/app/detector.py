@@ -13,6 +13,7 @@ from wand.image import Image
 from flask import render_template, request, session, redirect, url_for, g
 from flask_login import current_user
 from app import a1_webapp, db
+from http import HTTPStatus
 from app.models import Users
 from app.dbhandler import get_db, get_s3
 from app.dbconfig import *
@@ -126,7 +127,7 @@ def detector_upload():
 
 @a1_webapp.route('/api/upload', methods=['GET','POST'])
 def api_upload():
-    failure_dict = {"success": "false", "error": {"code": 500, "message" : None}}
+    failure_dict = {"success": "false", "error": {"code": HTTPStatus.INTERNAL_SERVER_ERROR, "message" : None}}
     success_dict = {"success": "true", "payload": {"num_faces" : None, "num_masked": None, "num_unmasked" : None}}
     if request.method == 'GET':
         return __get_render_template("api_upload.html", "API upload for testing", error_in = None)
@@ -134,6 +135,9 @@ def api_upload():
         image_file = request.files['file']
         __username = request.form['username']
         __password = request.form['password']
+
+        if not image_file or not __username or not __password:
+            failure_dict["error"]["message"] = "Missing post parameters"
 
         user = Users.query.filter_by(username=__username).first()
         if user is None or not user.check_password(__password):
