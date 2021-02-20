@@ -11,6 +11,6 @@ DATABASE_LOCAL_CONFIG = {
 AWS_S3_CONFIG = {
     "aws_access_key": "AKIAUA6L6EDR3WYDNCPU",
     "aws_secret_access_key": "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",
-    "aws_bucket_name": "suimage",
-    "aws_s3_bucket_url": "https://suimage.s3.amazonaws.com/{}.png",
+    "aws_bucket_name": "a1-db",
+    "aws_s3_bucket_url": "https://a1-db.s3.amazonaws.com/{}",
 }

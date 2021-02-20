@@ -103,7 +103,7 @@ def detector_upload():
         print("__user_id:{}".format(__user_id))
         __category = __get_image_category(total_detected, total_masked)
         print("__category:{}".format(__category))
-        __image_key = __get_timestamp_string()
+        __image_key = __get_timestamp_string()+".png"
         print("__image_key:{}".format(__image_key))
         __s3_path_detected_image_url = AWS_S3_CONFIG['aws_s3_bucket_url'].format(__image_key)
         print("__s3_path_detected_image:{}".format(__s3_path_detected_image_url))
