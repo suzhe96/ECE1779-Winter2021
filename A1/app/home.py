@@ -13,7 +13,7 @@ def main():
     __username = current_user.username
     print("__username:{}".format(__username))
     print("{}".format(type(__username)))
-    cnx = get_db(Debug=True)
+    cnx = get_db()
     cursor = cnx.cursor()
     try:
         query = '''SELECT images.image_url, images.category FROM users, images WHERE users.id = images.user_id AND users.username = %s;'''

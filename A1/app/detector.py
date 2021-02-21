@@ -92,7 +92,7 @@ def detector_upload():
         
         # MySql and S3
         s3_cli = get_s3()
-        cnx = get_db(Debug=True)
+        cnx = get_db()
         cursor = cnx.cursor()
         
         # fields preparation
