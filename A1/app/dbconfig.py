@@ -16,6 +16,4 @@ DATABASE_AWS_RDS_CONFIG = {
 
 #Configuration to connect to S3 bucket
 AWS_BUCKET_NAME = 'a1-db'
-AWS_ACCESS_KEY = 'AKIAUA6L6EDR3WYDNCPU'
-AWS_SECRET_ACCESS_KEY = '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'
 AWS_DOMAIN = 'http://a1-db.s3.amazonaws.com/'
