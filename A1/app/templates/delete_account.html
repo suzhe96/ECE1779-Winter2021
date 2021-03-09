@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+ <div class="main">
+     <p class="sign" align="center">Delete Account</p>
+        <form class="form1" action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.username(class_="un",placeholder='Username', size=32)}}<br>
+                {% for error in form.username.errors %}
+                <span style="color: indianred; text-align:center;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.username_confirm(class_="un",placeholder='Username_Confirm', size=32)}}<br>
+                {% for error in form.username_confirm.errors %}
+                <span style="color: indianred; text-align:center;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+
+            <p>{{ form.submit(class_="submit",placeholder='Delete', value="Delete") }}</p>
+        </form>
+ </div>
+{% endblock %}
+
+
