@@ -33,6 +33,7 @@ CREATE TABLE images (
     `category` INT NOT NULL,
     `user_id` INT NOT NULL,
     `image_key` VARCHAR(255) NOT NULL,
+    `image_url` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
     ON DELETE CASCADE

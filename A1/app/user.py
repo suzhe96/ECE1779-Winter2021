@@ -6,6 +6,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from flask_mail import Mail, Message
 from threading import Thread
+from http import HTTPStatus
 import json
 
 
@@ -173,15 +174,17 @@ def api_register():
     :return:
     '''
 
-    failure_dict = {"success": "false", "error": {"code": 500, "message": "Register Error!"}}
+    failure_dict = {"success": "false", "error": {"code": HTTPStatus.INTERNAL_SERVER_ERROR, "message": "Register Error!"}}
     success_dict = {"success": "true"}
     data = request.form
     tester_username = request.form['username']
     tester_password = request.form['password']
     if not tester_username or not tester_password:
+        failure_dict["error"]["message"]="username or password empty"
         return json.dumps(failure_dict)
     user = Users.query.filter_by(username=tester_username).first()
     if user is not None and user.username == tester_username:
+        failure_dict["error"]["message"]="username is already existed"
         return json.dumps(failure_dict)
     user = Users(username=tester_username)
     user.set_password(tester_password)

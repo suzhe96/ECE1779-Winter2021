@@ -14,51 +14,27 @@
 {% else %}
 <p class="sign">Images with no faces detected</p>
 <div id="scrolling_horizontal">
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
+        {% for iter in param['1'] %}
+        <a><img src="{{iter}}" class="img-thumbnail"></a>
+        {% endfor %}
     </div>
     <p class="sign">Images with all faces masked</p>
     <div id="scrolling_horizontal">
-        <a><img src="https://www.uni-regensburg.de/medien/rechte-spalten/120520_campusbilder_07.jpeg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/medien/rechte-spalten/120520_campusbilder_07.jpeg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
+        {% for iter in param['2'] %}
+        <a><img src="{{iter}}" class="img-thumbnail"></a>
+        {% endfor %}
     </div>
     <p class="sign">Images with no face masked</p>
     <div id="scrolling_horizontal">
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
+        {% for iter in param['3'] %}
+        <a><img src="{{iter}}" class="img-thumbnail"></a>
+        {% endfor %}
     </div>
     <p class="sign">Images with some faces masked</p>
     <div id="scrolling_horizontal">
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
-        <a><img src="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/prototypen/w_sexy_gr.jpg" class="img-thumbnail"></a>
+        {% for iter in param['4'] %}
+        <a><img src="{{iter}}" class="img-thumbnail"></a>
+        {% endfor %}
     </div>
  <style>
     #scrolling_horizontal{
