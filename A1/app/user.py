@@ -180,9 +180,11 @@ def api_register():
     tester_username = request.form['username']
     tester_password = request.form['password']
     if not tester_username or not tester_password:
+        failure_dict["error"]["message"]="username or password empty"
         return json.dumps(failure_dict)
     user = Users.query.filter_by(username=tester_username).first()
     if user is not None and user.username == tester_username:
+        failure_dict["error"]["message"]="username is already existed"
         return json.dumps(failure_dict)
     user = Users(username=tester_username)
     user.set_password(tester_password)
