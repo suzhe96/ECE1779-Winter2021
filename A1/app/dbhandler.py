@@ -11,7 +11,9 @@ def get_aws_credentials():
     if DEPLOY_BUILT:
         aws_response = requests.get(AWS_CREDENTIALS_REQUEST.format(AWS_S3_CONFIG['aws_iam_role']))
         aws_response_json = json.loads(aws_response.content.decode())
-        return {"aws_access_key": aws_response_json['AccessKeyId'], "aws_secret_access_key": aws_response_json['SecretAccessKey']}
+        return {"aws_access_key": aws_response_json['AccessKeyId'],
+                "aws_secret_access_key": aws_response_json['SecretAccessKey'],
+                "aws_session_token": aws_response_json['Token']}
     else:
         return AWS_CREDENTIALS_PERSONAL
 
@@ -28,7 +30,8 @@ def initialize_s3_handler():
     aws_credentials = get_aws_credentials()
     s3_client = boto3.client("s3",
                       aws_access_key_id=aws_credentials['aws_access_key'],
-                      aws_secret_access_key=aws_credentials['aws_secret_access_key'])
+                      aws_secret_access_key=aws_credentials['aws_secret_access_key'],
+                      aws_session_token=aws_credentials['aws_session_token'])
     # s3_client.create_bucket(Bucket=AWS_S3_CONFIG['aws_bucket_name'])
     return s3_client
 
