@@ -32,7 +32,6 @@ def initialize_s3_handler():
                       aws_access_key_id=aws_credentials['aws_access_key'],
                       aws_secret_access_key=aws_credentials['aws_secret_access_key'],
                       aws_session_token=aws_credentials['aws_session_token'])
-    # s3_client.create_bucket(Bucket=AWS_S3_CONFIG['aws_bucket_name'])
     return s3_client
 
 
