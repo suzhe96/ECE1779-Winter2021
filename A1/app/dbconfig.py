@@ -23,7 +23,5 @@ AWS_CREDENTIALS_PERSONAL = {
 }
 
 #Configuration to connect to S3 bucket
-AWS_BUCKET_NAME = 'a1-db'
-AWS_DOMAIN = 'http://a1-db.s3.amazonaws.com/'
 DEPLOY_BUILT = False
 AWS_CREDENTIALS_REQUEST = "http://169.254.169.254/latest/meta-data/iam/security-credentials/{}"
