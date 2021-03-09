@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+ <div class="main">
+     <p class="sign" align="center">Face Detector</p>
+        <form class="form1" enctype="multipart/form-data" action="" method="post" novalidate>
+                <input class="pass" accept=".png, .jpg, .jpeg" type="file" name="upload_image"><br/>
+                <input class="pass" type="url" name="upload_url", placeholder="Image URL"><br/>
+                <input type="submit" value="Run"><br/>
+                <input type="reset">
+        </form>
+        <p align="center">
+            <span style="color: indianred;text-align:center;">{{ error if error != None }}</span>
+        </p>
+        <style>
+            input[type=submit] {
+                cursor: pointer;
+                width: 50%;
+                box-sizing: border-box;
+                border-radius: 5em;
+                color: #fff;
+                background: linear-gradient(to right, #9C27B0, #E040FB);
+                border: 0;
+                padding-left: 40px;
+                padding-right: 40px;
+                padding-bottom: 10px;
+                padding-top: 10px;
+                font-family: 'Ubuntu', sans-serif;
+                margin-left: 25%;
+                margin-bottom: 27px;
+                font-size: 13px;
+                box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04); 
+            }
+            input[type=reset] {
+                cursor: pointer;
+                width: 50%;
+                box-sizing: border-box;
+                border-radius: 5em;
+                color: #fff;
+                background: linear-gradient(to right, #9C27B0, #E040FB);
+                border: 0;
+                padding-left: 40px;
+                padding-right: 40px;
+                padding-bottom: 10px;
+                padding-top: 10px;
+                font-family: 'Ubuntu', sans-serif;
+                margin-left: 25%;
+                margin-bottom: 27px;
+                font-size: 13px;
+                box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);  
+            }
+        </style>
+ </div>
+{% endblock %}
+
+
