@@ -54,11 +54,3 @@ def teardown_db(exception):
     if db is not None:
         db.close()
 
-
-s3 = boto3.client(
-    "s3",
-    aws_access_key_id='AWS_ACCESS_KEY',
-    aws_secret_access_key='AWS_SECRET_ACCESS_KEY'
-)
-
-BUCKET_NAME = 'a1-db'
