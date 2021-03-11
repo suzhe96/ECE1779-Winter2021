@@ -88,7 +88,7 @@ STOPPING -> TERMINATED
 '''
 def update_aws_worker_dict():
     ec2_resource = get_ec2_resource()
-    ec2_instances = ec2_resource.instancces.all()
+    ec2_instances = ec2_resource.instances.all()
     pending_to_running, stopping_to_down = [], []
     with aws_worker_dict_mutex:
         for inst in ec2_instances:

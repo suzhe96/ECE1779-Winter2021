@@ -14,7 +14,7 @@ def main():
 
     while true:
         awsworker.update_aws_worker_dict()
-        worker_dict = get_aws_worker_dict()
+        worker_dict = awsworker.get_aws_worker_dict()
         for key in worker_dict:
             if worker_dict[key] == awsconfig.AWS_EC2_STATUS_RUNNING:
                 return render_template("home.html", title="Home", worker_number=Workers)
