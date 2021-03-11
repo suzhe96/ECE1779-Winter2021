@@ -1,4 +1,4 @@
-from flask import render_template, flash
+from flask import render_template, flash, url_for, redirect
 import time
 from app import a2
 from app import awsworker
@@ -12,7 +12,7 @@ def main():
     worker_numbers = [10, 20, 30, 80, 50, 70, 10, 20, 30, 80, 50, 70]
     Workers = [time_stamps, worker_numbers]
 
-    while true:
+    while True:
         awsworker.update_aws_worker_dict()
         worker_dict = awsworker.get_aws_worker_dict()
         for key in worker_dict:
