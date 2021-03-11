@@ -134,7 +134,7 @@ def get_ec2_cpu_utilization(inst_id):
         Period=60,
         StartTime=current_time-timedelta(seconds=1800),
         EndTime=current_time,
-        MetricName=AWS_CLOUDWATCH_CONFIG['CPUUtilization'],
+        MetricName=AWS_CLOUDWATCH_CONFIG['CPU_metrics'],
         Namespace=AWS_CLOUDWATCH_CONFIG['ec2_namespace'],
         Statistics=[AWS_CLOUDWATCH_CONFIG['statistics_avg']],
         Dimensions=[{'Name': 'InstanceId', 'Value': inst_id}]
