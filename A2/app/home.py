@@ -1,5 +1,8 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash
+import time
 from app import a2
+from app import awsworker
+from app import awsconfig
 
 
 @a2.route('/')
@@ -8,6 +11,14 @@ def main():
     time_stamps = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     worker_numbers = [10, 20, 30, 80, 50, 70, 10, 20, 30, 80, 50, 70]
     Workers = [time_stamps, worker_numbers]
+
+    while true:
+        awsworker.update_aws_worker_dict()
+        worker_dict = awsworker.get_aws_worker_dict()
+        for key in worker_dict:
+            if worker_dict[key] == awsconfig.AWS_EC2_STATUS_RUNNING:
+                return render_template("home.html", title="Home", worker_number=Workers)
+        time.sleep(30)
     return render_template("home.html", title="Home", worker_number=Workers)
 
 
