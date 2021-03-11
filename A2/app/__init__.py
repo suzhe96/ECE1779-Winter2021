@@ -6,3 +6,6 @@ a2 = Flask(__name__)
 a2.config.from_object(Config)
 
 from app import home
+from app import awsworker
+
+awsworker.initialize_first_worker()

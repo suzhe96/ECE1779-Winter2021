@@ -161,8 +161,9 @@ def aws_datapoint_parser(data, statistics):
 '''Initalize the first worker
 '''
 def initialize_first_worker():
+    print("========== START INIT FIRST WORKER ==========")
     scaling_instance(AWS_EC2_SCALING_UP, 1)
-
+    print("==========  END INIT FIRST WORKER  ==========")
 
 '''Get worker dict
 '''

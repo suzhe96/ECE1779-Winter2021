@@ -4,8 +4,6 @@ from app import a2
 from app import awsworker
 from app import awsconfig
 
-# Initalize the first worker
-awsworker.initialize_first_worker()
 
 @a2.route('/')
 @a2.route('/home')
