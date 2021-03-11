@@ -28,7 +28,7 @@ AWS_CLOUDWATCH_CONFIG = {
     'CPU_metrics' : 'CPUUtilization',
     'healthy_metrics' : 'HealthyHostCount',
     'http_metrics' : 'HTTPRequestsMetrics',
-    'statistics_avg' : 'average',
+    'statistics_avg' : 'Average',
     'statisitcs_max' : 'Maximum',
 }
 
