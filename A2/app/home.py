@@ -1,13 +1,6 @@
 from flask import render_template, flash
 from app import a2
 from app import awsworker
-print("im here ready for resting {}".format(awsworker.get_elb_dns()))
-print("====================================")
-print("CPU: {}".format(awsworker.get_ec2_cpu_utilization('i-0f2ab4d996f0af8aa')))
-print("===============================DONE1===")
-print("====================================")
-print("CPU: {}".format(awsworker.get_ec2_workers_chart('')))
-print("===============================DONE2===")
 
 
 
@@ -17,6 +10,19 @@ def main():
     time_stamps = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     worker_numbers = [10, 20, 30, 80, 50, 70, 10, 20, 30, 80, 50, 70]
     Workers = [time_stamps, worker_numbers]
+
+
+    print("im here ready for resting {}".format(awsworker.get_elb_dns()))
+    print("====================================")
+    print("CPU: {}".format(awsworker.get_ec2_cpu_utilization('i-0f2ab4d996f0af8aa')))
+    print("===============================DONE1===")
+    print("====================================")
+    print("CPU: {}".format(awsworker.get_ec2_workers_chart('')))
+    print("===============================DONE2===")
+
+
+
+
     return render_template("home.html", title="Home", worker_number=Workers)
 
 
