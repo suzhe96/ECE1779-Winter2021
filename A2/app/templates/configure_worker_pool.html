@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="content-section">
+    <div class="container">
+        <center><h2>Change Worker Pool Size</h2></center>
+        <br><br>
+
+        <center><button type="button" onclick="window.location.href='{{ url_for('increase_worker_pool') }}';" class="button button_custom">Grow Worker Pool Size </button></center>
+        <br>
+        <center><button type="button" onclick="window.location.href='{{ url_for('decrease_worker_pool') }}';" class="button button_custom">Shrink Worker Pool Size</button></center>
+</div>
+</div>
+{% endblock content %}
