@@ -111,7 +111,7 @@ def get_elb_dns():
 '''
 def get_ec2_workers_chart():
     cloudwatch = get_cloudwatch()
-    current_time
+    current_time = datetime.utcnow()
     response = cloudwatch.get_metric_statistics(
         Period=60,
         StartTime=current_time-timedelta(seconds=1800),
