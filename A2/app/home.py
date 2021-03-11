@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, flash
 from app import a2
 
 
@@ -29,9 +29,25 @@ def get_workers_list():
 @a2.route('/load_balancer')
 def load_balancer():
     return render_template("load_balancer.html", title="Home")
-@a2.route('/get_worker_pool')
-def get_worker_pool():
-    return render_template("get_worker_pool.html", title="Home")
+
+
+@a2.route('/configure_worker_pool')
+def configure_worker_pool():
+    return render_template("configure_worker_pool.html", title="Home")
+
+
+@a2.route('/increase_worker_pool')
+def increase_worker_pool():
+    flash('Increased Worker Pool Successfully')
+    return
+
+
+@a2.route('/decrease_worker_pool')
+def decrease_worker_pool():
+    flash('Decreased Worker Pool Successfully')
+    return
+
+
 @a2.route('/configure_auto_scaler')
 def configure_auto_scaler():
     return render_template("configure_auto_scaler.html", title="Home")
