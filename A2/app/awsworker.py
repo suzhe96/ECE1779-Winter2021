@@ -1,7 +1,8 @@
-from awshandler import *
-from awsconfig import *
+from app.awshandler import *
+from app.awsconfig import *
 from datetime import datetime, timedelta
 from operator import itemgetter
+from threading import Lock
 
 
 aws_workers_dict = {}
