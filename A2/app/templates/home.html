@@ -1,3 +1,22 @@
 {% extends "base.html" %}
+
 {% block content %}
+
+    <table style="margin-left:auto; margin-right:auto;">
+        <tr>
+            <td><center>Number of Workers</center></td>
+        </tr>
+        <tr>
+            <td><div class="ct-chart" id="my-chart" style="width: 1000px; height: 500px;"></div></td>
+        </tr>
+    </table>
+    <script>
+            var Worker_Numbers = {
+                labels: {{ worker_number[0] }},
+                series: [
+                    {{ worker_number[1] }}
+                ]
+            };
+        new Chartist.Line('#my-chart', Worker_Numbers);
+    </script>
 {% endblock %}

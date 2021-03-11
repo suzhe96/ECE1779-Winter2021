@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/alert.css') }}">
     <style>
@@ -40,6 +42,12 @@
             </div>
             <ul class="nav navbar-nav">
                 <li class="active"><a href="{{ url_for('main') }}">Home</a></li>
+		<li><a href="{{ url_for('get_workers_list') }}">Workers List</a></li>
+		<li><a href="{{ url_for('load_balancer') }}">load_balancer</a></li>
+		<li><a href="{{ url_for('get_worker_pool') }}">Change Worker Pool</a></li>
+		<li><a href="{{ url_for('configure_auto_scaler') }}">Configure Auto Scaler</a></li>
+		<li><a href="{{ url_for('stop') }}">Stop</a></li>
+		<li><a href="{{ url_for('delete_data') }}">Delete Data</a></li>
             </ul>
           </div>
         </nav>
