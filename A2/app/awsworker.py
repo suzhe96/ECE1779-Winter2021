@@ -10,10 +10,14 @@ aws_worker_dict_mutex = Lock()
 
 
 '''Create one EC2 instance, return instance id
+RETURN instance_id
 '''
 def create_instance():
-    # TODO
-    return
+    ec2_resource = get_ec2_resource()
+    instance_list = ec2_resource.create_instances(LaunchTemplate={'LaunchTemplateId': AWS_LAUNCH_TEMPLATE_CONFIG['id'],
+                                                                  'Version': AWS_LAUNCH_TEMPLATE_CONFIG['version']})
+    print("Instance created: {}".format(instance_list[0].id))
+    return instance_list[0].id
 
 
 '''Terminate one EC2 instance given instance id
@@ -153,3 +157,14 @@ def aws_datapoint_parser(data, statistics):
     ret_list = sorted(ret_list, key=itemgetter(0))
     return ret_list
 
+
+'''Initalize the first worker
+'''
+def initialize_first_worker():
+    scaling_instance(AWS_EC2_SCALING_UP, 1)
+
+
+'''Get worker dict
+'''
+def get_aws_worker_dict():
+    return aws_workers_dict 

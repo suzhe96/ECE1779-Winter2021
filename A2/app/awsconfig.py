@@ -32,6 +32,11 @@ AWS_CLOUDWATCH_CONFIG = {
     'statisitcs_max' : 'Maximum',
 }
 
+AWS_LAUNCH_TEMPLATE_CONFIG = {
+    'id' : 'lt-05d5dd91eddb6aee4',
+    'version' : '2'
+}
+
 AWS_EC2_STATUS_PENDING = 'pending'
 AWS_EC2_STATUS_RUNNING = 'running'
 AWS_EC2_STATUS_STOPPING = 'stopping'
