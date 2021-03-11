@@ -18,8 +18,8 @@
     <style>
         div.home_text_box{
         background-color:whitesmoke;
-        height: 700px;
-        width: 1300px;
+        height: auto;
+        width: auto;
         text-align: center;
         margin: 7em auto;
         border-radius: 1.5em;
@@ -42,12 +42,16 @@
             </div>
             <ul class="nav navbar-nav">
                 <li class="active"><a href="{{ url_for('main') }}">Home</a></li>
-		<li><a href="{{ url_for('get_workers_list') }}">Workers List</a></li>
-		<li><a href="{{ url_for('load_balancer') }}">load_balancer</a></li>
-		<li><a href="{{ url_for('configure_worker_pool') }}">Change Worker Pool</a></li>
-		<li><a href="{{ url_for('configure_auto_scaler') }}">Configure Auto Scaler</a></li>
-		<li><a href="{{ url_for('stop') }}">Stop</a></li>
-		<li><a href="{{ url_for('delete_data') }}">Delete Data</a></li>
+                <li><a href="{{ url_for('get_workers_list') }}">Workers List</a></li>
+                <li><a href="{{ url_for('load_balancer') }}">load_balancer</a></li>
+                <li><a href="{{ url_for('configure_worker_pool') }}">Change Worker Pool</a></li>
+                <li><a href="{{ url_for('configure_auto_scaler') }}">Configure Auto Scaler</a></li>
+                <li class = "nav-item">
+                    <a class="nav-link" href="{{ url_for('stop') }}" onclick="return confirm('This will terminate all worker instances and stop the manager-app. Are you sure?')">Stop All Instances</a>
+                </li>
+                <li class = "nav-item">
+                    <a class="nav-link" href="{{ url_for('delete_data') }}" onclick="return confirm('This will delete all data stored. Are you sure?')">Delete All Data</a>
+                </li>
             </ul>
           </div>
         </nav>
@@ -64,6 +68,13 @@
                 </ul>
                 {% endif %}
             {% endwith %}
+        </div>
+        <div class="home_text_box">
+        <div class="container">
+          <div class="card border-0 shadow my-5">
+            <div class="card-body p-5">
+            </div>
+          </div>
         </div>
         {% block content %}{% endblock %}
 </body>
