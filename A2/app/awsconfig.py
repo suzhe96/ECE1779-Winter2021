@@ -30,6 +30,7 @@ AWS_CLOUDWATCH_CONFIG = {
     'http_metrics' : 'HTTPRequestsMetrics',
     'statistics_avg' : 'Average',
     'statisitcs_max' : 'Maximum',
+    'statistics_sum' : 'Sum',
 }
 
 AWS_LAUNCH_TEMPLATE_CONFIG = {

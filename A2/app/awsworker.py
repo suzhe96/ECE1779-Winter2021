@@ -142,10 +142,27 @@ def get_ec2_cpu_utilization(inst_id):
         EndTime=current_time,
         MetricName=AWS_CLOUDWATCH_CONFIG['CPU_metrics'],
         Namespace=AWS_CLOUDWATCH_CONFIG['ec2_namespace'],
-        Statistics=[AWS_CLOUDWATCH_CONFIG['statistics_avg']],
+        Statistics=[AWS_CLOUDWATCH_CONFIG['statistics_sum']],
         Dimensions=[{'Name': 'InstanceId', 'Value': inst_id}]
     )
-    return aws_datapoint_parser(response['Datapoints'], AWS_CLOUDWATCH_CONFIG['statistics_avg'])
+    return aws_datapoint_parser(response['Datapoints'], AWS_CLOUDWATCH_CONFIG['statistics_sum'])
+
+
+'''Get HTTP Requests given by instance id
+'''
+def get_http_request(inst_id):
+    cloudwatch = get_cloudwatch()
+    current_time = datetime.utcnow()
+    response = cloudwatch.get_metric_statistics(
+        Period=60,
+        StartTime=current_time-timedelta(seconds=1800),
+        EndTime=current_time,
+        MetricName=AWS_CLOUDWATCH_CONFIG['http_metrics'],
+        Namespace=AWS_CLOUDWATCH_CONFIG['http_namespace'],
+        Statistics=[AWS_CLOUDWATCH_CONFIG['statistics_sum']],
+        Dimensions=[{'Name': 'InstanceId', 'Value': inst_id}]
+    )
+    return aws_datapoint_parser(response['Datapoints'], AWS_CLOUDWATCH_CONFIG['statistics_sum']) 
 
 
 '''Parse aws response datapoint
