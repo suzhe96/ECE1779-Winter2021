@@ -9,6 +9,7 @@ from threading import Lock
 
 session = None
 s3_client = None
+cloudwatch = None
 http_request_count = 0
 
 

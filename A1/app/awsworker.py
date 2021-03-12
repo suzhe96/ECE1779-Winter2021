@@ -32,8 +32,8 @@ def publish_http_request_count(inst_id):
                                MetricData=[{'MetricName' : AWS_CLOUDWATCH_CONFIG['http_metrics'],
                                             'Timestamp' : current_time,
                                             'Value' : requests_count,
-                                            'Unit' : 'Counts',
-                                            'Dimension' : [{
+                                            'Unit' : 'Count',
+                                            'Dimensions' : [{
                                                 'Name' : 'InstanceId',
                                                 'Value' : inst_id
                                             }]

@@ -8,8 +8,8 @@ from app import awsworker
 @a1_webapp.route('/')
 @a1_webapp.route('/home')
 def main():
-    awsworker.add_http_request_count()
-    print("/home add")
+    # awsworker.add_http_request_count()
+    # print("/home add")
     if current_user.is_anonymous:
         return render_template("home.html", title="Home")
 

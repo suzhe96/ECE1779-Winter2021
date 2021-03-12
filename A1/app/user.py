@@ -79,6 +79,8 @@ def send_email(recipient, subject, template, **kwargs):
 
 @a1_webapp.route('/forget_password', methods=['GET', 'POST'])
 def forget_password():
+    awsworker.add_http_request_count()
+    print("/forgotpass add")
     if not current_user.is_anonymous:
         return redirect(url_for('main'))
     form = RequestResetPasswordForm()
@@ -108,6 +110,8 @@ def forget_password():
 @login_required
 def change_password():
     """Change an existing user's password."""
+    awsworker.add_http_request_count()
+    print("/changepass add")
     form = ChangePasswordForm()
     if form.validate_on_submit():
         if current_user.check_password(form.old_password.data):
@@ -128,6 +132,8 @@ def change_password():
 @a1_webapp.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     """Reset an existing user's password."""
+    awsworker.add_http_request_count()
+    print("/resetpass add")
     if not current_user.is_anonymous:
         return redirect(url_for('main.index'))
     form = ResetPasswordForm()
@@ -149,6 +155,8 @@ def reset_password(token):
 
 @a1_webapp.route('/register', methods=['GET', 'POST'])
 def register():
+    awsworker.add_http_request_count()
+    print("/register add")
     form = RegistrationForm()
     if form.validate_on_submit():
         user = Users.query.filter_by(email=form.email.data).first()
@@ -171,6 +179,8 @@ def register():
 
 @a1_webapp.route('/account', methods=['GET'])
 def my_account():
+    awsworker.add_http_request_count()
+    print("/myaccount add")
     return render_template('account.html', title='My_Account')
 
 
