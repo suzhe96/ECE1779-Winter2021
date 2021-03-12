@@ -57,29 +57,36 @@ AWS_EC2_SCALING_UP: create instance -> add to worker dict (does not register to 
 AWS_EC2_SCALING_DOWN: terminate instance -> change to stopping state -> deregister to elb
 '''
 def scaling_instance(scaling_behaviour, scaling_num):
-    if scaling_behaviour == AWS_EC2_SCALING_UP:
-        if len(aws_workers_dict) + scaling_num > AWS_EC2_NUM_MAX:
-            return AWS_ERROR_EC2_NUM_EXCEED_MAX
-        for num in range(scaling_num):
-            inst_id = create_instance()
-            with aws_worker_dict_mutex:
-                aws_workers_dict[inst_id] = AWS_EC2_STATUS_PENDING
-            print("Create instance with id : {}".format(inst_id))
-        return AWS_OK
-    
-    if scaling_behaviour == AWS_EC2_SCALING_DOWN:
-        if len(aws_workers_dict) - scaling_num < AWS_EC2_NUM_MIN:
-            return AWS_ERROR_EC2_NUM_BELOW_MIN
-        detach_cnt = 0
-        with aws_worker_dict_mutex:
+    with aws_worker_dict_mutex:
+        if scaling_behaviour == AWS_EC2_SCALING_UP:
+            if len(aws_workers_dict) + scaling_num > AWS_EC2_NUM_MAX:
+                return AWS_ERROR_EC2_NUM_EXCEED_MAX
             for inst_id in aws_workers_dict:
-                if detach_cnt > scaling_num:
-                    break
-                deregister_instance_to_elb(inst_id)
-                terminate_instance(inst_id)
-                aws_workers_dict[inst_id] = AWS_EC2_STATUS_STOPPING
-                detach_cnt += 1
-        return AWS_OK
+                if aws_workers_dict[inst_id] == AWS_EC2_STATUS_PENDING:
+                    scaling_num -= 1
+            scaling_num = max(0, scaling_num)
+            print("The actual scale up number is : {}".format(scaling_num))
+            for num in range(scaling_num):
+                inst_id = create_instance()
+                aws_workers_dict[inst_id] = AWS_EC2_STATUS_PENDING
+
+        if scaling_behaviour == AWS_EC2_SCALING_DOWN:
+            if len(aws_workers_dict) - scaling_num < AWS_EC2_NUM_MIN:
+                return AWS_ERROR_EC2_NUM_BELOW_MIN
+            stopping_list = []
+            scalable_list = []
+            for inst_id in aws_workers_dict:
+                if aws_workers_dict[inst_id] == AWS_EC2_STATUS_STOPPING:
+                    stopping_list.append(inst_id)
+                else:
+                    scalable_list.append(inst_id)
+            scaling_num = max(0, scaling_num - len(stopping_list))
+            print("The actual scale down number is : {}".format(scaling_num))
+            for index in range(scaling_num):
+                deregister_instance_to_elb(scalable_list[index])
+                terminate_instance(scalable_list[index])
+                aws_workers_dict[scalable_list[index]] = AWS_EC2_STATUS_STOPPING
+    return AWS_OK
 
 
 '''Update aws_worker_dict status
@@ -103,7 +110,7 @@ def update_aws_worker_dict():
             register_instance_to_elb(inst_id)
             aws_workers_dict[inst_id] = AWS_EC2_STATUS_RUNNING
         for inst_id in stopping_to_down:
-            aws_workers_dict[inst_id] = AWS_EC2_STATUS_DOWN
+            del aws_workers_dict[inst_id]
     return AWS_OK
 
 
@@ -131,7 +138,7 @@ def get_ec2_workers_chart():
     return aws_datapoint_parser(response['Datapoints'], AWS_CLOUDWATCH_CONFIG['statistics_avg'])
 
 
-'''Get CPU Utilization given by instance id
+'''Get CPU utilization given by instance id
 '''
 def get_ec2_cpu_utilization(inst_id):
     cloudwatch = get_cloudwatch()
@@ -142,10 +149,25 @@ def get_ec2_cpu_utilization(inst_id):
         EndTime=current_time,
         MetricName=AWS_CLOUDWATCH_CONFIG['CPU_metrics'],
         Namespace=AWS_CLOUDWATCH_CONFIG['ec2_namespace'],
-        Statistics=[AWS_CLOUDWATCH_CONFIG['statistics_sum']],
+        Statistics=[AWS_CLOUDWATCH_CONFIG['statistics_avg']],
         Dimensions=[{'Name': 'InstanceId', 'Value': inst_id}]
     )
-    return aws_datapoint_parser(response['Datapoints'], AWS_CLOUDWATCH_CONFIG['statistics_sum'])
+    return aws_datapoint_parser(response['Datapoints'], AWS_CLOUDWATCH_CONFIG['statistics_avg'])
+
+
+'''Get CPU utilization average value given up-to-dated worker_dict (ONLY COUNT ON RUNNING INSTANCES)
+'''
+def get_ec2_cpu_utilization_avg(worker_dict):
+    cpu_avg_list = []
+    for inst_id in worker_dict:
+        if worker_dict[inst_id] != AWS_EC2_STATUS_RUNNING:
+            continue
+        response = get_ec2_cpu_utilization(inst_id)
+        response = response[-2:]
+        datapoints = [i[1] for i in response]
+        cpu_avg_list.append(sum(datapoints) / len(datapoints))
+    return sum(cpu_avg_list) / len(cpu_avg_list)
+
 
 
 '''Get HTTP Requests given by instance id
