@@ -35,7 +35,7 @@ AWS_CLOUDWATCH_CONFIG = {
 
 AWS_LAUNCH_TEMPLATE_CONFIG = {
     'id' : 'lt-05d5dd91eddb6aee4',
-    'version' : '4'
+    'version' : '6'
 }
 
 AWS_EC2_STATUS_PENDING = 'pending'
@@ -52,8 +52,10 @@ AWS_EC2_NUM_MIN = 1
 AWS_OK = 0
 AWS_ERROR_EC2_NUM_EXCEED_MAX = 1501
 AWS_ERROR_EC2_NUM_BELOW_MIN = 1502
+AWS_ERROR_CPU_AVG_VALUE_ZERO = 1503
 
 AWS_ERROR_MSG = {
    AWS_ERROR_EC2_NUM_EXCEED_MAX : 'EC2 instance number maximum reached',
-   AWS_ERROR_EC2_NUM_BELOW_MIN : 'EC2 instance number minimum reached'
+   AWS_ERROR_EC2_NUM_BELOW_MIN : 'EC2 instance number minimum reached',
+   AWS_ERROR_CPU_AVG_VALUE_ZERO : 'Get zero in cpu utilization average'
 }

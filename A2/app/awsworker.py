@@ -166,6 +166,8 @@ def get_ec2_cpu_utilization_avg(worker_dict):
         response = response[-2:]
         datapoints = [i[1] for i in response]
         cpu_avg_list.append(sum(datapoints) / len(datapoints))
+    if len(cpu_avg_list) == 0:
+        return AWS_ERROR_CPU_AVG_VALUE_ZERO
     return sum(cpu_avg_list) / len(cpu_avg_list)
 
 

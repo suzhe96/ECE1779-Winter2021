@@ -34,9 +34,9 @@ def auto_scaler_main():
     worker_dict = awsworker.get_aws_worker_dict()
     # get cpu_utilization_avg
     cpu_util_avg = awsworker.get_ec2_cpu_utilization_avg(worker_dict)
-    if cpu_util_avg == 0:
+    if cpu_util_avg == AWS_ERROR_CPU_AVG_VALUE_ZERO:
         # A running instance with hosting web application could not be 0 cpu in avg
-        print("cpu_util_avg is 0!")
+        print("Error: {}".format(AWS_ERROR_MSG[AWS_ERROR_CPU_AVG_VALUE_ZERO]))
         return
     # get auto_scaler_policy
     policy = auto_scaler_policy_get()
@@ -55,7 +55,7 @@ def auto_scaler_main():
         ret = awsworker.scaling_instance(AWS_EC2_SCALING_DOWN, scale_down_number)
 
     if ret != AWS_OK:
-        print("auto scaler error: {}".format(AWS_ERROR_MSG[ret]))
+        print("Error: {}".format(AWS_ERROR_MSG[ret]))
 
 def auto_scaler_task_cb():
     while True:
