@@ -15,8 +15,9 @@ from flask_login import current_user
 from app import a1_webapp, db
 from http import HTTPStatus
 from app.models import Users
-from app.dbhandler import get_db, get_s3
-from app.dbconfig import *
+from app.awshandler import get_db, get_s3
+from app.awsconfig import *
+from app import awsworker
 from FaceMaskDetection import pytorch_infer
 
 '''TODO: TRY TO REMOVE THE LINE AFTER DEPLOY TO EC2
@@ -58,6 +59,7 @@ def __get_timestamp_string():
 
 @a1_webapp.route('/detector_upload_route', methods=['GET', 'POST'])
 def detector_upload():
+    awsworker.add_http_request_count()
     if request.method == 'POST':
         image_url = request.form['upload_url']
         image_file = request.files['upload_image']

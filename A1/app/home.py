@@ -1,12 +1,14 @@
 from flask import render_template
 from app import a1_webapp
-from app.dbhandler import get_db
+from app.awshandler import get_db
 from flask_login import current_user
+from app import awsworker
 
 
 @a1_webapp.route('/')
 @a1_webapp.route('/home')
 def main():
+    awsworker.add_http_request_count()
     if current_user.is_anonymous:
         return render_template("home.html", title="Home")
 

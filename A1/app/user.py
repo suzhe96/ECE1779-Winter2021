@@ -7,11 +7,13 @@ from werkzeug.urls import url_parse
 from flask_mail import Mail, Message
 from threading import Thread
 from http import HTTPStatus
+from app import awsworker
 import json
 
 
 @a1_webapp.route('/delete_account', methods=['GET', 'POST'])
 def delete_account():
+    awsworker.add_http_request_count()
     form = DeletionForm()
     if form.validate_on_submit():
         user = Users.query.filter_by(username=form.username.data).first()
@@ -27,6 +29,7 @@ def delete_account():
 
 @a1_webapp.route('/user_login', methods=['GET', 'POST'])
 def login():
+    awsworker.add_http_request_count()
     # if user is already logged in, dont not log in until logout
     if current_user.is_authenticated:
         return redirect(url_for('main'))
@@ -48,6 +51,7 @@ def login():
 @a1_webapp.route('/user_logout')
 @login_required
 def logout():
+    awsworker.add_http_request_count()
     logout_user()
     return redirect(url_for('main'))
 

@@ -167,6 +167,7 @@ def initialize_first_worker():
     scaling_instance(AWS_EC2_SCALING_UP, 1)
     print("==========  END INIT FIRST WORKER  ==========")
 
+
 '''Get worker dict
 '''
 def get_aws_worker_dict():
