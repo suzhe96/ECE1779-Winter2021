@@ -1,6 +1,7 @@
 import time
 from threading import Thread, Lock
 from app import awsworker
+from app.awsconfig import *
 
 # deefault policy
 auto_scaler_policy = {'cpu_grow_threshold' : 80,
