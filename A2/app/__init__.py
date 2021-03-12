@@ -12,6 +12,6 @@ from app import autoscaler
 
 awsworker.initialize_first_worker()
 
-auto_scaler_background_task = Thread(targert=autoscaler.auto_scaler_task_cb)
+auto_scaler_background_task = Thread(target=autoscaler.auto_scaler_task_cb)
 auto_scaler_background_task.daemon = True
 auto_scaler_background_task.start()

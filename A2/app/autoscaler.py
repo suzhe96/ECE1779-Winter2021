@@ -1,6 +1,5 @@
 import time
-
-from threading import Thread
+from threading import Thread, Lock
 from app import awsworker
 
 # deefault policy
