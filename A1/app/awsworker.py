@@ -44,9 +44,7 @@ def publish_http_request_count(inst_id):
 def publish_http_request_cb():
     inst_id = get_instance_id()
     while True:
-        # publish_http_request_count()
-        # time.sleep(60)
-        print("request {}".format(get_and_reset_http_request_count()))
-        time.sleep(10)
+        publish_http_request_count()
+        time.sleep(60)
 
 
