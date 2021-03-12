@@ -35,7 +35,7 @@ AWS_CLOUDWATCH_CONFIG = {
 
 AWS_LAUNCH_TEMPLATE_CONFIG = {
     'id' : 'lt-05d5dd91eddb6aee4',
-    'version' : '9'
+    'version' : '10'
 }
 
 AWS_EC2_STATUS_PENDING = 'pending'

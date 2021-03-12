@@ -16,7 +16,6 @@ def create_instance():
     ec2_resource = get_ec2_resource()
     instance_list = ec2_resource.create_instances(MaxCount=1,
                                                   MinCount=1,
-                                                  UserData=AWS_EC2_USERDATA_SCRIPT,
                                                   LaunchTemplate={'LaunchTemplateId': AWS_LAUNCH_TEMPLATE_CONFIG['id'],
                                                                   'Version': AWS_LAUNCH_TEMPLATE_CONFIG['version']})
     print("Instance created: {}".format(instance_list[0].id))
