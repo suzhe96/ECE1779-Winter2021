@@ -16,6 +16,7 @@ def create_instance():
     ec2_resource = get_ec2_resource()
     instance_list = ec2_resource.create_instances(MaxCount=1,
                                                   MinCount=1,
+                                                  UserData=AWS_EC2_USERDATA_SCRIPT,
                                                   LaunchTemplate={'LaunchTemplateId': AWS_LAUNCH_TEMPLATE_CONFIG['id'],
                                                                   'Version': AWS_LAUNCH_TEMPLATE_CONFIG['version']})
     print("Instance created: {}".format(instance_list[0].id))
@@ -165,10 +166,11 @@ def get_ec2_cpu_utilization_avg(worker_dict):
         response = get_ec2_cpu_utilization(inst_id)
         response = response[-2:]
         datapoints = [i[1] for i in response]
-        cpu_avg_list.append(sum(datapoints) / len(datapoints))
-    if len(cpu_avg_list) == 0:
-        return AWS_ERROR_CPU_AVG_VALUE_ZERO
-    return sum(cpu_avg_list) / len(cpu_avg_list)
+        if len(datapoints) != 0:
+            cpu_avg_list.append(sum(datapoints) / len(datapoints))
+    if len(cpu_avg_list) != 0:
+        return sum(cpu_avg_list) / len(cpu_avg_list)
+    return AWS_ERROR_CPU_AVG_VALUE_ZERO
 
 
 

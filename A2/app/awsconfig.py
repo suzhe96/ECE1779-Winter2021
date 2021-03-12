@@ -35,7 +35,7 @@ AWS_CLOUDWATCH_CONFIG = {
 
 AWS_LAUNCH_TEMPLATE_CONFIG = {
     'id' : 'lt-05d5dd91eddb6aee4',
-    'version' : '7'
+    'version' : '9'
 }
 
 AWS_EC2_STATUS_PENDING = 'pending'
@@ -59,3 +59,24 @@ AWS_ERROR_MSG = {
    AWS_ERROR_EC2_NUM_BELOW_MIN : 'EC2 instance number minimum reached',
    AWS_ERROR_CPU_AVG_VALUE_ZERO : 'Get zero in cpu utilization average'
 }
+
+# Could be included into launchTemplate
+AWS_EC2_USERDATA_SCRIPT = 'Content-Type: multipart/mixed; boundary="//"\n' \
+                          'MIME-Version: 1.0\n' \
+                          '--//\n' \
+                          'Content-Type: text/cloud-config; charset="us-ascii"\n' \
+                          'MIME-Version: 1.0\n' \
+                          'Content-Transfer-Encoding: 7bit\n' \
+                          'Content-Disposition: attachment; filename="cloud-config.txt"\n' \
+                          '#cloud-config\n' \
+                          'cloud_final_modules:\n' \
+                          '- [scripts-user, always]\n' \
+                          '--//\n' \
+                          'Content-Type: text/x-shellscript; charset="us-ascii"\n' \
+                          'MIME-Version: 1.0\n' \
+                          'Content-Transfer-Encoding: 7bit\n' \
+                          'Content-Disposition: attachment; filename="userdata.txt"\n' \
+                          '#!/bin/bash\n' \
+                          'screen\n' \
+                          '/home/ubuntu/Desktop/ECE1779-Winter2021/A1/start.sh\n' \
+                          '--//'
