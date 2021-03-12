@@ -9,7 +9,6 @@ from threading import Lock
 
 session = None
 s3_client = None
-db = None
 http_request_count = 0
 
 
@@ -51,10 +50,9 @@ def initialize_cloudwatch_handler():
 
 
 def get_db():
-    # db = getattr(g, '_database', None)
-    global db
+    db = getattr(g, '_database', None)
     if db is None:
-        db = connect_to_database()
+        db = g._database = connect_to_database()
     return db
 
 def get_s3():
@@ -76,8 +74,7 @@ def get_cloudwatch():
 
 @a1_webapp.teardown_appcontext
 def teardown_db(exception):
-    # db = getattr(g, '_database', None)
-    global db
+    db = getattr(g, '_database', None)
     if db is not None:
         db.close()
 

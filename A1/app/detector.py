@@ -60,6 +60,7 @@ def __get_timestamp_string():
 @a1_webapp.route('/detector_upload_route', methods=['GET', 'POST'])
 def detector_upload():
     awsworker.add_http_request_count()
+    print("/detector add")
     if request.method == 'POST':
         image_url = request.form['upload_url']
         image_file = request.files['upload_image']
