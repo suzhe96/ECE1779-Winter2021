@@ -1,4 +1,5 @@
 .idea/
 logs/
-venv/*
+venv/lib/*
+venv/.DS_Store
 app/__pycache__/*
