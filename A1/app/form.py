@@ -4,7 +4,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired, ValidationError, DataRequired, Email, EqualTo, InputRequired, Length
 
-from app import a1_webapp
+from app import app
 from app.models import Users
 
 

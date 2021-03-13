@@ -12,7 +12,7 @@ from PIL import Image as PILImage
 from wand.image import Image
 from flask import render_template, request, session, redirect, url_for, g
 from flask_login import current_user
-from app import a1_webapp, db
+from app import app, db
 from http import HTTPStatus
 from app.models import Users
 from app.awshandler import get_db, get_s3
@@ -57,7 +57,7 @@ def __get_timestamp_string():
     return str(timestamp).split('.')[0] + str(timestamp).split('.')[1]
 
 
-@a1_webapp.route('/detector_upload_route', methods=['GET', 'POST'])
+@app.route('/detector_upload_route', methods=['GET', 'POST'])
 def detector_upload():
     awsworker.add_http_request_count()
     print("/detector add")
@@ -128,7 +128,7 @@ def detector_upload():
     if request.method == 'GET':
         return __get_render_template("detector_upload.html", "Upload Image", error_in = None)
 
-@a1_webapp.route('/api/upload', methods=['GET','POST'])
+@app.route('/api/upload', methods=['GET','POST'])
 def api_upload():
     failure_dict = {"success": "false", "error": {"code": HTTPStatus.INTERNAL_SERVER_ERROR, "message" : None}}
     success_dict = {"success": "true", "payload": {"num_faces" : None, "num_masked": None, "num_unmasked" : None}}

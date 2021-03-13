@@ -2,7 +2,7 @@ import requests
 import json
 import mysql.connector
 from flask import g
-from app import a1_webapp
+from app import app
 from app.awsconfig import *
 import boto3, botocore
 from threading import Lock
@@ -73,7 +73,7 @@ def get_cloudwatch():
     return cloudwatch
 
 
-@a1_webapp.teardown_appcontext
+@app.teardown_appcontext
 def teardown_db(exception):
     db = getattr(g, '_database', None)
     if db is not None:
