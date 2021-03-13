@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+ <div class="main">
+     <p class="sign" align="center">Configure Auto Scalar Policy</p>
+        <form class="form1" action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.cpu_threshold_grow(class_="un",placeholder='Cpu Threshold Grow')}}<br>
+                {% for error in form.cpu_threshold_grow.errors %}
+                <span style="color: indianred; text-align:center;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.cpu_threshold_shrink(class_="un",placeholder='Cpu Threshold Shrink')}}<br>
+                {% for error in form.cpu_threshold_shrink.errors %}
+                <span style="color: indianred; text-align:center;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.expand_ratio(class_="un",placeholder='Expand Ratio')}}<br>
+                {% for error in form.expand_ratio.errors %}
+                <span style="color: indianred; text-align:center;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+             <p>
+                {{ form.shrink_ratio(class_="un",placeholder='Shrink Ratio')}}<br>
+                {% for error in form.shrink_ratio.errors %}
+                <span style="color: indianred; text-align:center;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit(class_="submit" ,placeholder='Submit') }}</p>
+        </form>
+ </div>
+{% endblock %}
