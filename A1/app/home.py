@@ -1,12 +1,12 @@
 from flask import render_template
-from app import a1_webapp
+from app import app
 from app.awshandler import get_db
 from flask_login import current_user
 from app import awsworker
 
 
-@a1_webapp.route('/')
-@a1_webapp.route('/home')
+@app.route('/')
+@app.route('/home')
 def main():
     # awsworker.add_http_request_count()
     # print("/home add")

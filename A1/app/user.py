@@ -1,5 +1,5 @@
 from flask import render_template, redirect, flash, url_for, request, current_app
-from app import a1_webapp, db
+from app import app, db
 from app.form import LoginForm, RegistrationForm, ChangePasswordForm, RequestResetPasswordForm, ResetPasswordForm, DeletionForm
 from app.models import Users
 from flask_login import current_user, login_user, logout_user, login_required
@@ -11,7 +11,7 @@ from app import awsworker
 import json
 
 
-@a1_webapp.route('/delete_account', methods=['GET', 'POST'])
+@app.route('/delete_account', methods=['GET', 'POST'])
 def delete_account():
     awsworker.add_http_request_count()
     print("/delete add")
@@ -28,7 +28,7 @@ def delete_account():
     return render_template('delete_account.html', form=form)
 
 
-@a1_webapp.route('/user_login', methods=['GET', 'POST'])
+@app.route('/user_login', methods=['GET', 'POST'])
 def login():
     awsworker.add_http_request_count()
     print("/login add")
@@ -50,7 +50,7 @@ def login():
     return render_template('login.html', title='Sign In', form=form)
 
 
-@a1_webapp.route('/user_logout')
+@app.route('/user_logout')
 @login_required
 def logout():
     awsworker.add_http_request_count()
@@ -60,13 +60,13 @@ def logout():
 
 
 def send_async_email(app, msg):
-    mail = Mail(a1_webapp)
+    mail = Mail(app)
     with app.app_context():
         mail.send(msg)
 
 
 def send_email(recipient, subject, template, **kwargs):
- #   mail = Mail(a1_webapp)
+ #   mail = Mail(app)
     msg = Message(
         current_app.config['EMAIL_SUBJECT_PREFIX'] + ' ' + subject,
         sender='kevingarnett03@gmail.com',
@@ -74,10 +74,10 @@ def send_email(recipient, subject, template, **kwargs):
     msg.body = render_template(template + '.txt', **kwargs)
     msg.html = render_template(template + '.html', **kwargs)
 #    mail.send(msg)
-    Thread(target=send_async_email, args=(a1_webapp, msg)).start()
+    Thread(target=send_async_email, args=(app, msg)).start()
 
 
-@a1_webapp.route('/forget_password', methods=['GET', 'POST'])
+@app.route('/forget_password', methods=['GET', 'POST'])
 def forget_password():
     awsworker.add_http_request_count()
     print("/forgotpass add")
@@ -106,7 +106,7 @@ def forget_password():
     return render_template('email_reset_password.html', form=form)
 
 
-@a1_webapp.route('/change_password', methods=['GET', 'POST'])
+@app.route('/change_password', methods=['GET', 'POST'])
 @login_required
 def change_password():
     """Change an existing user's password."""
@@ -129,7 +129,7 @@ def change_password():
     )
 
 
-@a1_webapp.route('/reset_password/<token>', methods=['GET', 'POST'])
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     """Reset an existing user's password."""
     awsworker.add_http_request_count()
@@ -153,7 +153,7 @@ def reset_password(token):
         'reset_password.html', form=form)
 
 
-@a1_webapp.route('/register', methods=['GET', 'POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     awsworker.add_http_request_count()
     print("/register add")
@@ -177,14 +177,14 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
-@a1_webapp.route('/account', methods=['GET'])
+@app.route('/account', methods=['GET'])
 def my_account():
     awsworker.add_http_request_count()
     print("/myaccount add")
     return render_template('account.html', title='My_Account')
 
 
-@a1_webapp.route('/api/register', methods=['POST'])
+@app.route('/api/register', methods=['POST'])
 def api_register():
     '''
     this is for the project tester usage
