@@ -29,15 +29,20 @@ def auto_scaler_policy_get():
 
 
 def auto_scaler_main():
+    print("########## Autoscaler Thread ##########")
     # update aws_worker_dict
     awsworker.update_aws_worker_dict()
     # get aws_worker_dict
     worker_dict = awsworker.get_aws_worker_dict()
+    print("worker_dict: {}".format(worker_dict))
     # get cpu_utilization_avg
     cpu_util_avg = awsworker.get_ec2_cpu_utilization_avg(worker_dict)
+    print("cpu utilization average: {}".format(cpu_util_avg))
     if cpu_util_avg == AWS_ERROR_CPU_AVG_VALUE_ZERO:
         # A running instance with hosting web application could not be 0 cpu in avg
-        print("Error: {}".format(AWS_ERROR_MSG[AWS_ERROR_CPU_AVG_VALUE_ZERO]))
+        print("Info: {}".format(AWS_ERROR_MSG[AWS_ERROR_CPU_AVG_VALUE_ZERO]))
+        print("It happends only at the first initializatio of manager")
+        print("######################################")
         return
     # get auto_scaler_policy
     policy = auto_scaler_policy_get()
@@ -47,16 +52,22 @@ def auto_scaler_main():
     if cpu_util_avg >= policy['cpu_grow_threshold']:
         scale_up_number = int(len(worker_dict) * policy['cpu_grow_ratio'])
         scale_up_number = max(0, scale_up_number)
+        print("Behaviour: Scale up")
+        print("Number: {}".format(scale_up_number))
         ret = awsworker.scaling_instance(AWS_EC2_SCALING_UP, scale_up_number)
 
     # case: scale down
     if cpu_util_avg <= policy['cpu_shrink_threshold']:
         scale_down_number = int(len(worker_dict) * policy['cpu_shrink_ratio'])
         scale_down_number = max(0, scale_down_number)
+        print("Behaviour: Scale down")
+        print("Number: {}".format(scale_up_number))
         ret = awsworker.scaling_instance(AWS_EC2_SCALING_DOWN, scale_down_number)
 
     if ret != AWS_OK:
         print("Error: {}".format(AWS_ERROR_MSG[ret]))
+    print("######################################")
+
 
 def auto_scaler_task_cb():
     while True:

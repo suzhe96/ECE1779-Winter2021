@@ -27,7 +27,15 @@ def create_instance():
 def terminate_instance(inst_id):
     ec2 = get_ec2()
     response = ec2.terminate_instances(InstanceIds=[inst_id])
-    print("terminate inst {} response {}".format(inst_id, response))
+    print("Instance terminated: {}".format(inst_id))
+
+
+'''Stop one EC2 instance given instance id
+'''
+def stop_instance(inst_id):
+    ec2 = get_ec2()
+    response = ec2.stop_instances(InstanceIds=[inst_id])
+    print("Instance stopped: {}".format(inst_id))
 
 
 '''Register one EC2 instancce to ELB given instance id
@@ -38,7 +46,7 @@ def register_instance_to_elb(inst_id):
         TargetGroupArn=AWS_TARGET_GROUP_CONFIG['targetgroupARN'],
         Targets=[{'Id': inst_id, 'Port': 5000}]
     )
-    print("register inst {} to elb response: {}".format(inst_id, response))
+    print("Instance registed to elb: {}".format(inst_id))
 
 
 '''Deregisiter one EC2 instance given instance id
@@ -49,7 +57,7 @@ def deregister_instance_to_elb(inst_id):
         TargetGroupArn=AWS_TARGET_GROUP_CONFIG['targetgroupARN'],
         Targets=[{'Id': inst_id, 'Port': 5000}]
     )
-    print("deregister inst {} to elb response: {}".format(inst_id, response))
+    print("Instance deregisted to elb: {}".format(inst_id))
 
 
 '''Scale up/down number of EC2 instances:
@@ -65,7 +73,7 @@ def scaling_instance(scaling_behaviour, scaling_num):
                 if aws_workers_dict[inst_id] == AWS_EC2_STATUS_PENDING:
                     scaling_num -= 1
             scaling_num = max(0, scaling_num)
-            print("The actual scale up number is : {}".format(scaling_num))
+            print("Actual scale up number: {}".format(scaling_num))
             for num in range(scaling_num):
                 inst_id = create_instance()
                 aws_workers_dict[inst_id] = AWS_EC2_STATUS_PENDING
@@ -81,7 +89,7 @@ def scaling_instance(scaling_behaviour, scaling_num):
                 else:
                     scalable_list.append(inst_id)
             scaling_num = max(0, scaling_num - len(stopping_list))
-            print("The actual scale down number is : {}".format(scaling_num))
+            print("Actual scale down number: {}".format(scaling_num))
             for index in range(scaling_num):
                 deregister_instance_to_elb(scalable_list[index])
                 terminate_instance(scalable_list[index])
@@ -154,6 +162,7 @@ def get_ec2_cpu_utilization(inst_id):
     )
     return aws_datapoint_parser(response['Datapoints'], AWS_CLOUDWATCH_CONFIG['statistics_avg'])
 
+
 '''Get CPU Utilization for all workers
 '''
 def get_all_ec2_cpu_utilizaton(worker_dict):
@@ -181,6 +190,7 @@ def get_ec2_cpu_utilization_avg(worker_dict):
     if len(cpu_avg_list) != 0:
         return sum(cpu_avg_list) / len(cpu_avg_list)
     return AWS_ERROR_CPU_AVG_VALUE_ZERO
+
 
 '''GET HTTP Requests for all running worker instances
 '''
@@ -229,8 +239,6 @@ def aws_datapoint_parser(data, statistics):
     time_stamps = list(map(time_stamps.__getitem__, indexes))
     stat = list(map(stat.__getitem__, indexes))
     ret_list=[time_stamps, stat]
-#        ret_list.append([time, data_point[statistics]])
-#    ret_list = sorted(ret_list, key=itemgetter(0))
                 
     return ret_list
 
@@ -248,13 +256,15 @@ def initialize_first_worker():
 def get_aws_worker_dict():
     return aws_workers_dict 
 
-'''Terminate all worke instances
+
+'''Terminate all worke instances and stop manager instance
 '''
 def stop_all():
     ec2_resource = get_ec2_resource()
     ec2_instances = ec2_resource.instances.all()
-    #FIXME, how to stop the Manager APP rathe than TERMINATE IT ?
     for inst_id in ec2_instances:
-#        terminate_instance(inst_id)
-        print("fix later")
+        if inst_id == AWS_GENERAL_CONFIG['manager_inst_id']:
+            stop_instance(inst_id)
+        else:
+            terminate_instance(inst_id)
     return AWS_OK

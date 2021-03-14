@@ -15,6 +15,7 @@ def main():
 #    workers = [time_stamps, worker_numbers]
     awsworker.update_aws_worker_dict()
     workers = awsworker.get_ec2_workers_chart()
+    print("[HOME]worker list size: {}".format(len(workers[1])))
     return render_template("home.html", title="Home", worker_number=workers)
 
 
@@ -33,8 +34,9 @@ def get_workers_list():
     awsworker.update_aws_worker_dict()
     worker_dict = awsworker.get_aws_worker_dict()
     cpu_util = awsworker.get_all_ec2_cpu_utilizaton(worker_dict)
-    HTTP_Req = awsworker.get_all_workers_http_request(worker_dict) 
-    return render_template("get_workers_list.html", title="Listing_Workers", CPU_Util = cpu_util, HTTP_Req=HTTP_Req)
+    http_req = awsworker.get_all_workers_http_request(worker_dict)
+    print("[WROKER_LIST]cpu dict size: {}, http dict size: {}".format(len(cpu_util), len(http_req)))
+    return render_template("get_workers_list.html", title="Listing_Workers", CPU_Util = cpu_util, HTTP_Req=http_req)
 
 
 @a2.route('/load_balancer', methods=['POST', 'GET'])
@@ -52,7 +54,7 @@ def increase_worker_pool():
     awsworker.update_aws_worker_dict()
     return_value = awsworker.scaling_instance(awsconfig.AWS_EC2_SCALING_UP, 1)
     if return_value != awsconfig.AWS_OK:
-        flash('Increase Worker Pool Failed', 'danger')
+        flash('Increase Worker Pool Failed: {}'.format(awsconfig.AWS_ERROR_MSG[return_value]), 'danger')
     else:
         flash('Increased Worker Pool Successfully', 'success')
     return redirect(url_for('configure_worker_pool'))
@@ -63,7 +65,7 @@ def decrease_worker_pool():
     awsworker.update_aws_worker_dict()
     return_value = awsworker.scaling_instance(awsconfig.AWS_EC2_SCALING_DOWN, 1)
     if return_value != awsconfig.AWS_OK:
-        flash('Decrease Worker Pool Failed', 'danger')
+        flash('Decrease Worker Pool Failed: {}'.format(awsconfig.AWS_ERROR_MSG[return_value]), 'danger')
     else:
         flash('Decreased Worker Pool Successfully', 'success')
     return redirect(url_for('configure_worker_pool'))
@@ -112,6 +114,7 @@ def delete_data():
     flash('Deleted all data Successfully', 'success')
     #FIXME, need to delete RDS data as well
     return redirect(url_for('main'))
+
 
 def delete_s3_data(s3_handler):
     for key in s3_handler.list_objects(Bucket='a1db')['Contents']:

@@ -16,6 +16,7 @@ AWS_TARGET_GROUP_CONFIG = {
 
 AWS_GENERAL_CONFIG = {
     'region' : 'us-east-1',
+    'manager_inst_id' : 'i-08e136084eb1c23c4',
     'elb_service' : 'elbv2',
     'ec2_service' : 'ec2',
     'cloudwatch_service' : 'cloudwatch',
