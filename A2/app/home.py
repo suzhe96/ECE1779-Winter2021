@@ -13,6 +13,10 @@ def main():
 #    time_stamps = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 #    worker_numbers = [10, 20, 30, 80, 50, 70, 10, 20, 30, 80, 50, 70]
 #    workers = [time_stamps, worker_numbers]
+
+    #TODO: display worker list based on worker_dict
+    #      display another attribute on healthy count (since it is out of sync mostly)
+
     awsworker.update_aws_worker_dict()
     workers = awsworker.get_ec2_workers_chart()
     print("[HOME]worker list size: {}".format(len(workers[1])))
@@ -31,6 +35,9 @@ def get_workers_list():
 #        if x == 2:
 #            http_requests = [100,200,300,400,500,600,700,800]
 #        HTTP_Req[x] = [time_stamps, http_requests]
+
+    #TODO: for each worker, display its current status getting from worker_dict
+
     awsworker.update_aws_worker_dict()
     worker_dict = awsworker.get_aws_worker_dict()
     cpu_util = awsworker.get_all_ec2_cpu_utilizaton(worker_dict)
@@ -53,10 +60,12 @@ def configure_worker_pool():
 def increase_worker_pool():
     awsworker.update_aws_worker_dict()
     return_value = awsworker.scaling_instance(awsconfig.AWS_EC2_SCALING_UP, 1)
-    if return_value != awsconfig.AWS_OK:
+    if return_value == awsconfig.AWS_ERROR_EC2_NUM_EXCEED_MAX:
         flash('Increase Worker Pool Failed: {}'.format(awsconfig.AWS_ERROR_MSG[return_value]), 'danger')
+    elif return_value == awsconfig.AWS_ERROR_EC2_NUM_SCALE_ZERO:
+        flash('Increase Worker Pool: Exist pending workers', 'success')
     else:
-        flash('Increased Worker Pool Successfully', 'success')
+        flash('Increase Worker Pool Successfully', 'success')
     return redirect(url_for('configure_worker_pool'))
 
 
@@ -64,10 +73,12 @@ def increase_worker_pool():
 def decrease_worker_pool():
     awsworker.update_aws_worker_dict()
     return_value = awsworker.scaling_instance(awsconfig.AWS_EC2_SCALING_DOWN, 1)
-    if return_value != awsconfig.AWS_OK:
+    if return_value == awsconfig.AWS_ERROR_EC2_NUM_BELOW_MIN:
         flash('Decrease Worker Pool Failed: {}'.format(awsconfig.AWS_ERROR_MSG[return_value]), 'danger')
+    elif return_value == awsconfig.AWS_ERROR_EC2_NUM_SCALE_ZERO:
+        flash('Decrease Worker Pool: Exist stopping workers', 'success')
     else:
-        flash('Decreased Worker Pool Successfully', 'success')
+        flash('Decrease Worker Pool Successfully', 'success')
     return redirect(url_for('configure_worker_pool'))
 
 

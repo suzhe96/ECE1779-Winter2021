@@ -55,11 +55,13 @@ AWS_OK = 0
 AWS_ERROR_EC2_NUM_EXCEED_MAX = 1501
 AWS_ERROR_EC2_NUM_BELOW_MIN = 1502
 AWS_ERROR_CPU_AVG_VALUE_ZERO = 1503
+AWS_ERROR_EC2_NUM_SCALE_ZERO = 1504
 
 AWS_ERROR_MSG = {
    AWS_ERROR_EC2_NUM_EXCEED_MAX : 'EC2 instance number maximum reached',
    AWS_ERROR_EC2_NUM_BELOW_MIN : 'EC2 instance number minimum reached',
-   AWS_ERROR_CPU_AVG_VALUE_ZERO : 'Get zero in cpu utilization average'
+   AWS_ERROR_CPU_AVG_VALUE_ZERO : 'Get zero in cpu utilization average',
+   AWS_ERROR_EC2_NUM_SCALE_ZERO : 'EC2 scaling with zero worker'
 }
 
 # Could be included into launchTemplate

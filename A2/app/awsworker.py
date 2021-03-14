@@ -74,6 +74,8 @@ def scaling_instance(scaling_behaviour, scaling_num):
                     scaling_num -= 1
             scaling_num = max(0, scaling_num)
             print("Actual scale up number: {}".format(scaling_num))
+            if (scaling_num == 0):
+                return AWS_ERROR_EC2_NUM_SCALE_ZERO
             for num in range(scaling_num):
                 inst_id = create_instance()
                 aws_workers_dict[inst_id] = AWS_EC2_STATUS_PENDING
@@ -90,6 +92,8 @@ def scaling_instance(scaling_behaviour, scaling_num):
                     scalable_list.append(inst_id)
             scaling_num = max(0, scaling_num - len(stopping_list))
             print("Actual scale down number: {}".format(scaling_num))
+            if scaling_num == 0:
+                return AWS_ERROR_EC2_NUM_SCALE_ZERO
             for index in range(scaling_num):
                 deregister_instance_to_elb(scalable_list[index])
                 terminate_instance(scalable_list[index])

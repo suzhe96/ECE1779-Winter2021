@@ -40,7 +40,7 @@ def auto_scaler_main():
     if cpu_util_avg == AWS_ERROR_CPU_AVG_VALUE_ZERO:
         # A running instance with hosting web application could not be 0 cpu in avg
         print("Info: {}".format(AWS_ERROR_MSG[AWS_ERROR_CPU_AVG_VALUE_ZERO]))
-        print("It happends only at the first initializatio of manager")
+        print("It happends only at the first initialization of manager")
         print("######################################")
         return
     print("cpu utilization average: {}".format(cpu_util_avg))
@@ -65,7 +65,7 @@ def auto_scaler_main():
         ret = awsworker.scaling_instance(AWS_EC2_SCALING_DOWN, scale_down_number)
 
     if ret != AWS_OK:
-        print("Error: {}".format(AWS_ERROR_MSG[ret]))
+        print("Info: {}".format(AWS_ERROR_MSG[ret]))
     print("######################################")
 
 
