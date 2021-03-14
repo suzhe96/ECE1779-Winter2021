@@ -18,7 +18,8 @@ AWS_GENERAL_CONFIG = {
     'region' : 'us-east-1',
     'elb_service' : 'elbv2',
     'ec2_service' : 'ec2',
-    'cloudwatch_service' : 'cloudwatch'
+    'cloudwatch_service' : 'cloudwatch',
+    's3_service' : 's3'
 }
 
 AWS_CLOUDWATCH_CONFIG = {

@@ -5,6 +5,7 @@ from app import awsworker
 from app import awsconfig
 from app.form import AutoScalarForm
 from app import autoscaler
+from app import awshandler
 
 @a2.route('/')
 @a2.route('/home', methods=['POST', 'GET'])
@@ -107,5 +108,22 @@ def stop():
 
 @a2.route('/delete_data', methods=['POST', 'GET'])
 def delete_data():
+    s3_handler = awshandler.get_s3()
+    delete_s3_data(s3_handler)
     flash('Deleted all data Successfully', 'success')
+    #FIXME, need to delete RDS data as well
     return redirect(url_for('main'))
+
+def delete_s3_data(s3_handler):
+    for key in s3_handler.list_objects(Bucket='a1db')['Contents']:
+            s3_handler.delete_objects(
+                Bucket='a1db',
+                Delete={
+                    'Objects': [
+                        {
+                            'Key': key['Key'],
+                        },
+                    ],
+                    'Quiet': True
+                },
+            )

@@ -12,7 +12,7 @@ elb = None
 ec2 = None
 ec2_resource = None
 cloudwatch = None
-
+s3 = None
 
 def get_aws_credentials():
     aws_response = requests.get(AWS_CREDENTIALS_CONFIG['request'].format(AWS_CREDENTIALS_CONFIG['iam_role']))
@@ -70,3 +70,10 @@ def get_cloudwatch():
         cloudwatch = session.client(AWS_GENERAL_CONFIG['cloudwatch_service'])
     return cloudwatch
 
+def get_s3():
+    global session, s3
+    if s3 is None:
+        session = get_boto3_session()
+        s3 = session.client(AWS_GENERAL_CONFIG['s3_service'],
+                             region_name=AWS_GENERAL_CONFIG['region'])
+    return s3

@@ -219,10 +219,20 @@ RETURN [[time, data]]
 '''
 def aws_datapoint_parser(data, statistics):
     ret_list = []
+    stat =[]
+    time_stamps =[]
     for data_point in data:
         time = data_point['Timestamp'].hour + data_point['Timestamp'].minute/60
-        ret_list.append([time, data_point[statistics]])
-    ret_list = sorted(ret_list, key=itemgetter(0))
+        time_stamps.append(round(time,2))
+        stat.append(data_point[statistics])
+    indexes = list(range(len(time_stamps)))
+    indexes.sort(key=time_stamps.__getitem__)
+    time_stamps = list(map(time_stamps.__getitem__, indexes))
+    stat = list(map(stat.__getitem__, indexes))
+    ret_list=[time_stamps, stat]
+#        ret_list.append([time, data_point[statistics]])
+#    ret_list = sorted(ret_list, key=itemgetter(0))
+                
     return ret_list
 
 
@@ -247,4 +257,5 @@ def stop_all():
     #FIXME, how to stop the Manager APP rathe than TERMINATE IT ?
     for inst_id in ec2_instances:
 #        terminate_instance(inst_id)
+        print("fix later")
     return AWS_OK
