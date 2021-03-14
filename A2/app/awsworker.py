@@ -3,7 +3,7 @@ from app.awsconfig import *
 from datetime import datetime, timedelta
 from operator import itemgetter
 from threading import Lock
-
+import mysql.connector
 
 aws_workers_dict = {}
 aws_worker_dict_mutex = Lock()
@@ -272,3 +272,17 @@ def stop_all():
         else:
             terminate_instance(inst_id)
     return AWS_OK
+
+
+'''Init RDB with schema.sql
+'''
+def init_rdb():
+    cmd_list = []
+    with open("schema.sql") as fd:
+        cmd_list = [cmd.replace("\n", "") for cmd in fd.read().split(";")]
+    cnx = get_db()
+    cursor = cnx.cursor()
+    for cmd in cmd_list:
+        if not cmd: continue
+        cursor.execute(cmd)
+        cnx.commit()

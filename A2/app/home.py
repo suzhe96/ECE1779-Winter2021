@@ -122,8 +122,8 @@ def stop():
 def delete_data():
     s3_handler = awshandler.get_s3()
     delete_s3_data(s3_handler)
+    # awsworker.init_rdb()
     flash('Deleted all data Successfully', 'success')
-    #FIXME, need to delete RDS data as well
     return redirect(url_for('main'))
 
 

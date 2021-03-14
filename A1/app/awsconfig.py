@@ -8,6 +8,14 @@ DATABASE_LOCAL_CONFIG = {
     "db": "ECE1779_A1_DB"
 }
 
+AWS_RDS_CONFIG = {
+    "host": "ece1779-group-zhe-rds.cyxz2jq5daoc.us-east-1.rds.amazonaws.com",
+    "port": 3306,
+    "user": "root",
+    "password": "ece1779pass",
+    "db": "ECE1779_A1_DB"
+}
+
 # S3 bucket need to be pre-created as public access
 AWS_S3_CONFIG = {
     "aws_bucket_name": "a1db",
@@ -43,3 +51,5 @@ AWS_CLOUDWATCH_CONFIG = {
     'statistics_avg' : 'Average',
     'statisitcs_max' : 'Maximum',
 }
+
+AWS_RDS_DEPLOY = False

@@ -27,10 +27,16 @@ def get_instance_id():
 
 
 def connect_to_database():
-    return mysql.connector.connect(user=DATABASE_LOCAL_CONFIG['user'],
-                                   password=DATABASE_LOCAL_CONFIG['password'],
-                                   host=DATABASE_LOCAL_CONFIG['host'],
-                                   database=DATABASE_LOCAL_CONFIG['db'])
+    if AWS_RDS_DEPLOY:
+        return mysql.connector.connect(user=AWS_RDS_CONFIG['user'],
+                                       password=AWS_RDS_CONFIG['password'],
+                                       host=AWS_RDS_CONFIG['host'],
+                                       database=AWS_RDS_CONFIG['db'])
+    else:
+        return mysql.connector.connect(user=DATABASE_LOCAL_CONFIG['user'],
+                                       password=DATABASE_LOCAL_CONFIG['password'],
+                                       host=DATABASE_LOCAL_CONFIG['host'],
+                                       database=DATABASE_LOCAL_CONFIG['db'])
 
 
 def get_boto3_session():

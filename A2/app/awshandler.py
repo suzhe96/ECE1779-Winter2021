@@ -70,6 +70,7 @@ def get_cloudwatch():
         cloudwatch = session.client(AWS_GENERAL_CONFIG['cloudwatch_service'])
     return cloudwatch
 
+
 def get_s3():
     global session, s3
     if s3 is None:
@@ -77,3 +78,30 @@ def get_s3():
         s3 = session.client(AWS_GENERAL_CONFIG['s3_service'],
                              region_name=AWS_GENERAL_CONFIG['region'])
     return s3
+
+
+def connect_to_database():
+    if AWS_RDS_DEPLOY:
+        return mysql.connector.connect(user=AWS_RDS_CONFIG['user'],
+                                       password=AWS_RDS_CONFIG['password'],
+                                       host=AWS_RDS_CONFIG['host'],
+                                       database=AWS_RDS_CONFIG['db'])
+    else:
+        return mysql.connector.connect(user=DATABASE_LOCAL_CONFIG['user'],
+                                       password=DATABASE_LOCAL_CONFIG['password'],
+                                       host=DATABASE_LOCAL_CONFIG['host'],
+                                       database=DATABASE_LOCAL_CONFIG['db'])
+
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = connect_to_database()
+    return db
+
+
+@app.teardown_appcontext
+def teardown_db(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()

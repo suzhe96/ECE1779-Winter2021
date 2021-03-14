@@ -3,6 +3,14 @@ AWS_CREDENTIALS_CONFIG = {
     'iam_role' : 'ECE1779-ADMIN'
 }
 
+AWS_RDS_CONFIG = {
+    "host": "ece1779-group-zhe-rds.cyxz2jq5daoc.us-east-1.rds.amazonaws.com",
+    "port": 3306,
+    "user": "root",
+    "password": "ece1779pass",
+    "db": "ECE1779_A1_DB"
+}
+
 AWS_ELB_CONFIG = {
     'lb' : 'app/ece1779-lb-group-zhe/70e467fa27db17ed',
     'lbARN' : 'arn:aws:elasticloadbalancing:us-east-1:905405143286:loadbalancer/app/ece1779-lb-group-zhe/70e467fa27db17ed',
@@ -64,23 +72,4 @@ AWS_ERROR_MSG = {
    AWS_ERROR_EC2_NUM_SCALE_ZERO : 'EC2 scaling with zero worker'
 }
 
-# Could be included into launchTemplate
-AWS_EC2_USERDATA_SCRIPT = 'Content-Type: multipart/mixed; boundary="//"\n' \
-                          'MIME-Version: 1.0\n' \
-                          '--//\n' \
-                          'Content-Type: text/cloud-config; charset="us-ascii"\n' \
-                          'MIME-Version: 1.0\n' \
-                          'Content-Transfer-Encoding: 7bit\n' \
-                          'Content-Disposition: attachment; filename="cloud-config.txt"\n' \
-                          '#cloud-config\n' \
-                          'cloud_final_modules:\n' \
-                          '- [scripts-user, always]\n' \
-                          '--//\n' \
-                          'Content-Type: text/x-shellscript; charset="us-ascii"\n' \
-                          'MIME-Version: 1.0\n' \
-                          'Content-Transfer-Encoding: 7bit\n' \
-                          'Content-Disposition: attachment; filename="userdata.txt"\n' \
-                          '#!/bin/bash\n' \
-                          'screen\n' \
-                          '/home/ubuntu/Desktop/ECE1779-Winter2021/A1/start.sh\n' \
-                          '--//'
+AWS_RDS_DEPLOY = False
