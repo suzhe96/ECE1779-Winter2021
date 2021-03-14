@@ -45,10 +45,10 @@ CREATE TABLE autoscale
 (
     id INT NOT NULL AUTO_INCREMENT,
     scale char(10) NOT NULL,
-    upper_bound INT NOT NULL,
-    lower_bound INT NOT NULL,
-    scale_up    INT NOT NULL,
-    scale_down  INT NOT NULL,
+    cpu_grow_threshold INT NOT NULL,
+    cpu_shrink_threshold INT NOT NULL,
+    cpu_grow_ratio    INT NOT NULL,
+    cpu_shrink_ratio  INT NOT NULL,
     PRIMARY KEY (id)
 ) ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
