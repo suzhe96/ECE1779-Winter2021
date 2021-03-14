@@ -9,33 +9,32 @@ from app import autoscaler
 @a2.route('/')
 @a2.route('/home', methods=['POST', 'GET'])
 def main():
-    time_stamps = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-    worker_numbers = [10, 20, 30, 80, 50, 70, 10, 20, 30, 80, 50, 70]
-    Workers = [time_stamps, worker_numbers]
-
- #   while True:
- #       awsworker.update_aws_worker_dict()
- #       worker_dict = awsworker.get_aws_worker_dict()
- #       for key in worker_dict:
- #           if worker_dict[key] == awsconfig.AWS_EC2_STATUS_RUNNING:
- #               return render_template("home.html", title="Home", worker_number=Workers)
- #       time.sleep(30)
+#    time_stamps = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+#    worker_numbers = [10, 20, 30, 80, 50, 70, 10, 20, 30, 80, 50, 70]
+#    Workers = [time_stamps, worker_numbers]
+    awsworker.update_aws_worker_dict()
+    Workers = awsworker.get_ec2_workers_chart
+    print(Workers)
     return render_template("home.html", title="Home", worker_number=Workers)
 
 
 @a2.route('/get_workers_list', methods=['POST', 'GET'])
 def get_workers_list():
-   time_stamps = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
-   cpu_stats = [10,20,30,80,50,70,10,20,30,80,50,70]
-   cpu_util = {}
-   http_requests = [100,400,600,700,800,900]
-   HTTP_Req = {}
-   for x in range(8):
-        cpu_util[x] = [time_stamps, cpu_stats]
-        if x == 2:
-            http_requests = [100,200,300,400,500,600,700,800]
-        HTTP_Req[x] = [time_stamps, http_requests]
-   return render_template("get_workers_list.html", title="Listing_Workers", CPU_Util = cpu_util, HTTP_Req=HTTP_Req)
+#  time_stamps = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
+#   cpu_stats = [10,20,30,80,50,70,10,20,30,80,50,70]
+#   cpu_util = {}
+#   http_requests = [100,400,600,700,800,900]
+#   HTTP_Req = {}
+#   for x in range(8):
+#        cpu_util[x] = [time_stamps, cpu_stats]
+#        if x == 2:
+#            http_requests = [100,200,300,400,500,600,700,800]
+#        HTTP_Req[x] = [time_stamps, http_requests]
+    awsworker.update_aws_worker_dict()
+    worker_dict = awsworker.get_aws_worker_dict()
+    cpu_util = awsworker.get_all_ec2_cpu_utilizaton(worker_dict)
+    HTTP_Req = awsworker.get_all_workers_http_request(worker_dict) 
+    return render_template("get_workers_list.html", title="Listing_Workers", CPU_Util = cpu_util, HTTP_Req=HTTP_Req)
 
 
 @a2.route('/load_balancer', methods=['POST', 'GET'])
@@ -50,13 +49,23 @@ def configure_worker_pool():
 
 @a2.route('/increase_worker_pool', methods=['POST', 'GET'])
 def increase_worker_pool():
-    flash('Increased Worker Pool Successfully', 'success')
+    awsworker.update_aws_worker_dict()
+    return_value = awsworker.scaling_instance(awsconfig.AWS_EC2_SCALING_UP, 1)
+    if return_value != awsconfig.AWS_OK:
+        flash('Increase Worker Pool Failed', 'danger')
+    else:
+        flash('Increased Worker Pool Successfully', 'success')
     return redirect(url_for('configure_worker_pool'))
 
 
 @a2.route('/decrease_worker_pool', methods=['POST', 'GET'])
 def decrease_worker_pool():
-    flash('Decreased Worker Pool Successfully', 'success')
+    awsworker.update_aws_worker_dict()
+    return_value = awsworker.scaling_instance(awsconfig.AWS_EC2_SCALING_DOWN, 1)
+    if return_value != awsconfig.AWS_OK:
+        flash('Decrease Worker Pool Failed', 'danger')
+    else:
+        flash('Decreased Worker Pool Successfully', 'success')
     return redirect(url_for('configure_worker_pool'))
 
 
@@ -89,6 +98,10 @@ def configure_auto_scaler():
 
 @a2.route('/stop', methods=['POST', 'GET'])
 def stop():
+    #FIXME, HOW TO STOP THE CURRENT MANAGER APP?
+
+    #terminal all instances (including pending to start)
+    awsworker.stop_all()
     flash('Stopped all EC2 instances Successfully', 'success')
     return render_template("termination.html", title="Home")
 

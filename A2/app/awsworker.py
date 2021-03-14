@@ -154,6 +154,18 @@ def get_ec2_cpu_utilization(inst_id):
     )
     return aws_datapoint_parser(response['Datapoints'], AWS_CLOUDWATCH_CONFIG['statistics_avg'])
 
+'''Get CPU Utilization for all workers
+'''
+def get_all_ec2_cpu_utilizaton(worker_dict):
+    all_running_ec2_stat ={}
+    index = 0
+    for inst_id in worker_dict:
+        if worker_dict[inst_id] != AWS_EC2_STATUS_RUNNING:
+            continue
+        ec2_stat = get_ec2_cpu_utilization(inst_id);
+        all_running_ec2_stat[index] = ec2_stat
+        index = index + 1
+    return all_running_ec2_stat
 
 '''Get CPU utilization average value given up-to-dated worker_dict (ONLY COUNT ON RUNNING INSTANCES)
 '''
@@ -171,6 +183,18 @@ def get_ec2_cpu_utilization_avg(worker_dict):
         return sum(cpu_avg_list) / len(cpu_avg_list)
     return AWS_ERROR_CPU_AVG_VALUE_ZERO
 
+'''GET HTTP Requests for all running worker instances
+'''
+def get_all_workers_http_request(worker_dict):
+    all_running_ec2_stat ={}
+    index = 0
+    for inst_id in worker_dict:
+        if worker_dict[inst_id] != AWS_EC2_STATUS_RUNNING:
+            continue
+        ec2_stat = get_http_request(inst_id);
+        all_running_ec2_stat[index] = ec2_stat
+        index = index + 1
+    return all_running_ec2_stat
 
 
 '''Get HTTP Requests given by instance id
@@ -214,3 +238,12 @@ def initialize_first_worker():
 '''
 def get_aws_worker_dict():
     return aws_workers_dict 
+
+'''Terminate all worke instances
+'''
+def stop_all():
+    ec2_resource = get_ec2_resource()
+    ec2_instances = ec2_resource.instances.all()
+    for inst_id in ec2_instances:
+        terminate_instance(inst_id)
+    return AWS_OK
