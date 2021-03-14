@@ -50,6 +50,15 @@ CREATE TABLE autoscale (
     `cpu_shrink_ratio`  INT NOT NULL,
     PRIMARY KEY (id)
 ) ENGINE = InnoDB;
+
+DROP TABLE IF EXISTS `http_request`;
+CREATE TABLE http_request (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `request_number` INT NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
