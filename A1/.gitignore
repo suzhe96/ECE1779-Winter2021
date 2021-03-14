@@ -2,3 +2,5 @@
 logs/
 venv/*
 app/__pycache__/*
+access.log
+error.log
