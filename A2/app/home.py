@@ -12,11 +12,10 @@ from app import awshandler
 def main():
 #    time_stamps = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 #    worker_numbers = [10, 20, 30, 80, 50, 70, 10, 20, 30, 80, 50, 70]
-#    Workers = [time_stamps, worker_numbers]
+#    workers = [time_stamps, worker_numbers]
     awsworker.update_aws_worker_dict()
-    Workers = awsworker.get_ec2_workers_chart
-    print(Workers)
-    return render_template("home.html", title="Home", worker_number=Workers)
+    workers = awsworker.get_ec2_workers_chart()
+    return render_template("home.html", title="Home", worker_number=workers)
 
 
 @a2.route('/get_workers_list', methods=['POST', 'GET'])

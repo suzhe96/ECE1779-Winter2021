@@ -175,8 +175,7 @@ def get_ec2_cpu_utilization_avg(worker_dict):
         if worker_dict[inst_id] != AWS_EC2_STATUS_RUNNING:
             continue
         response = get_ec2_cpu_utilization(inst_id)
-        response = response[-2:]
-        datapoints = [i[1] for i in response]
+        datapoints = response[1][-2:]
         if len(datapoints) != 0:
             cpu_avg_list.append(sum(datapoints) / len(datapoints))
     if len(cpu_avg_list) != 0:
