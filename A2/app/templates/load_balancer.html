@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+/* unvisited link */
+a:link {
+  color: red;
+}
+
+/* visited link */
+a:visited {
+  color: green;
+}
+
+/* mouse over link */
+a:hover {
+  color: hotpink;
+}
+
+/* selected link */
+a:active {
+  color: blue;
+}
+</style>
+     <div class="home_text_box">
+        <div class="container">
+          <div class="card border-0 shadow my-5">
+            <div class="card-body p-5">
+            </div>
+          </div>
+        </div>
+<div class="content-section">
+    <div class="container">
+        <center><h2>Press Below Link To Access User App</h2></center>
+        <br><br>
+	    <a style="font-size:60px" href = "http://{{ DNS }}">User App URL</a>
+        <br>
+</div>
+</div>
+{% endblock content %}

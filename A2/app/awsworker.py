@@ -173,8 +173,8 @@ def get_all_ec2_cpu_utilizaton(worker_dict):
     all_running_ec2_stat ={}
     index = 0
     for inst_id in worker_dict:
-        if worker_dict[inst_id] != AWS_EC2_STATUS_RUNNING:
-            continue
+    #    if worker_dict[inst_id] != AWS_EC2_STATUS_RUNNING:
+    #        continue
         ec2_stat = get_ec2_cpu_utilization(inst_id);
         all_running_ec2_stat[index] = ec2_stat
         index = index + 1
@@ -202,8 +202,8 @@ def get_all_workers_http_request(worker_dict):
     all_running_ec2_stat ={}
     index = 0
     for inst_id in worker_dict:
-        if worker_dict[inst_id] != AWS_EC2_STATUS_RUNNING:
-            continue
+    #    if worker_dict[inst_id] != AWS_EC2_STATUS_RUNNING:
+    #        continue
         ec2_stat = get_http_request(inst_id);
         all_running_ec2_stat[index] = ec2_stat
         index = index + 1
@@ -266,11 +266,12 @@ def get_aws_worker_dict():
 def stop_all():
     ec2_resource = get_ec2_resource()
     ec2_instances = ec2_resource.instances.all()
-    for inst_id in ec2_instances:
-        if inst_id == AWS_GENERAL_CONFIG['manager_inst_id']:
-            stop_instance(inst_id)
-        else:
-            terminate_instance(inst_id)
+    for inst in ec2_instances:
+        if inst.state['Name'] != AWS_EC2_STATUS_DOWN: 
+            if inst.id == AWS_GENERAL_CONFIG['manager_inst_id']:
+                stop_instance(inst.id)
+            else:
+                terminate_instance(inst.id)
     return AWS_OK
 
 

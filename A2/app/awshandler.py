@@ -100,7 +100,7 @@ def get_db():
     return db
 
 
-@app.teardown_appcontext
+@a2.teardown_appcontext
 def teardown_db(exception):
     db = getattr(g, '_database', None)
     if db is not None:

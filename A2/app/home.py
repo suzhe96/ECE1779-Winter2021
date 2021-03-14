@@ -37,18 +37,26 @@ def get_workers_list():
 #        HTTP_Req[x] = [time_stamps, http_requests]
 
     #TODO: for each worker, display its current status getting from worker_dict
+    #ADDED current status for each worker, remove above TODO after check
 
     awsworker.update_aws_worker_dict()
     worker_dict = awsworker.get_aws_worker_dict()
     cpu_util = awsworker.get_all_ec2_cpu_utilizaton(worker_dict)
     http_req = awsworker.get_all_workers_http_request(worker_dict)
+    worker_status = {}
+    worker_index = 0;
+    for worker in worker_dict:
+        worker_status[worker_index]=worker_dict[worker]
+        worker_index = worker_index + 1
     print("[WROKER_LIST]cpu dict size: {}, http dict size: {}".format(len(cpu_util), len(http_req)))
-    return render_template("get_workers_list.html", title="Listing_Workers", CPU_Util = cpu_util, HTTP_Req=http_req)
+    return render_template("get_workers_list.html", title="Listing_Workers", CPU_Util = cpu_util, HTTP_Req=http_req, worker_status=worker_status)
 
 
 @a2.route('/load_balancer', methods=['POST', 'GET'])
 def load_balancer():
-    return render_template("load_balancer.html", title="Load_Balancer")
+    awsworker.update_aws_worker_dict()
+    DNS = awsworker.get_elb_dns()
+    return render_template("load_balancer.html", title="Load_Balancer", DNS = DNS)
 
 
 @a2.route('/configure_worker_pool', methods=['POST', 'GET'])
@@ -111,8 +119,6 @@ def configure_auto_scaler():
 
 @a2.route('/stop', methods=['POST', 'GET'])
 def stop():
-    #FIXME, HOW TO STOP THE CURRENT MANAGER APP?
-    #terminal all instances (including pending to start)
     awsworker.stop_all()
     flash('Stopped all EC2 instances Successfully', 'success')
     return render_template("termination.html", title="Home")
