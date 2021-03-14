@@ -244,6 +244,7 @@ def get_aws_worker_dict():
 def stop_all():
     ec2_resource = get_ec2_resource()
     ec2_instances = ec2_resource.instances.all()
+    #FIXME, how to stop the Manager APP rathe than TERMINATE IT ?
     for inst_id in ec2_instances:
-        terminate_instance(inst_id)
+#        terminate_instance(inst_id)
     return AWS_OK

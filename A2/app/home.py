@@ -99,7 +99,6 @@ def configure_auto_scaler():
 @a2.route('/stop', methods=['POST', 'GET'])
 def stop():
     #FIXME, HOW TO STOP THE CURRENT MANAGER APP?
-
     #terminal all instances (including pending to start)
     awsworker.stop_all()
     flash('Stopped all EC2 instances Successfully', 'success')
