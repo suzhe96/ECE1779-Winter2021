@@ -8,9 +8,16 @@
             </div>
           </div>
         </div>
+     <table style="border:1px solid black;margin-left:auto;margin-right:auto;text-align:left;">
+        <tr><td>Current All Workers: </td><td> {{ current_total_workers }}</td></tr>
+	<tr><td>Current Pending Workers: </td><td> {{ pending_workers }}</td></tr>
+	<tr><td>Current Stopping Workers: </td><td> {{ stopping_workers }}</td></tr>
+	<tr><td>Current Running Workers: </td><td> {{ running_workers }}</td></tr>
+    </table>
+    <br>
     <table style="margin-left:auto; margin-right:auto;">
         <tr>
-            <td><center>Number of Workers</center></td>
+            <td><center>Number of Healthy Workers</center></td>
         </tr>
         <tr>
             <td><div class="ct-chart" id="my-chart" style="width: 1000px; height: 500px;"></div></td>

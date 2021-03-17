@@ -10,17 +10,26 @@ from app import awshandler
 @a2.route('/')
 @a2.route('/home', methods=['POST', 'GET'])
 def main():
-#    time_stamps = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-#    worker_numbers = [10, 20, 30, 80, 50, 70, 10, 20, 30, 80, 50, 70]
-#    workers = [time_stamps, worker_numbers]
 
     #TODO: display worker list based on worker_dict
     #      display another attribute on healthy count (since it is out of sync mostly)
 
     awsworker.update_aws_worker_dict()
-    workers = awsworker.get_ec2_workers_chart()
-    print("[HOME]worker list size: {}".format(len(workers[1])))
-    return render_template("home.html", title="Home", worker_number=workers)
+    healthy_workers = awsworker.get_ec2_workers_chart()
+    current_total_workers = len(awsworker.get_aws_worker_dict())
+    worker_dict = awsworker.get_aws_worker_dict()
+    pending_workers = 0
+    stopping_workers = 0
+    running_workers = 0
+    for worker in worker_dict:
+        if worker_dict[worker] == awsconfig.AWS_EC2_STATUS_PENDING:
+            pending_workers = pending_workers+ 1
+        elif worker_dict[worker] == awsconfig.AWS_EC2_STATUS_STOPPING:
+            stopping_workers = stopping_workers + 1
+        elif worker_dict[worker] == awsconfig.AWS_EC2_STATUS_RUNNING:
+            running_workers = running_workers + 1
+#    print("[HOME]worker list size: {}".format(len(healthy_workers[1])))
+    return render_template("home.html", title="Home", worker_number=healthy_workers,current_total_workers = current_total_workers, pending_workers=pending_workers, stopping_workers=stopping_workers, running_workers = running_workers)
 
 
 @a2.route('/get_workers_list', methods=['POST', 'GET'])
