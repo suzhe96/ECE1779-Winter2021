@@ -2,6 +2,7 @@ import time
 from threading import Thread, Lock
 from app import awsworker
 from app.awsconfig import *
+from app.awshandler import *
 
 # deefault policy
 auto_scaler_policy = {'cpu_grow_threshold' : 80,
@@ -10,22 +11,49 @@ auto_scaler_policy = {'cpu_grow_threshold' : 80,
           'cpu_shrink_ratio' : 0.5}
 # policy mutex
 auto_scaler_policy_mutex = Lock()
+AUTO_SCALER_POLICY_ID = 1
 
 
 def auto_scaler_policy_set(cpu_grow_threshold,
                            cpu_shrink_threshold,
                            cpu_grow_ratio,
                            cpu_shrink_ratio):
+    # with auto_scaler_policy_mutex:
+    #     auto_scaler_policy['cpu_grow_threshold'] = cpu_grow_threshold
+    #     auto_scaler_policy['cpu_shrink_threshold'] = cpu_shrink_threshold
+    #     auto_scaler_policy['cpu_grow_ratio'] =cpu_grow_ratio
+    #     auto_scaler_policy['cpu_shrink_ratio'] = cpu_shrink_ratio
+    # store policy to db as required by handout
     with auto_scaler_policy_mutex:
-        auto_scaler_policy['cpu_grow_threshold'] = cpu_grow_threshold
-        auto_scaler_policy['cpu_shrink_threshold'] = cpu_shrink_threshold
-        auto_scaler_policy['cpu_grow_ratio'] =cpu_grow_ratio
-        auto_scaler_policy['cpu_shrink_ratio'] = cpu_shrink_ratio
+        cnx = get_db()
+        cursor = cnx.cursor()
+        query = '''UPDATE policy SET cpu_grow_threshold={}, cpu_shrink_threshold={}, cpu_grow_ratio={}, cpu_shrink_ratio={} WHERE id={}'''.format(
+            cpu_grow_threshold,
+            cpu_shrink_threshold,
+            cpu_grow_ratio,
+            cpu_shrink_ratio,
+            AUTO_SCALER_POLICY_ID
+        )
+        cursor.execute(query)
+        cnx.commit()
 
 
 def auto_scaler_policy_get():
     with auto_scaler_policy_mutex:
-        return auto_scaler_policy
+        # return auto_scaler_policy
+        cnx = get_db()
+        cursor = cnx.cursor()
+        query = '''SELECT cpu_grow_threshold, cpu_shrink_threshold, cpu_grow_ratio, cpu_shrink_ratio FROM policy WHERE id={}'''.format(
+            AUTO_SCALER_POLICY_ID
+        )
+        cursor.execute(query)
+        policy_list = cursor.fetchone()
+        cnx.commit()
+        policy_dict = {'cpu_grow_threshold' : policy_list[0],
+                       'cpu_shrink_threshold' : policy_list[1],
+                       'cpu_grow_ratio' : policy_list[2],
+                       'cpu_shrink_ratio' : policy_list[3]}
+        return policy_dict
 
 
 def auto_scaler_main():
