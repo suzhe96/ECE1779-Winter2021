@@ -73,3 +73,13 @@ AWS_ERROR_MSG = {
 }
 
 AWS_RDS_DEPLOY = False
+
+# Deploy by using local config require MySql server on local system
+DATABASE_LOCAL_CONFIG = {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "user": "root",
+    "password": "ece1779pass",
+    "db": "ECE1779_AUTO_SCALER_DB"
+}
+
