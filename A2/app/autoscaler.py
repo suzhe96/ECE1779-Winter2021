@@ -25,7 +25,7 @@ def auto_scaler_policy_set(cpu_grow_threshold,
     #     auto_scaler_policy['cpu_shrink_ratio'] = cpu_shrink_ratio
     # store policy to db as required by handout
     with auto_scaler_policy_mutex:
-        cnx = get_db()
+        cnx = connect_to_database()
         cursor = cnx.cursor()
         query = '''UPDATE policy SET cpu_grow_threshold={}, cpu_shrink_threshold={}, cpu_grow_ratio={}, cpu_shrink_ratio={} WHERE id={}'''.format(
             cpu_grow_threshold,
@@ -41,7 +41,7 @@ def auto_scaler_policy_set(cpu_grow_threshold,
 def auto_scaler_policy_get():
     with auto_scaler_policy_mutex:
         # return auto_scaler_policy
-        cnx = get_db()
+        cnx = connect_to_database()
         cursor = cnx.cursor()
         query = '''SELECT cpu_grow_threshold, cpu_shrink_threshold, cpu_grow_ratio, cpu_shrink_ratio FROM policy WHERE id={}'''.format(
             AUTO_SCALER_POLICY_ID

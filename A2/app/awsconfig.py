@@ -8,7 +8,7 @@ AWS_RDS_CONFIG = {
     "port": 3306,
     "user": "root",
     "password": "ece1779pass",
-    "db": "ECE1779_A1_DB"
+    "db": "ECE1779_AUTO_SCALER_DB"
 }
 
 AWS_ELB_CONFIG = {
