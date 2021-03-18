@@ -40,8 +40,8 @@
             <div class="navbar-header">
               <a class="navbar-brand" href="#">ECE1779 A2 Manager</a>
             </div>
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="{{ url_for('main') }}">Home</a></li>
+            <ul id ="myDiv" class="nav navbar-nav">
+		<li><a href="{{ url_for('main') }}">Home</a></li>
                 <li><a href="{{ url_for('get_workers_list') }}">Workers List</a></li>
                 <li><a href="{{ url_for('load_balancer') }}">load_balancer</a></li>
                 <li><a href="{{ url_for('configure_worker_pool') }}">Change Worker Pool</a></li>
@@ -69,7 +69,18 @@
                 {% endif %}
             {% endwith %}
         </div>
-
+        <script>
+		// Add active class to the current button (highlight it)
+		var header = document.getElementById("myDIV");
+		var btns = header.getElementsByClassName("a");
+		for (var i = 0; i < btns.length; i++) {
+		  btns[i].addEventListener("click", function() {
+		  var current = document.getElementsByClassName("active");
+		  current[0].className = current[0].className.replace(" active", "");
+		  this.className += " active";
+		  });
+		}
+	</script>
         {% block content %}{% endblock %}
 </body>
 </html>
