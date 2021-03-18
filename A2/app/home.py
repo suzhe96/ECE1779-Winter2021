@@ -146,7 +146,7 @@ def delete_data():
 
 def delete_s3_data(s3_handler):
     response_dict = s3_handler.list_objects(Bucket=awsconfig.AWS_S3_WORKER_BUCKET)
-    if response_dict is None or len(response_dict) == 0:
+    if response_dict is None or len(response_dict) == 0 or 'Contents' not in response_dict:
         return
     for key in response_dict['Contents']:
             s3_handler.delete_objects(
