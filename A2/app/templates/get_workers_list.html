@@ -11,7 +11,7 @@
 <div class="content-section">
 {% for instance_id, cpu_stats in CPU_Util.items() %}
     <table style="border:1px solid black;margin-left:auto;margin-right:auto;text-align:left;">
-        <tr><td>Worker Instance ID: </td><td> {{ instance_id }}</td></tr>
+        <tr><td>Worker Instance ID: </td><td> {{ worker_instance_id[instance_id] }}</td></tr>
 	<tr><td>Worker Status: </td><td> {{ worker_status[instance_id] }}</td></tr>
     </table>
     <br>

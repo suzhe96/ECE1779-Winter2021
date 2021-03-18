@@ -54,11 +54,13 @@ def get_workers_list():
     http_req = awsworker.get_all_workers_http_request(worker_dict)
     worker_status = {}
     worker_index = 0;
+    worker_instance_id = {}
     for worker in worker_dict:
         worker_status[worker_index]=worker_dict[worker]
+        worker_instance_id[worker_index]=worker
         worker_index = worker_index + 1
     print("[WROKER_LIST]cpu dict size: {}, http dict size: {}".format(len(cpu_util), len(http_req)))
-    return render_template("get_workers_list.html", title="Listing_Workers", CPU_Util = cpu_util, HTTP_Req=http_req, worker_status=worker_status)
+    return render_template("get_workers_list.html", title="Listing_Workers", CPU_Util = cpu_util, HTTP_Req=http_req, worker_status=worker_status, worker_instance_id=worker_instance_id)
 
 
 @a2.route('/load_balancer', methods=['POST', 'GET'])
