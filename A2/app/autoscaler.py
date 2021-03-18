@@ -63,6 +63,7 @@ def auto_scaler_main():
     # get aws_worker_dict
     worker_dict = awsworker.get_aws_worker_dict()
     print("worker_dict: {}".format(worker_dict))
+    awsworker.get_healthy_instances()
     # get cpu_utilization_avg
     cpu_util_avg = awsworker.get_ec2_cpu_utilization_avg(worker_dict)
     if cpu_util_avg == AWS_ERROR_CPU_AVG_VALUE_ZERO:

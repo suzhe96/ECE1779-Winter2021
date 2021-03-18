@@ -14,7 +14,8 @@ AWS_RDS_CONFIG = {
 AWS_ELB_CONFIG = {
     'lb' : 'app/ece1779-lb-group-zhe/70e467fa27db17ed',
     'lbARN' : 'arn:aws:elasticloadbalancing:us-east-1:905405143286:loadbalancer/app/ece1779-lb-group-zhe/70e467fa27db17ed',
-    'lbDNS' : 'ece1779-lb-group-zhe-1258727599.us-east-1.elb.amazonaws.com'
+    'lbDNS' : 'ece1779-lb-group-zhe-1258727599.us-east-1.elb.amazonaws.com',
+    'lbName' : 'ece1779-lb-group-zhe'
 }
 
 AWS_TARGET_GROUP_CONFIG = {

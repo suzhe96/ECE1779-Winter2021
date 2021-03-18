@@ -287,3 +287,19 @@ def init_rdb():
         if not cmd: continue
         cursor.execute(cmd)
         cnx.commit()
+
+
+'''Get healthy instances from ELB
+'''
+def get_healthy_instances():
+    elb = get_elb()
+    response = client.describe_target_health(
+        TargetGroupArn=AWS_TARGET_GROUP_CONFIG['targetgroupARN'],
+    )
+    ret_dict = {}
+    if response is None or len(response) == 0 or 'TargetHealthDescriptions' not in response:
+        return ret_dict
+
+    for attr in response['TargetHealthDescriptions']:
+        ret_dict[attr['Target']['Id']] = attr['TargetHealth']['State']
+    print("Get healthy dict: {}".format(ret_dict))
