@@ -180,12 +180,13 @@ def get_all_ec2_cpu_utilizaton(worker_dict):
         index = index + 1
     return all_running_ec2_stat
 
+
 '''Get CPU utilization average value given up-to-dated worker_dict (ONLY COUNT ON RUNNING INSTANCES)
 '''
-def get_ec2_cpu_utilization_avg(worker_dict):
+def get_ec2_cpu_utilization_avg(healthy_dict):
     cpu_avg_list = []
-    for inst_id in worker_dict:
-        if worker_dict[inst_id] != AWS_EC2_STATUS_RUNNING:
+    for inst_id in healthy_dict:
+        if healthy_dict[inst_id] != AWS_ELB_TARGET_STATUS_HEALTHY:
             continue
         response = get_ec2_cpu_utilization(inst_id)
         datapoints = response[1][-2:]
@@ -293,7 +294,7 @@ def init_rdb():
 '''
 def get_healthy_instances():
     elb = get_elb()
-    response = client.describe_target_health(
+    response = elb.describe_target_health(
         TargetGroupArn=AWS_TARGET_GROUP_CONFIG['targetgroupARN'],
     )
     ret_dict = {}
@@ -302,4 +303,4 @@ def get_healthy_instances():
 
     for attr in response['TargetHealthDescriptions']:
         ret_dict[attr['Target']['Id']] = attr['TargetHealth']['State']
-    print("Get healthy dict: {}".format(ret_dict))
+    return ret_dict

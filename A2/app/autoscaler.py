@@ -56,6 +56,29 @@ def auto_scaler_policy_get():
         return policy_dict
 
 
+'''Work the best to converge:
+We calculate the CPU avg on only healthy instances;
+For scaling up:
+If the instance started by the previous minute detection is running but not healthy,
+a new instance should not be started since the current cpu avg does not include
+the actual workloads from the previous minute started instance.
+For scaling down:
+This logic should not be applied to scaling down case since
+the workload is below the threshold, we need to terminate a instance anyway
+'''
+def eligible_for_scaling_up(worker_dict, healthy_dict):
+    running_count = 0
+    healthy_count = 0
+    for inst in worker_dict:
+        if worker_dict[inst] == AWS_EC2_STATUS_RUNNING:
+            running_count += 1
+    for inst in healthy_dict:
+        if healthy_dict[inst] == AWS_ELB_TARGET_STATUS_HEALTHY:
+            healthy_count += 1
+    return running_count == healthy_count
+
+
+
 def auto_scaler_main():
     print("########## Autoscaler Thread ##########")
     # update aws_worker_dict
@@ -63,9 +86,11 @@ def auto_scaler_main():
     # get aws_worker_dict
     worker_dict = awsworker.get_aws_worker_dict()
     print("worker_dict: {}".format(worker_dict))
-    awsworker.get_healthy_instances()
+    # get target healthy dict
+    healthy_dict = awsworker.get_healthy_instances()
+    print("healthy_dict: {}".format(healthy_dict))
     # get cpu_utilization_avg
-    cpu_util_avg = awsworker.get_ec2_cpu_utilization_avg(worker_dict)
+    cpu_util_avg = awsworker.get_ec2_cpu_utilization_avg(healthy_dict)
     if cpu_util_avg == AWS_ERROR_CPU_AVG_VALUE_ZERO:
         # A running instance with hosting web application could not be 0 cpu in avg
         print("Info: {}".format(AWS_ERROR_MSG[AWS_ERROR_CPU_AVG_VALUE_ZERO]))
@@ -79,6 +104,11 @@ def auto_scaler_main():
     ret = AWS_OK
     # case: scale up
     if cpu_util_avg >= policy['cpu_grow_threshold']:
+        if (eligible_for_scaling_up(worker_dict, healthy_dict) == False):
+            print("Info: Wait for some running instances becoming healthy...")
+            print("######################################")
+            return 
+
         scale_up_number = int(len(worker_dict) * (policy['cpu_grow_ratio']-1))
         scale_up_number = max(0, scale_up_number)
         print("Behaviour: Scale up")
