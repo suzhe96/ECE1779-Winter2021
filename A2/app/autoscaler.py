@@ -78,7 +78,7 @@ def auto_scaler_main():
     ret = AWS_OK
     # case: scale up
     if cpu_util_avg >= policy['cpu_grow_threshold']:
-        scale_up_number = int(len(worker_dict) * policy['cpu_grow_ratio'])
+        scale_up_number = int(len(worker_dict) * (policy['cpu_grow_ratio']-1))
         scale_up_number = max(0, scale_up_number)
         print("Behaviour: Scale up")
         print("Number: {}".format(scale_up_number))
@@ -86,7 +86,7 @@ def auto_scaler_main():
 
     # case: scale down
     if cpu_util_avg <= policy['cpu_shrink_threshold']:
-        scale_down_number = int(len(worker_dict) * policy['cpu_shrink_ratio'])
+        scale_down_number = int(len(worker_dict) * (1-policy['cpu_shrink_ratio']))
         scale_down_number = max(0, scale_down_number)
         print("Behaviour: Scale down")
         print("Number: {}".format(scale_down_number))

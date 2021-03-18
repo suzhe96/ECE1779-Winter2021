@@ -138,8 +138,10 @@ def stop():
 @a2.route('/delete_data', methods=['POST', 'GET'])
 def delete_data():
     s3_handler = awshandler.get_s3()
-    delete_s3_data(s3_handler)
-    # awsworker.init_rdb()
+    # delete_s3_data bug when s3 bucket is empty already
+    # delete_s3_data(s3_handler)
+    s3_handler.Bucket(awsconfig.AWS_S3_WORKER_BUCKET).objects.all().delete() 
+    awsworker.init_rdb()
     flash('Deleted all data Successfully', 'success')
     return redirect(url_for('main'))
 
