@@ -135,6 +135,7 @@ def api_upload():
     if request.method == 'GET':
         return __get_render_template("api_upload.html", "API upload for testing", error_in = None)
     if request.method == 'POST':
+        awsworker.add_http_request_count()
         image_file = request.files['file']
         __username = request.form['username']
         __password = request.form['password']

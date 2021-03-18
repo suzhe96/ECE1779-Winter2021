@@ -190,7 +190,7 @@ def api_register():
     this is for the project tester usage
     :return:
     '''
-
+    awsworker.add_http_request_count()
     failure_dict = {"success": "false", "error": {"code": HTTPStatus.INTERNAL_SERVER_ERROR, "message": "Register Error!"}}
     success_dict = {"success": "true"}
     data = request.form
