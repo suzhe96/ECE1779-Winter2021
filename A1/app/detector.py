@@ -150,6 +150,7 @@ def api_upload():
 
         file_handle, path = tempfile.mkstemp()
         filename_api = path+"_api.jpeg"
+        filename_detected = path+ "_detected_api.jpeg"
         print(path)
         try:
             with Image(file=image_file) as img:
@@ -163,9 +164,36 @@ def api_upload():
         except:
             failure_dict["error"]["message"] = "Face Detector Error"
             return json.dumps(failure_dict)
-        os.remove(path)
-        os.remove(filename_api)
         success_dict["payload"]["num_faces"] = total_detected
         success_dict["payload"]["num_masked"] = total_masked
         success_dict["payload"]["num_unmasked"] = total_detected - total_masked
+
+        cv2.imwrite(filename_detected, image)
+
+        # MySql and S3
+        s3_cli = get_s3()
+        cnx = get_db()
+        cursor = cnx.cursor()
+
+        # fields preparation
+        query = '''SELECT id FROM users WHERE username = %s'''
+        cursor.execute(query, (__username,))
+        __user_id = cursor.fetchone()[0]
+        print("__user_id:{}".format(__user_id))
+        __category = __get_image_category(total_detected, total_masked)
+        print("__category:{}".format(__category))
+        __image_key = __get_timestamp_string()+".png"
+        print("__image_key:{}".format(__image_key))
+        __s3_path_detected_image_url = AWS_S3_CONFIG['aws_s3_bucket_url'].format(__image_key)
+        print("__s3_path_detected_image:{}".format(__s3_path_detected_image_url))
+        __s3_image_data = open(filename_detected, "rb").read()
+
+        # data upload
+        s3_cli.put_object(Bucket=AWS_S3_CONFIG['aws_bucket_name'], Key=__image_key, Body=__s3_image_data, ACL='public-read')
+        query = '''INSERT INTO images (category, user_id, image_key, image_url) VALUES (%s,%s,%s,%s)'''
+        cursor.execute(query, (__category,__user_id,__image_key,__s3_path_detected_image_url))
+        cnx.commit()
+        os.remove(path)
+        os.remove(filename_api)
+        os.remove(filename_detected)
         return json.dumps(success_dict)
