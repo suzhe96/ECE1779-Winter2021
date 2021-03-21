@@ -52,4 +52,4 @@ AWS_CLOUDWATCH_CONFIG = {
     'statisitcs_max' : 'Maximum',
 }
 
-AWS_RDS_DEPLOY = False
+AWS_RDS_DEPLOY = True 

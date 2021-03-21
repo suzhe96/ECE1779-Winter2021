@@ -77,7 +77,7 @@ AWS_ERROR_MSG = {
    AWS_ERROR_EC2_NUM_SCALE_ZERO : 'EC2 scaling with zero worker'
 }
 
-AWS_RDS_DEPLOY = False
+AWS_RDS_DEPLOY = True 
 
 # Deploy by using local config require MySql server on local system
 DATABASE_LOCAL_CONFIG = {
