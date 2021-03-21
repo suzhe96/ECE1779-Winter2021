@@ -11,6 +11,8 @@ auto_scaler_policy = {'cpu_grow_threshold' : 80,
           'cpu_shrink_ratio' : 0.5}
 # policy mutex
 auto_scaler_policy_mutex = Lock()
+# policy toggle
+auto_scaler_policy_toggle_enable = True
 AUTO_SCALER_POLICY_ID = 1
 
 
@@ -56,6 +58,13 @@ def auto_scaler_policy_get():
         return policy_dict
 
 
+def auto_scaler_policy_toggle_set(enable):
+    if enable:
+        auto_scaler_policy_toggle_enable = True
+    else:
+        auto_scaler_policy_toggle_enable = False
+
+
 '''Work the best to converge:
 We calculate the CPU avg on only healthy instances;
 For scaling up:
@@ -98,6 +107,12 @@ def auto_scaler_main():
         print("######################################")
         return
     print("cpu utilization average: {}".format(cpu_util_avg))
+
+    # Do not scale if policy is disable
+    if auto_scaler_policy_toggle_enable == False:
+        print("######################################")
+        return 
+
     # get auto_scaler_policy
     policy = auto_scaler_policy_get()
 
