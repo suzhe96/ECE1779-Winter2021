@@ -59,6 +59,7 @@ def auto_scaler_policy_get():
 
 
 def auto_scaler_policy_toggle_set(enable):
+    global auto_scaler_policy_toggle_enable
     if enable:
         auto_scaler_policy_toggle_enable = True
     else:
@@ -109,8 +110,10 @@ def auto_scaler_main():
     print("cpu utilization average: {}".format(cpu_util_avg))
 
     # Do not scale if policy is disable
+    global auto_scaler_policy_toggle_enable
+    print ("Auto Scaler Policy Enable is: {}".format(auto_scaler_policy_toggle_enable))
     if auto_scaler_policy_toggle_enable == False:
-        print("######################################")
+        print("#####################Scaler Policy is Disabled#################")
         return 
 
     # get auto_scaler_policy

@@ -7,6 +7,8 @@ from app.form import AutoScalarForm
 from app import autoscaler
 from app import awshandler
 
+policy_on = True
+
 @a2.route('/')
 @a2.route('/home', methods=['POST', 'GET'])
 def main():
@@ -103,6 +105,7 @@ def decrease_worker_pool():
 
 @a2.route('/configure_auto_scaler', methods=['POST', 'GET'])
 def configure_auto_scaler():
+    global policy_on
     form = AutoScalarForm()
     if form.validate_on_submit():
         current_auto_scalar_policy = autoscaler.auto_scaler_policy_get()
@@ -125,7 +128,7 @@ def configure_auto_scaler():
             autoscaler.auto_scaler_policy_set(cpu_threshold_grow, cpu_threshold_shrink, expand_ratio, shrink_ratio)
         print("The cpu_threshold_grow is {}, cpu_threshold_shrink is {}, expand_ratio is {}, shrink_ratio is {}".format(cpu_threshold_grow, cpu_threshold_shrink, expand_ratio, shrink_ratio))
         return redirect(url_for('configure_auto_scaler'))
-    return render_template('configure_auto_scaler.html', title="configure_auto_scalar", form=form)
+    return render_template('configure_auto_scaler.html', title="configure_auto_scalar", form=form, policy_enable=policy_on)
 
 
 @a2.route('/stop', methods=['POST', 'GET'])
@@ -160,3 +163,17 @@ def delete_s3_data(s3_handler):
                     'Quiet': True
                 },
             )
+
+@a2.route('/turn_off_scaler', methods=['POST', 'GET'])
+def enable_scaler_policy():
+    global policy_on
+    if policy_on is True:
+        policy_on = False
+    else:
+        policy_on = True
+    autoscaler.auto_scaler_policy_toggle_set(policy_on)
+    if policy_on is False:
+        flash('Scaler Policy is Turned off', 'success')
+    else:
+        flash('Scaler Policy is Turned on', 'success')
+    return redirect(url_for('configure_auto_scaler'))

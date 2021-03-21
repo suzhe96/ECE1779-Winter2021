@@ -30,5 +30,10 @@
             </p>
             <p>{{ form.submit(class_="submit" ,placeholder='Submit') }}</p>
         </form>
+	{% if policy_enable == true %}
+		<center><button type="button" onclick="window.location.href='{{ url_for('enable_scaler_policy') }}';" class="button button_custom" value="Turn off scaler policy" id="policy_enable">Turn off scaler policy</button></center>
+	{% else %}
+		<center><button type="button" onclick="window.location.href='{{ url_for('enable_scaler_policy') }}';" class="button button_custom" value="Turn on scaler policy" id="policy_enable">Turn on scaler policy</button></center>
+	{% endif %}
  </div>
 {% endblock %}
