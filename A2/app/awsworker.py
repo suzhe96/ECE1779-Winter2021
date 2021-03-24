@@ -84,20 +84,39 @@ def scaling_instance(scaling_behaviour, scaling_num):
             if len(aws_workers_dict) - scaling_num < AWS_EC2_NUM_MIN:
                 return AWS_ERROR_EC2_NUM_BELOW_MIN
             stopping_list = []
-            scalable_list = []
+            pending_list = []
+            running_list = []
             for inst_id in aws_workers_dict:
                 if aws_workers_dict[inst_id] == AWS_EC2_STATUS_STOPPING:
                     stopping_list.append(inst_id)
-                else:
-                    scalable_list.append(inst_id)
+                elif aws_workers_dict[inst_id] == AWS_EC2_STATUS_PENDING:
+                    pending_list.append(inst_id)
+                elif aws_workers_dict[inst_id] == AWS_EC2_STATUS_RUNNING:
+                    running_list.append(inst_id)
             scaling_num = max(0, scaling_num - len(stopping_list))
             print("Actual scale down number: {}".format(scaling_num))
             if scaling_num == 0:
                 return AWS_ERROR_EC2_NUM_SCALE_ZERO
-            for index in range(scaling_num):
-                deregister_instance_to_elb(scalable_list[index])
-                terminate_instance(scalable_list[index])
-                aws_workers_dict[scalable_list[index]] = AWS_EC2_STATUS_STOPPING
+
+            '''Terminate instance:
+            Remove any pending instance first since it has not contributed to the work
+            Remove the running instance reversely since the last one has the 
+            largest possibility to be unhealthy
+            '''
+            for inst_id in pending_list:
+                if scaling_num == 0:
+                    break
+                deregister_instance_to_elb(inst_id)
+                terminate_instance(inst_id)
+                aws_workers_dict[inst_id] = AWS_EC2_STATUS_STOPPING
+                scaling_num -= 1
+            for index in range(len(running_list)-1, -1, -1):
+                if scaling_num == 0:
+                    break
+                deregister_instance_to_elb(running_list[index])
+                terminate_instance(running_list[index])
+                aws_workers_dict[running_list[index]] = AWS_EC2_STATUS_STOPPING
+                scaling_num -= 1
     return AWS_OK
 
 

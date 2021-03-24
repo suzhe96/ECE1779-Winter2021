@@ -149,4 +149,4 @@ def auto_scaler_main():
 def auto_scaler_task_cb():
     while True:
         auto_scaler_main()
-        time.sleep(60)
+        time.sleep(30)
