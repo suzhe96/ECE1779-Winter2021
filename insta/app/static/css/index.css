@@ -1,0 +1,113 @@
+    .container_index {
+        font-family: 'Open Sans' , sans-serif;
+        padding-top: 50px;
+        position: absolute;
+        width: 100%;
+        top: 30px;
+        bottom: 0;
+    }
+
+    .card_index{
+            background: #fff;
+            margin: 0 auto;
+            width: 500px;
+            height: auto;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+    }
+    .profile-image{
+        display: inline-block;
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+        margin-left: 5px;
+        margin-top: 5px;
+    }
+    .profile-info {
+        display: inline-block;
+    }
+    .name{
+            font-family: 'Open Sans' , sans-serif;
+            font-size: 14px;
+            color: #111111;
+            font-weight: 700;
+    }
+    .location{
+        font-size: 12px;
+        color: #111;
+    }
+    .time{
+        font-family: 'Open Sans' , sans-serif;
+        font-size: 12px;
+        float: right;
+        display: inline-block;
+        top: 10px;
+        position: relative;
+        margin-right:5px;
+        font-weight: 700;
+    }
+    .image{
+        width: 500px;
+    }
+    .card-footer{
+        padding: 15px;
+        box-sizing: border-box;
+    }
+    .likes{
+        font-size: 14px;
+        font-family: 'Open Sans' , sans-serif;
+        font-weight: bold;
+    }
+    .description{
+        font-size: 14px;
+        margin :0;
+        padding: 0 0 5px 0;
+        display: inline-block;
+        font-style: italic;
+    }
+    .username{
+        font-family: "Open Sans" , sans-serif;
+        font-weight: 700;
+    }
+    .comments{
+        font-size: 14px;
+        margin: 0;
+        padding: 0;
+        padding: 0 0 5px 0;
+    }
+    .form {
+        padding-top: 15px;
+    }
+
+    .add-comment{
+        display: inline-block;
+        width: auto;
+    }
+    .input{
+        width: 100%;
+        padding: 5px;
+        font-weight: 16;
+        border: 0px solid #fff;
+    }
+    .hr{
+        padding: 0;
+    }
+    .view-btn-container{
+      margin: auto;
+      height:auto;
+      width:auto;
+
+    }
+    button{
+        display: block;
+        margin: 0 auto;
+        text-align: center;
+        width: 100px;
+        color: black;
+        cursor: pointer;
+    }
+
+

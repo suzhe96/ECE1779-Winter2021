@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+{% if current_user.is_anonymous %}
+    <div class="home_text_box">
+        <div class="container">
+          <div class="card border-0 shadow my-5">
+            <div class="card-body p-5">
+              <h1 class="font-weight-light">Welcome {{ current_user.username }}!</h1>
+                    <p class="lead">Please Sign In to Access the Social Media</p>
+            </div>
+          </div>
+        </div>
+    </div>
+{% else %}
+    <meta http-equiv="refresh" content="5; URL=profile.html"/>
+{% endif %}
+{% endblock %}

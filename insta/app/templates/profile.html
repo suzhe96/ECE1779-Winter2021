@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block content %}
+<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+        <title>Profile</title>
+</head>
+<header>
+
+	<div class="container">
+
+		<div class="profile">
+
+			<div class="profile-image">
+
+				<img src={{ user.profile_pic }} alt="">
+
+			</div>
+
+			<div class="profile-user-settings">
+
+				<h1 class="profile-user-name">{{ user.username }}</h1>
+
+                {% if current_user.username == user.username %}
+				    <button onclick="window.location.href='{{ url_for('edit_profile') }}';" class="btn profile-edit-btn">Edit Profile</button>
+                    <button onclick="window.location.href='{{ url_for('my_account') }}';" class="btn profile-settings-btn" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button>
+                {% endif %}
+
+			</div>
+
+			<div class="profile-stats">
+
+				<ul>
+					<li><span class="profile-stat-count">{{ user['posts']|length }}</span> posts</li>
+                    <li><span class="profile-stat-count"><button type="button" onclick="window.location.href='{{ url_for('followers') }}';" class="button button_custom"  id="followers"> {{ user['followers']|length }} Followers </button></span></li>
+					<li><span class="profile-stat-count"><button type="button" onclick="window.location.href='{{ url_for('followings') }}';" class="button button_custom"  id="followers"> {{ user['followings']|length }} Followings </button></span></li></span></li>
+				</ul>
+
+			</div>
+
+			<div class="profile-bio">
+
+				<p><span class="profile-real-name"></span>{{ user['profile_bio'] }}</p>
+
+			</div>
+           {% if friend == True %}
+                <center><button type="button" onclick="window.location.href='{{ url_for('unfollow') }}';" class="button button_custom"  id="unfollow">unfollow</button></center>
+            {% else %}
+                <center><button type="button" onclick="window.location.href='{{ url_for('follow') }}';" class="button button_custom"  id="follow">Follow</button></center>
+            {% endif %}
+
+		</div>
+		<!-- End of profile section -->
+
+	</div>
+	<!-- End of container -->
+
+</header>
+
+<main>
+
+	<div class="container">
+
+		<div class="gallery">
+            {% for post in user['posts']  %}
+			<div class="gallery-item" tabindex="0">
+
+				<img src={{post['image_source']}} class="gallery-image" alt="">
+
+				<div class="gallery-item-info">
+
+					<ul>
+						<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> {{ post['likes'] }}</li>
+						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> {{ post['comments']|length }}</li>
+					</ul>
+
+				</div>
+
+			</div>
+            {% endfor %}
+
+
+		</div>
+		<!-- End of gallery -->
+
+
+	</div>
+	<!-- End of container -->
+<script>
+        $('button').click(function(){
+          var $this = $(this);
+          $this.toggleClass('following')
+          if($this.is('.following')){
+            $this.addClass('wait');
+          }
+        }).on('mouseleave',function(){
+          $(this).removeClass('wait');
+        })
+</script>
+</main>
+{% endblock %}

@@ -1,0 +1,88 @@
+{
+  "username": "David",
+  "profile_pic": "https://images.unsplash.com/photo-1513721032312-6a18a42c8763?w=152&h=152&fit=crop&crop=faces",
+  "profile_bio": "Today is good",
+  "followers": [
+    {
+      "username": "David"
+    },
+    {
+      "username": "Marry"
+    }
+
+  ],
+  "followings": [
+    {
+      "user_id": "Terry"
+    },
+    {
+      "user_id": "Mike"
+    }
+  ],
+  "posts": [
+    {
+      "post_id": 1,
+      "image_source": "https://images.unsplash.com/photo-1511765224389-37f0e77cf0eb?w=500&h=500&fit=crop",
+      "likes": 5,
+      "time": "1hr",
+      "comments": [
+        {
+          "user_id": "2",
+          "comment": "so nice"
+        },
+        {
+          "user_id": "1",
+          "comment": "so good"
+        }
+      ]
+    },
+    {
+      "post_id": 2,
+      "image_source": "https://images.unsplash.com/photo-1497445462247-4330a224fdb1?w=500&h=500&fit=crop",
+      "likes": 10,
+      "time": "1hr",
+      "comments": [
+        {
+          "user_id": "2",
+          "comment": "so nice"
+        },
+        {
+          "user_id": "1",
+          "comment": "so good"
+        }
+      ]
+    },
+    {
+      "post_id": 3,
+      "image_source": "https://images.unsplash.com/photo-1498471731312-b6d2b8280c61?w=500&h=500&fit=crop",
+      "likes": 10,
+      "time": "1hr",
+      "comments": [
+        {
+          "user_id": "2",
+          "comment": "so nice"
+        },
+        {
+          "user_id": "1",
+          "comment": "so good"
+        }
+      ]
+    },
+    {
+      "post_id": 4,
+      "image_source": "https://images.unsplash.com/photo-1511765224389-37f0e77cf0eb?w=500&h=500&fit=crop",
+      "likes": 10,
+      "time": "1hr",
+      "comments": [
+        {
+          "user_id": "2",
+          "comment": "so nice"
+        },
+        {
+          "user_id": "1",
+          "comment": "so good"
+        }
+      ]
+    }
+  ]
+}

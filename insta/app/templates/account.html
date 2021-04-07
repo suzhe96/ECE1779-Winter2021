@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+ <head>
+       <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+        <title>Settings</title>
+</head>
+     <div class="home_text_box">
+        <div class="container">
+          <div class="card border-0 shadow my-5">
+            <div class="card-body p-5">
+              <h1 class="font-weight-light">Hi {{ current_user.username }}!</h1>
+
+                <div class="container">
+                    <button onclick="window.location.href='{{ url_for('change_password') }}';" class="btn profile-settings-btn" aria-label="password setting"><i class="fas fa-cog" aria-hidden="true"></i>Change Password</button>
+                    <hr/>
+                    <button onclick="window.location.href='{{ url_for('change_profile_bio') }}';" class="btn profile-settings-btn" aria-label="profile bio change"><i class="fas fa-cog" aria-hidden="true"></i>Change Profile Bio</button>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+{% endblock %}
