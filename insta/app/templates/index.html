@@ -9,8 +9,6 @@
          <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
 
-
-
         <title>Index</title>
         <style>
             img.resize {
@@ -48,12 +46,13 @@
 </head>
 <body>
     <section class="container_index">
+     {%  for user in user %}
         {% for post in user['posts']  %}
         <div class="card_index">
                 <img class="resize" src="https://images.unsplash.com/photo-1513721032312-6a18a42c8763?w=152&h=152&fit=crop&crop=faces"/>
             <div class="profile-info">
-                <div class="name">David</div>
-                <div class="location">Toronto</div>
+                <div class="name">{{ user['username'] }}</div>
+                <div class="location">{{ user['location'] }}</div>
             </div>
             <div class ="time">1hr</div>
             <div class="image">
@@ -74,16 +73,12 @@
                     </p>
                 </div>
                 <div class="comments" id="comments{{ post.post_id }}">
+                    {% for comment in post['comments'] %}
                     <p>
-                        <span class="username">Frank</span>:
-                        <span>This is so good,This is so good,This is so good,This is so good,This is so good,This is so good,This is so good,T
-                            his is so good,This is so good,This is so good,This is so good,This is so good,
-                            This is so good,This is so good,This is so good,This is so good,This is so good,This is so good,</span>
+                        <span class="username">{{ comment['username'] }}</span>:
+                        <span>{{ comment['comment']}}</span>
                     </p>
-                    <p>
-                        <span class="username">Alex</span>:
-                        <span>This is damn good</span>
-                    </p>
+                     {% endfor %}
                 </div>
                 <div class="view-btn-container">
                     <button class="btn" id="btn{{ post.post_id }}" onclick = "read_more('comments{{ post.post_id }}' , 'btn{{ post.post_id }}')">Read Less</button>
@@ -96,6 +91,7 @@
             </div>
         </div>
         {% endfor %}
+    {% endfor %}
     </section>
 
 </body>

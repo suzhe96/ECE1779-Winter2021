@@ -45,6 +45,11 @@
 				<p><span class="profile-real-name"></span>{{ user['profile_bio'] }}</p>
 
 			</div>
+           {% if friend == True %}
+                <center><button type="button" onclick="window.location.href='{{ url_for('unfollow') }}';" class="button button_custom"  id="unfollow">unfollow</button></center>
+            {% else %}
+                <center><button type="button" onclick="window.location.href='{{ url_for('follow') }}';" class="button button_custom"  id="follow">Follow</button></center>
+            {% endif %}
 
 		</div>
 		<!-- End of profile section -->
