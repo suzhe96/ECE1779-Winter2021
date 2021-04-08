@@ -73,7 +73,7 @@
                         <span>This is wonderful world to live in</span>
                     </p>
                 </div>
-                <div class="comments" id="comments">
+                <div class="comments" id="comments{{ post.post_id }}">
                     <p>
                         <span class="username">Frank</span>:
                         <span>This is so good,This is so good,This is so good,This is so good,This is so good,This is so good,This is so good,T
@@ -86,7 +86,7 @@
                     </p>
                 </div>
                 <div class="view-btn-container">
-                    <button id="toggle">Read Less</button>
+                    <button class="btn" id="btn{{ post.post_id }}" onclick = "read_more('comments{{ post.post_id }}' , 'btn{{ post.post_id }}')">Read Less</button>
                 </div>
                 <hr/>
                     <div class="add-comment">

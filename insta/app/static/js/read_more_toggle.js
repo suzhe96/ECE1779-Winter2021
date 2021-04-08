@@ -1,14 +1,14 @@
-$(document).ready(function() {
-  $("#toggle").click(function() {
-    var elem = $("#toggle").text();
+function read_more ( comment_id, btn_id){
+  bt = document.getElementById(btn_id);
+  comment = document.getElementById(comment_id);
+    var elem = $(bt).text();
     if (elem == "Read More") {
       //Stuff to do when btn is in the read more state
-      $("#toggle").text("Read Less");
-      $("#comments").slideDown();
+      $(bt).text("Read Less");
+      $(comment).slideDown();
     } else {
       //Stuff to do when btn is in the read less state
-      $("#toggle").text("Read More");
-      $("#comments").slideUp();
+      $(bt).text("Read More");
+      $(comment).slideUp();
     }
-  });
-});
+};
