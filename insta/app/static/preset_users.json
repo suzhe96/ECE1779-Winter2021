@@ -1,0 +1,33 @@
+[
+    {
+        "userid": 0,
+        "name": "David",
+        "info" : {
+            "profile_img": "https://a1db.s3.amazonaws.com/david_profile.jpeg",
+            "bio": "Today is good",
+            "location": "Toronto",
+            "followers": [
+                "Marry"
+            ],
+            "following": [
+                "Terry",
+                "Mike"
+            ]
+        }
+    },
+    {
+        "userid": 1,
+        "name": "Mike",
+        "info": {
+            "profile_img": "https://a1db.s3.amazonaws.com/mike_profile.jpeg",
+            "bio": "Today is good",
+            "location": "Beijing",
+            "followers": [
+                "David"
+            ],
+            "following": [
+                "Terry"
+            ]
+        }
+    }  
+]
