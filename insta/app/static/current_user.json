@@ -6,7 +6,7 @@
     "location": "Toronto",
     "followers": [
       {
-        "username": "David"
+        "username": "Mike"
       },
       {
         "username": "Marry"
@@ -15,7 +15,7 @@
     ],
     "followings": [
       {
-        "username": "Terry"
+        "username": "Dallas"
       },
       {
         "username": "Mike"
@@ -95,14 +95,17 @@
     "profile_bio": "Today is good",
     "location": "Beijing",
     "followers": [
+      {
+        "username": "David"
+      }
 
     ],
     "followings": [
       {
-        "username": "Terry"
+        "username": "David"
       },
       {
-        "username": "Mike"
+        "username": "Terry"
       }
     ],
     "posts": [

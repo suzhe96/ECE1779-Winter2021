@@ -150,7 +150,7 @@ def change_profile_bio():
 @app.route('/followers', methods=['GET', 'POST'])
 def followers():
     # need to change the bio for current user in the db
-    return redirect(url_for('index'))
+    return render_template("followers.html")
 
 
 @app.route('/followings', methods=['GET', 'POST'])
