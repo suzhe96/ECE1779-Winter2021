@@ -19,27 +19,28 @@ def main():
                 if u['username'] == current_user.username:
                     me = u
                     break
-
             return render_template("profile.html", user=me)
 
 
 @app.route('/others_profile', methods=['GET', 'POST'])
 def others_profile():
     print("others_profile")
-    u = request.args.get('u')
+    u = request.form['user_to_view']
     print(u)
     filename = os.path.join(app.static_folder, 'current_user.json')
+    user_to_view = {}
     with open(filename) as json_file:
         all_user = json.load(json_file)
         friend = False
         for user in all_user:
             if u == user['username']:
+                user_to_view = user
                 for follower in user['followers']:
                     if current_user.username == follower['username']:
                         friend = True
                         break
                 print(friend)
-        return render_template("others_profile.html", user=u, friend=friend)
+        return render_template("others_profile.html", user=user_to_view, friend=friend)
 
 
 @app.route('/index', methods=['GET', 'POST'])
@@ -61,7 +62,9 @@ def update_likes(post_id):
                 p['likes'] = p['likes']+1
         redirect(url_for('index'))
 
-
+'''
+the follow and unfollow function are used for jquery in all_user
+'''
 @app.route('/follow', methods=['GET', 'POST'])
 def follow():
     print("follow")
@@ -89,6 +92,46 @@ def unfollow():
             if user['username'] == user_to_unfollow:
                 print("found the user in db")
     return jsonify(result="True")
+
+
+'''
+below profile_follow and profile_unfollow are used for click in profile page
+'''
+
+
+@app.route('/profile_follow', methods=['GET', 'POST'])
+def profile_follow():
+    print("profile_follow")
+    filename = os.path.join(app.static_folder, 'current_user.json')
+    user_to_follow = request.form['follow']
+    print("user to follow: " + user_to_follow)
+    u = request.form['current_user']
+    call_back={}
+    with open(filename, "r+") as json_file:
+        all_user = json.load(json_file)
+        for user in all_user:
+            if user['username'] == user_to_follow:
+                call_back=user
+                print("found the user in db")
+                user['followers'] = {'username': u}
+        return render_template("others_profile.html", user=call_back, friend=True)
+
+
+@app.route('/profile_unfollow', methods=['GET', 'POST'])
+def profile_unfollow():
+    print("profile_unfollow")
+    filename = os.path.join(app.static_folder, 'current_user.json')
+    user_to_unfollow = request.form['unfollow']
+    u = request.form['current_user']
+    print("user to unfollow: " + user_to_unfollow)
+    call_back={}
+    with open(filename, "r+") as json_file:
+        all_user = json.load(json_file)
+        for user in all_user:
+            if user['username'] == user_to_unfollow:
+                call_back=user
+                print("found the user in db")
+        return render_template("others_profile.html", user=call_back, friend=False)
 
 
 #change the profile picture

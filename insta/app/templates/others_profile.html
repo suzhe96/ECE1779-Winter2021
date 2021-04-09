@@ -46,9 +46,17 @@
 
 			</div>
            {% if friend == True %}
-                <center><button type="button" onclick="window.location.href='{{ url_for('unfollow') }}';" class="button button_custom"  id="unfollow">unfollow</button></center>
+               <form id="unfollow" action="/profile_unfollow" enctype="multipart/form-data" method='POST'>
+                            <input name="unfollow" type="hidden" value="{{ user.username }}">
+                            <input name="current_user" type="hidden" value="{{ current_user.username}}">
+               </form>
+                <center><button type="button" onclick="click_unfollow()" class="btn profile-edit-btn"  id="unfollow">unfollow</button></center>
             {% else %}
-                <center><button type="button" onclick="window.location.href='{{ url_for('follow') }}';" class="button button_custom"  id="follow">Follow</button></center>
+                <form id="follow" action="/profile_follow" enctype="multipart/form-data" method='POST'>
+                            <input name="follow" type="hidden" value="{{ user.username }}">
+                            <input name="current_user" type="hidden" value="{{ current_user.username}}">
+               </form>
+                <center><button type="button" onclick="click_follow()" class="btn profile-edit-btn"  id="follow">Follow</button></center>
             {% endif %}
 
 		</div>
@@ -97,7 +105,15 @@
           }
         }).on('mouseleave',function(){
           $(this).removeClass('wait');
-        })
+        });
+
+         function click_follow(){
+        $("#follow").submit();
+        };
+
+          function click_unfollow(){
+        $("#unfollow").submit();
+        }
 </script>
 </main>
 {% endblock %}

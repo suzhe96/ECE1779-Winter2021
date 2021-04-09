@@ -33,7 +33,10 @@
             {% if current_user.username != user.username %}
                 <div class="card_index">
                     <div class="image">
-                        <img class="resize" src="{{ user['profile_pic']}}" onclick = "other_profile('{{ user.username }}')"/>
+                        <img class="resize" src="{{ user['profile_pic']}}" onclick = "other_profile()"/>
+                        <form id="view_other_profile" action="/others_profile" enctype="multipart/form-data" method='POST'>
+                            <input name="user_to_view" type="hidden" value="{{ user.username }}">
+                        </form>
                     </div>
                     <span class="profile-info">
                         <div class="name">{{ user['username'] }}</div>
@@ -74,12 +77,8 @@
         $("#result").text(data.result);
       });
     };
-    function other_profile(user){
-        $.getJSON($SCRIPT_ROOT + '/others_profile', {
-        u: user
-        },function(data) {
-        $("#result").text(data.result);
-      });
+    function other_profile(){
+        $("#view_other_profile").submit();
     }
 </script>
 {% endblock %}
