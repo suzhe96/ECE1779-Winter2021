@@ -33,9 +33,15 @@
 			<div class="profile-stats">
 
 				<ul>
+                    <form id="view_followers" action="/followers" enctype="multipart/form-data" method='POST'>
+                            <input name="user_to_view_followers" type="hidden" value="{{ user.username }}">
+                    </form>
+                    <form id="view_followings" action="/followings" enctype="multipart/form-data" method='POST'>
+                            <input name="user_to_view_followings" type="hidden" value="{{ user.username }}">
+                    </form>
 					<li><span class="profile-stat-count">{{ user['userposts']|length }}</span> posts</li>
-                    <li><span class="profile-stat-count"><button type="button" onclick="window.location.href='{{ url_for('followers') }}';" class="button button_custom"  id="followers"> {{ user['followers']|length }} Followers </button></span></li>
-					<li><span class="profile-stat-count"><button type="button" onclick="window.location.href='{{ url_for('followings') }}';" class="button button_custom"  id="followers"> {{ user['following']|length }} Followings </button></span></li>
+                    <li><span class="profile-stat-count"><button type="button" onclick="submit_view_followers()" class="button button_custom"  id="followers"> {{ user['followers']|length }} Followers </button></span></li>
+					<li><span class="profile-stat-count"><button type="button" onclick="submit_view_followings()" class="button button_custom"  id="followings"> {{ user['following']|length }} Followings </button></span></li>
 				</ul>
 
 			</div>
@@ -84,15 +90,16 @@
 	</div>
 	<!-- End of container -->
 <script>
-        $('button').click(function(){
-          var $this = $(this);
-          $this.toggleClass('following')
-          if($this.is('.following')){
-            $this.addClass('wait');
-          }
-        }).on('mouseleave',function(){
-          $(this).removeClass('wait');
-        })
+
+
+        function submit_view_followers(){
+        $("#view_followers").submit();
+
+        };
+         function submit_view_followings(){
+        $("#view_followings").submit();
+        };
+
 </script>
 </main>
 {% endblock %}

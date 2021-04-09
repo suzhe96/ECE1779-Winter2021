@@ -5,7 +5,7 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-        <title>Settings</title>
+        <title>All_Users</title>
      <style>
             img.resize {
                 width : 30px;
@@ -41,7 +41,11 @@
                     <span class="profile-info">
                         <div class="name">{{ user['username'] }}</div>
                     </span>
-                    <button class="follow" id="btn{{ user.username}}" onclick = "toggle('{{ user.username }}' , 'btn{{ user.username }}','{{ current_user.username }}')">follow</button>
+                    {% if user.username in friendship and friendship[user.username] %}
+                        <button class="follow" id="btn{{ user.username}}" onclick = "toggle('{{ user.username }}' , 'btn{{ user.username }}','{{ current_user.username }}')">unfollow</button>
+                    {% else %}
+                        <button class="follow" id="btn{{ user.username}}" onclick = "toggle('{{ user.username }}' , 'btn{{ user.username }}','{{ current_user.username }}')">follow</button>
+                    {% endif %}
                 </div>
             {% endif %}
         {% endfor %}

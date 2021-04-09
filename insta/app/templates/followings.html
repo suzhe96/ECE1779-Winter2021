@@ -29,10 +29,10 @@
      </style>
     </head>
     <section class="container_index">
-        {% if user['followers']|length == 0 %}
+        {% if user['following']|length == 0 %}
                    <h1> You Have No Followers Yet</h1>
         {% else %}
-            {%  for username in user['followers'] %}
+            {%  for username in user['following'] %}
                 {% if username in all_users %}
                     <div class="card_index">
                         <form id="view_other_profile" action="/others_profile" enctype="multipart/form-data" method='POST'>
@@ -44,7 +44,7 @@
                         <span class="profile-info">
                             <div class="name">{{ all_users[username]['username'] }}</div>
                         </span>
-                        <span class="follow">Followed By</span>
+                        <span class="follow">Following</span>
                     </div>
                 {% endif %}
             {% endfor %}

@@ -33,16 +33,22 @@
 			<div class="profile-stats">
 
 				<ul>
+                    <form id="view_followers" action="/followers" enctype="multipart/form-data" method='POST'>
+                            <input name="user_to_view_followers" type="hidden" value="{{ user.username }}">
+                    </form>
+                    <form id="view_followings" action="/followings" enctype="multipart/form-data" method='POST'>
+                            <input name="user_to_view_followings" type="hidden" value="{{ user.username }}">
+                    </form>
 					<li><span class="profile-stat-count">{{ user['userposts']|length }}</span> posts</li>
-                    <li><span class="profile-stat-count"><button type="button" onclick="window.location.href='{{ url_for('followers') }}';" class="button button_custom"  id="followers"> {{ user['followers']|length }} Followers </button></span></li>
-					<li><span class="profile-stat-count"><button type="button" onclick="window.location.href='{{ url_for('followings') }}';" class="button button_custom"  id="followers"> {{ user['following']|length }} Followings </button></span></li></span></li>
+                    <li><span class="profile-stat-count"><button type="button" onclick="submit_view_followers()" class="button button_custom"  id="followers"> {{ user['followers']|length }} Followers </button></span></li>
+					<li><span class="profile-stat-count"><button type="button" onclick="submit_view_followings()" class="button button_custom"  id="followings"> {{ user['following']|length }} Followings </button></span></li>
 				</ul>
 
 			</div>
 
 			<div class="profile-bio">
 
-				<p><span class="profile-real-name"></span>{{ user['profile_bio'] }}</p>
+				<p><span class="profile-real-name"></span>{{ user['bio'] }}</p>
 
 			</div>
            {% if friend == True %}
@@ -72,16 +78,16 @@
 	<div class="container">
 
 		<div class="gallery">
-            {% for post in user['posts']  %}
+            {% for post in posts  %}
 			<div class="gallery-item" tabindex="0">
 
-				<img src={{post['image_source']}} class="gallery-image" alt="">
+				<img src={{post['img']}} class="gallery-image" alt="">
 
 				<div class="gallery-item-info">
 
 					<ul>
 						<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> {{ post['likes'] }}</li>
-						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> {{ post['comments']|length }}</li>
+						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> {{ post['commentOwner']|length }}</li>
 					</ul>
 
 				</div>
@@ -113,7 +119,17 @@
 
           function click_unfollow(){
         $("#unfollow").submit();
+
         }
+
+        function submit_view_followers(){
+        $("#view_followers").submit();
+
+        };
+         function submit_view_followings(){
+        $("#view_followings").submit();
+        };
+
 </script>
 </main>
 {% endblock %}

@@ -16,7 +16,7 @@ def main():
     else:
         user = db_handler.get_user_by_name(current_user.username)
         user_posts = db_handler.get_posts_by_name(current_user.username)
-        return render_template("profile.html", user=user, posts=user_posts)
+        return render_template("profile.html", user=user[0], posts=user_posts)
 
 
 @app.route('/others_profile', methods=['GET', 'POST'])
@@ -24,14 +24,18 @@ def others_profile():
     print("others_profile")
     u = request.form['user_to_view']
     print(u)
-    users = db_handler.get_all_users()
-    user_to_view ={ }
-    for user in users:
-        if user['username'] == u:
-            user_to_view = user
-            break
-    #FIXME, need function to see if curent_user is a friend of user_to_view, put False for now
-    return render_template("others_profile.html", user=user_to_view, friend=False)
+    user = db_handler.get_user_by_name(u)
+    user_posts = db_handler.get_posts_by_name(u)
+    print(user[0]['userposts'])
+    friendship = False
+    if current_user.username in user[0]['followers']:
+        friendship= True
+        print("true")
+    else:
+        friendship= False
+        print("false")
+    return render_template("others_profile.html", user=user[0], posts=user_posts, friend=friendship)
+
 
 
 '''
@@ -65,9 +69,9 @@ def follow():
     print("follow")
     filename = os.path.join(app.static_folder, 'current_user.json')
     user_to_follow = request.args.get('user_to_follow')
-    u = request.args.get('user')
+    u = request.args.get('u')
+    print(user_to_follow)
     db_handler.put_user_following(u, user_to_follow)
-    db_handler.get_user_by_name(user_to_follow)
     return jsonify(result="True")
 
 
@@ -75,9 +79,9 @@ def follow():
 def unfollow():
     print("unfollow")
     user_to_unfollow = request.args.get('user_to_unfollow')
-    u = request.args.get('user')
+    u = request.args.get('u')
+    print(user_to_unfollow)
     db_handler.put_user_unfollowing(u, user_to_unfollow)
-    db_handler.get_user_by_name(user_to_unfollow)
     return jsonify(result="True")
 
 
@@ -87,14 +91,14 @@ below profile_follow and profile_unfollow are used for click in profile page
 @app.route('/profile_follow', methods=['GET', 'POST'])
 def profile_follow():
     print("profile_follow")
-    filename = os.path.join(app.static_folder, 'current_user.json')
     user_to_follow = request.form['follow']
     print("user to follow: " + user_to_follow)
     u = request.form['current_user']
     db_handler.put_user_following(u, user_to_follow)
     call_back=db_handler.get_user_by_name(user_to_follow)
     print("call_back username : " + call_back[0]['username'])
-    return render_template("others_profile.html", user=call_back[0], friend=True)
+    user_posts = db_handler.get_posts_by_name(user_to_follow)
+    return render_template("others_profile.html", user=call_back[0], posts=user_posts, friend=True)
 
 
 @app.route('/profile_unfollow', methods=['GET', 'POST'])
@@ -102,10 +106,12 @@ def profile_unfollow():
     print("profile_unfollow")
     user_to_unfollow = request.form['unfollow']
     u = request.form['current_user']
+    print("user to unfollow: " + user_to_unfollow)
     db_handler.put_user_unfollowing(u, user_to_unfollow)
     call_back = db_handler.get_user_by_name(user_to_unfollow)
     print("call_back username : " + call_back[0]['username'])
-    return render_template("others_profile.html", user=call_back[0], friend=False)
+    user_posts = db_handler.get_posts_by_name(user_to_unfollow)
+    return render_template("others_profile.html", user=call_back[0], posts=user_posts, friend=False)
 
 
 '''
@@ -125,14 +131,26 @@ def change_profile_bio():
 
 @app.route('/followers', methods=['GET', 'POST'])
 def followers():
-    #FIXME, need to get dict of all followers of current user
-    return render_template("followers.html")
+    cur_user = request.form['user_to_view_followers']
+    this_user = db_handler.get_user_by_name(cur_user)
+    all_users = {}
+    for username in this_user[0]['followers']:
+        followers_info = db_handler.get_user_by_name(username)
+        if followers_info:
+            all_users[username] = followers_info[0]
+    return render_template("followers.html", user=this_user[0], all_users=all_users)
 
 
 @app.route('/followings', methods=['GET', 'POST'])
 def followings():
-    #FIXME, need to get dict of all followings of current user
-    return redirect(url_for('index'))
+    cur_user = request.form['user_to_view_followings']
+    this_user = db_handler.get_user_by_name(cur_user)
+    all_users = {}
+    for username in this_user[0]['following']:
+        followings_info = db_handler.get_user_by_name(username)
+        if followings_info:
+            all_users[username] = followings_info[0]
+    return render_template("followings.html", user=this_user[0], all_users=all_users)
 
 
 '''
@@ -146,8 +164,18 @@ def new_post():
 
 @app.route('/all_user', methods=['GET', 'POST'])
 def all_user():
-    user = db_handler.get_all_users()
-    return render_template("all_user.html", user=user)
+    all_users = db_handler.get_all_users()
+    friendship ={}
+    for user in all_users:
+        if user['username'] != current_user.username:
+            this_user = db_handler.get_user_by_name(user['username'])
+            if current_user.username in this_user[0]['followers']:
+                friendship[user['username']] = True
+                print(user['username'] + "true")
+            else:
+                friendship[user['username']] = False
+                print(user['username'] + "false")
+    return render_template("all_user.html", user=all_users, friendship=friendship)
 
 
 '''
