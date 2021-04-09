@@ -1,0 +1,25 @@
+[
+    {
+        "postid": 1,
+        "postowner": "David",
+        "info": {
+            "img": "https://a1db.s3.amazonaws.com/david_post1.jpeg",
+            "likes": 10,
+            "posttime": "timestamp",
+            "commentOwner": ["Mike", "Mike"],
+            "commentContent": ["Nice Post", "wow"]
+        }
+    },
+    {
+        "postid": 2,
+        "postowner": "David",
+        "info": {
+            "img": "https://a1db.s3.amazonaws.com/david_post2.jpeg",
+            "likes": 5,
+            "posttime": "timestamp",
+            "commentOwner": ["Mike"],
+            "commentContent": ["What a post!"]
+        }
+        
+    }
+]
