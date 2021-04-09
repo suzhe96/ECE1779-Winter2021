@@ -1,11 +1,11 @@
 [
     {
-        "userid": 0,
-        "name": "David",
+        "username": "David",
         "info" : {
             "profile_img": "https://a1db.s3.amazonaws.com/david_profile.jpeg",
+            "userposts": [1, 2],
             "bio": "Today is good",
-            "location": "Toronto",
+            "loc": "Toronto",
             "followers": [
                 "Marry"
             ],
@@ -16,12 +16,12 @@
         }
     },
     {
-        "userid": 1,
-        "name": "Mike",
+        "username": "Mike",
         "info": {
             "profile_img": "https://a1db.s3.amazonaws.com/mike_profile.jpeg",
+            "userposts": [],
             "bio": "Today is good",
-            "location": "Beijing",
+            "loc": "Beijing",
             "followers": [
                 "David"
             ],
