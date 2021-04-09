@@ -291,13 +291,15 @@ def put_post_comment(A, postid, content):
 A(username) posts new img(path to s3)
 '''
 def put_post(A, img):
+    # Update post
     table = dynamodb.Table('Posts')
     dt = datetime.utcnow()
     # Now we only count till the day
     posttime = str(dt.day * 24 * 60 * 60 + dt.hour * 60 * 60 + dt.minute * 60 + dt.second)
+    postid = str(uuid.uuid1())
     _ = table.put_item(
        Item={
-            'postid': str(uuid.uuid1()),
+            'postid': postid,
             'postowner': A,
             'img': img,
             'likes': 0,
@@ -306,6 +308,25 @@ def put_post(A, img):
             'commentContent': []
         }
     )
+
+    # Update userposts in users
+    table = dynamodb.Table('Users')
+    response = table.query(
+            KeyConditionExpression=Key('username').eq(A)
+        )
+    userposts = response['Items'][0]['userposts']
+    userposts.append(postid)
+
+    _ = table.update_item(
+       Key={
+            'username': A,
+        },
+        UpdateExpression = "set userposts = :u",
+        ExpressionAttributeValues = {
+           ':u': userposts,
+        }
+    )
+
 
 
 '''
