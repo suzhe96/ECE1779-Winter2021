@@ -3,7 +3,7 @@
         "username": "David",
         "info" : {
             "profile_img": "https://a1db.s3.amazonaws.com/david_profile.jpeg",
-            "userposts": [1, 2],
+            "userposts": ["1", "2"],
             "bio": "Today is good",
             "loc": "Toronto",
             "followers": [

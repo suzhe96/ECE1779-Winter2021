@@ -1,7 +1,9 @@
 from __future__ import print_function # Python 2/3 compatibility
 import boto3
 import json
+import uuid
 
+from datetime import datetime
 from boto3.dynamodb.conditions import Key, Attr
 import pdb
 
@@ -86,7 +88,7 @@ def get_posts_by_name(username):
     table = dynamodb.Table('Posts')
     for postid in postid_list:
         response = table.query(
-            KeyConditionExpression=Key('postid').eq(int(postid))
+            KeyConditionExpression=Key('postid').eq(postid)
         )
         for i in response['Items']:
             records.append(i)
@@ -200,3 +202,137 @@ def put_user_unfollowing(A, B):
         }
     )
 
+
+'''
+Like a post given by postid
+'''
+def put_post_likes(postid):
+    table = dynamodb.Table('Posts')
+
+    # Get likes
+    response = table.query(
+            KeyConditionExpression=Key('postid').eq(postid)
+        )
+    likes = response['Items'][0]['likes']
+    postowner = response['Items'][0]['postowner']
+    likes += 1
+
+    # Update Likes
+    _ = table.update_item(
+       Key={
+            'postid': postid,
+            'postowner': postowner
+        },
+        UpdateExpression = "set likes = :l",
+        ExpressionAttributeValues = {
+           ':l': likes
+        }
+    )
+
+
+'''
+Unlike a post given by postid
+'''
+def put_post_unlikes(postid):
+    table = dynamodb.Table('Posts')
+
+    # Get likes
+    response = table.query(
+            KeyConditionExpression=Key('postid').eq(postid)
+        )
+    likes = response['Items'][0]['likes']
+    postowner = response['Items'][0]['postowner']
+    likes -= 1
+
+    # Update Likes
+    _ = table.update_item(
+       Key={
+            'postid': postid,
+            'postowner': postowner
+        },
+        UpdateExpression = "set likes = :l",
+        ExpressionAttributeValues = {
+           ':l': likes
+        }
+    )
+
+
+'''
+A(username) comments on a post given by postid and content
+'''
+def put_post_comment(A, postid, content):
+    table = dynamodb.Table('Posts')
+
+    # Get commentOwner and commentContent
+    response = table.query(
+            KeyConditionExpression=Key('postid').eq(postid)
+        )
+    postowner = response['Items'][0]['postowner']
+    commentOwner = response['Items'][0]['commentOwner']
+    commentContent = response['Items'][0]['commentContent']
+    commentOwner.append(A)
+    commentContent.append(content)
+
+    # Update comment
+    _ = table.update_item(
+       Key={
+            'postid': postid,
+            'postowner': postowner
+        },
+        UpdateExpression = "set commentOwner = :owner, commentContent = :content",
+        ExpressionAttributeValues = {
+           ':owner': commentOwner,
+           ':content': commentContent
+        }
+    )
+
+
+'''
+A(username) posts new img(path to s3)
+'''
+def put_post(A, img):
+    # Update post
+    table = dynamodb.Table('Posts')
+    dt = datetime.utcnow()
+    # Now we only count till the day
+    posttime = str(dt.day * 24 * 60 * 60 + dt.hour * 60 * 60 + dt.minute * 60 + dt.second)
+    postid = str(uuid.uuid1())
+    _ = table.put_item(
+       Item={
+            'postid': postid,
+            'postowner': A,
+            'img': img,
+            'likes': 0,
+            'posttime': posttime,
+            'commentOwner': [],
+            'commentContent': []
+        }
+    )
+
+    # Update userposts in users
+    table = dynamodb.Table('Users')
+    response = table.query(
+            KeyConditionExpression=Key('username').eq(A)
+        )
+    userposts = response['Items'][0]['userposts']
+    userposts.append(postid)
+
+    _ = table.update_item(
+       Key={
+            'username': A,
+        },
+        UpdateExpression = "set userposts = :u",
+        ExpressionAttributeValues = {
+           ':u': userposts,
+        }
+    )
+
+
+
+'''
+Helper: return timedelta in minutes given timestamp(str)
+'''
+def get_timedelta_minute(timestamp):
+    dt = datetime.utcnow()
+    curtime = dt.day * 24 * 60 * 60 + dt.hour * 60 * 60 + dt.minute * 60 + dt.second
+    return  (curtime - int(timestamp)) / 60

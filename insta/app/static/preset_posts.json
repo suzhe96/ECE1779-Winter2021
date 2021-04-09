@@ -1,6 +1,6 @@
 [
     {
-        "postid": 1,
+        "postid": "1",
         "postowner": "David",
         "info": {
             "img": "https://a1db.s3.amazonaws.com/david_post1.jpeg",
@@ -11,7 +11,7 @@
         }
     },
     {
-        "postid": 2,
+        "postid": "2",
         "postowner": "David",
         "info": {
             "img": "https://a1db.s3.amazonaws.com/david_post2.jpeg",
@@ -20,6 +20,5 @@
             "commentOwner": ["Mike"],
             "commentContent": ["What a post!"]
         }
-        
     }
 ]
