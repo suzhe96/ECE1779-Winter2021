@@ -46,51 +46,53 @@
 </head>
 <body>
     <section class="container_index">
-     {%  for user in user %}
-        {% for post in user['posts']  %}
-        <div class="card_index">
-                <img class="resize" src="https://images.unsplash.com/photo-1513721032312-6a18a42c8763?w=152&h=152&fit=crop&crop=faces"/>
-            <div class="profile-info">
-                <div class="name">{{ user['username'] }}</div>
-                <div class="location">{{ user['location'] }}</div>
-            </div>
-            <div class ="time">1hr</div>
-            <div class="image">
-                <img style='height: auto; width: 100%; object-fit: contain' src={{ post['image_source'] }}/>
-            </div>
-            <div class = "card-footer">
-                <div>
-                    <span id="post{{ post.post_id }}">
-                        <button class="likes">
-                            <i class="fa fa-heart" aria-hidden="true" ></i>
-                        </button>
-                        <div class = "name"> {{ post.likes }} likes </div>
-                    </span>
+     {%  for user in users %}
+        {% if user in posts %}
+            {% for post in posts[user]  %}
+            <div class="card_index">
+                    <img class="resize" src="{{  users[user]['profile_img'] }}"/>
+                <div class="profile-info">
+                    <div class="name">{{ users[user]['username'] }}</div>
+                    <div class="location">{{ users[user]['loc'] }}</div>
                 </div>
-                <div class="description">
-                    <p>
-                        <span>This is wonderful world to live in</span>
-                    </p>
+                <div class ="time">1hr</div>
+                <div class="image">
+                    <img style='height: auto; width: 100%; object-fit: contain' src="{{ post['img'] }}"/>
                 </div>
-                <div class="comments" id="comments{{ post.post_id }}">
-                    {% for comment in post['comments'] %}
-                    <p>
-                        <span class="username">{{ comment['username'] }}</span>:
-                        <span>{{ comment['comment']}}</span>
-                    </p>
-                     {% endfor %}
-                </div>
-                <div class="view-btn-container">
-                    <button class="btn" id="btn{{ post.post_id }}" onclick = "read_more('comments{{ post.post_id }}' , 'btn{{ post.post_id }}')">Read Less</button>
-                </div>
-                <hr/>
-                    <div class="add-comment">
-                        <img class="resize" src="https://cdn1.dotesports.com/wp-content/uploads/2019/10/23101633/shockblade-zed.jpg"/>
-                        <input type="text" placeholder="add comment" />
+                <div class = "card-footer">
+                    <div>
+                        <span id="post{{ post ['postid'] }}">
+                            <button class="likes">
+                                <i class="fa fa-heart" aria-hidden="true" ></i>
+                            </button>
+                            <div class = "name"> {{ post['likes'] }} likes </div>
+                        </span>
                     </div>
+                    <div class="description">
+                        <p>
+                            <span>This is wonderful world to live in</span>
+                        </p>
+                    </div>
+                    <div class="comments" id="comments{{ post['postid'] }}">
+                        {% for comment in post['commentContent']  %}
+                        <p>
+                            <span class="username">{{ post['commentOwner'][loop.index-1 ] }}</span>:
+                            <span>{{ comment }}</span>
+                        </p>
+                         {% endfor %}
+                    </div>
+                    <div class="view-btn-container">
+                        <button class="btn" id="btn{{ post['postid'] }}" onclick = "read_more('comments{{ post['postid']}}' , 'btn{{ post['postid'] }}')">Read Less</button>
+                    </div>
+                    <hr/>
+                        <div class="add-comment">
+                            <img class="resize" src="{{ this_user['profile_img'] }}"/>
+                            <input type="text" placeholder="add comment" />
+                        </div>
+                </div>
             </div>
-        </div>
-        {% endfor %}
+            {% endfor %}
+         {% endif %}
     {% endfor %}
     </section>
 

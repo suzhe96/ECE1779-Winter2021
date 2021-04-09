@@ -16,7 +16,7 @@ def main():
     else:
         user = db_handler.get_user_by_name(current_user.username)
         user_posts = db_handler.get_posts_by_name(current_user.username)
-        return render_template("profile.html", user=user[0], posts=user_posts)
+        return render_template("profile.html", title = "My Profile", user=user[0], posts=user_posts)
 
 
 @app.route('/others_profile', methods=['GET', 'POST'])
@@ -34,7 +34,7 @@ def others_profile():
     else:
         friendship= False
         print("false")
-    return render_template("others_profile.html", user=user[0], posts=user_posts, friend=friendship)
+    return render_template("others_profile.html", title= "Others Profile", user=user[0], posts=user_posts, friend=friendship)
 
 
 
@@ -43,11 +43,20 @@ show the current all feed from the followings
 '''
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    #FIXME, need to get an dict of all followings of current user
-    filename = os.path.join(app.static_folder, 'current_user.json')
-    with open(filename) as json_file:
-        user = json.load(json_file)
-        return render_template("index.html", title="Feed", user=user)
+    this_user = db_handler.get_user_by_name(current_user.username)
+    all_followings_posts= {}
+    all_followings ={}
+    for username in this_user[0]['following']:
+        #following_user will have all user info from db
+        following_user = db_handler.get_user_by_name(username)
+        following_post={}
+        if following_user:
+            all_followings[username] = following_user[0]
+            # follwing post will have all posts of a user
+            following_post = db_handler.get_posts_by_name(username)
+        if following_post:
+            all_followings_posts[username] = following_post
+    return render_template("index.html", title="Feed", users=all_followings, posts=all_followings_posts, this_user=this_user[0])
 
 
 def update_likes(post_id):
@@ -98,7 +107,7 @@ def profile_follow():
     call_back=db_handler.get_user_by_name(user_to_follow)
     print("call_back username : " + call_back[0]['username'])
     user_posts = db_handler.get_posts_by_name(user_to_follow)
-    return render_template("others_profile.html", user=call_back[0], posts=user_posts, friend=True)
+    return render_template("others_profile.html",title = "Others Profile", user=call_back[0], posts=user_posts, friend=True)
 
 
 @app.route('/profile_unfollow', methods=['GET', 'POST'])
@@ -111,7 +120,7 @@ def profile_unfollow():
     call_back = db_handler.get_user_by_name(user_to_unfollow)
     print("call_back username : " + call_back[0]['username'])
     user_posts = db_handler.get_posts_by_name(user_to_unfollow)
-    return render_template("others_profile.html", user=call_back[0], posts=user_posts, friend=False)
+    return render_template("others_profile.html", title= "Others Profile", user=call_back[0], posts=user_posts, friend=False)
 
 
 '''
@@ -120,7 +129,7 @@ change the profile picture
 @app.route('/edit_profile', methods=['GET', 'POST'])
 def edit_profile():
     print("edit_profile")
-    return render_template("upload_profile_pic.html")
+    return render_template("upload_profile_pic.html", title= "Edit My Profile")
 
 
 @app.route('/change_profile_bio', methods=['GET', 'POST'])
@@ -138,7 +147,7 @@ def followers():
         followers_info = db_handler.get_user_by_name(username)
         if followers_info:
             all_users[username] = followers_info[0]
-    return render_template("followers.html", user=this_user[0], all_users=all_users)
+    return render_template("followers.html", title="Followers", user=this_user[0], all_users=all_users)
 
 
 @app.route('/followings', methods=['GET', 'POST'])
@@ -150,7 +159,7 @@ def followings():
         followings_info = db_handler.get_user_by_name(username)
         if followings_info:
             all_users[username] = followings_info[0]
-    return render_template("followings.html", user=this_user[0], all_users=all_users)
+    return render_template("followings.html", title="Followings", user=this_user[0], all_users=all_users)
 
 
 '''
@@ -159,7 +168,7 @@ for current user to send new post
 @app.route('/new_post', methods=['GET', 'POST'])
 def new_post():
     # need to change the bio for current user in the db
-    return render_template("send_new_post.html")
+    return render_template("send_new_post.html", title="New Post")
 
 
 @app.route('/all_user', methods=['GET', 'POST'])
@@ -175,7 +184,7 @@ def all_user():
             else:
                 friendship[user['username']] = False
                 print(user['username'] + "false")
-    return render_template("all_user.html", user=all_users, friendship=friendship)
+    return render_template("all_user.html", title="All Register users", user=all_users, friendship=friendship)
 
 
 '''
@@ -183,4 +192,4 @@ update the actual profile picture
 '''
 @app.route('/profile_pic_upload', methods=['GET', 'POST'])
 def profile_pic_upload():
-    return render_template("upload_profile_pic.html")
+    return render_template("upload_profile_pic.html", title="Upload Profile Picture")
