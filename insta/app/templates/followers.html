@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+    <head>
+       <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+        <title>Settings</title>
+     <style>
+            img.resize {
+                width : 30px;
+                height: 30px;
+                border-radius: 50%;
+                position: relative;
+                margin-right: 5px;
+                margin-left: 5px;
+            }
+            .follow{
+
+                font-family: 'Open Sans' , sans-serif;
+                font-size: 12px;
+                float: right;
+                display: inline-block;
+                position: relative;
+                margin-right:5px;
+                font-weight: 700;
+
+            }
+     </style>
+    </head>
+    <section class="container_index">
+        {%  for user in user %}
+                {% if user['followers']|length == 0 %}
+                   <h1> You Have No Followers Yet</h1>
+                {% else %}
+                <div class="card_index">
+                    <div class="image">
+                        <img class="resize" src="{{ user['profile_pic']}}" onclick = "other_profile()"/>
+                        <form id="view_other_profile" action="/others_profile" enctype="multipart/form-data" method='POST'>
+                            <input name="user_to_view" type="hidden" value="{{ user.username }}">
+                        </form>
+                    </div>
+                    <span class="profile-info">
+                        <div class="name">{{ user['username'] }}</div>
+                    </span>
+                    <button class="follow" id="btn{{ user.username}}" onclick = "toggle('{{ user.username }}' , 'btn{{ user.username }}','{{ current_user.username }}')">follow</button>
+                </div>
+                {% endif %}
+        {% endfor %}
+
+    </section>
+<script>
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    function toggle ( user_id, btn_id, current_user){
+      bt = document.getElementById(btn_id);
+      user = document.getElementById(user_id);
+        var elem = $(bt).text();
+        if (elem == "follow") {
+          $(bt).text("unfollow");
+          follow(user_id, current_user)
+        } else {
+          $(bt).text("follow");
+           unfollow(user_id, current_user)
+        }
+    };
+    function follow (user_to_follow, user){
+        $.getJSON($SCRIPT_ROOT + '/follow', {
+        user_to_follow: user_to_follow,
+        u: user
+        },function(data) {
+        $("#result").text(data.result);
+      });
+    };
+     function unfollow (user_to_unfollow, user){
+        $.getJSON($SCRIPT_ROOT + '/unfollow', {
+        user_to_unfollow: user_to_unfollow,
+        u: user
+        },function(data) {
+        $("#result").text(data.result);
+      });
+    };
+    function other_profile(){
+        $("#view_other_profile").submit();
+    }
+</script>
+{% endblock %}
