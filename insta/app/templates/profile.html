@@ -15,7 +15,7 @@
 
 			<div class="profile-image">
 
-				<img src={{ user.profile_pic }} alt="">
+				<img src={{ user.profile_img }} alt="">
 
 			</div>
 
@@ -33,16 +33,16 @@
 			<div class="profile-stats">
 
 				<ul>
-					<li><span class="profile-stat-count">{{ user['posts']|length }}</span> posts</li>
+					<li><span class="profile-stat-count">{{ user['userposts']|length }}</span> posts</li>
                     <li><span class="profile-stat-count"><button type="button" onclick="window.location.href='{{ url_for('followers') }}';" class="button button_custom"  id="followers"> {{ user['followers']|length }} Followers </button></span></li>
-					<li><span class="profile-stat-count"><button type="button" onclick="window.location.href='{{ url_for('followings') }}';" class="button button_custom"  id="followers"> {{ user['followings']|length }} Followings </button></span></li></span></li>
+					<li><span class="profile-stat-count"><button type="button" onclick="window.location.href='{{ url_for('followings') }}';" class="button button_custom"  id="followers"> {{ user['following']|length }} Followings </button></span></li>
 				</ul>
 
 			</div>
 
 			<div class="profile-bio">
 
-				<p><span class="profile-real-name"></span>{{ user['profile_bio'] }}</p>
+				<p><span class="profile-real-name"></span>{{ user['bio'] }}</p>
 
 			</div>
 
@@ -59,16 +59,16 @@
 	<div class="container">
 
 		<div class="gallery">
-            {% for post in user['posts']  %}
+            {% for post in posts  %}
 			<div class="gallery-item" tabindex="0">
 
-				<img src={{post['image_source']}} class="gallery-image" alt="">
+				<img src={{post['img']}} class="gallery-image" alt="">
 
 				<div class="gallery-item-info">
 
 					<ul>
 						<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> {{ post['likes'] }}</li>
-						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> {{ post['comments']|length }}</li>
+						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> {{ post['commentOwner']|length }}</li>
 					</ul>
 
 				</div>

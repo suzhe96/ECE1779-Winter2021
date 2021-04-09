@@ -33,7 +33,7 @@
             {% if current_user.username != user.username %}
                 <div class="card_index">
                     <div class="image">
-                        <img class="resize" src="{{ user['profile_pic']}}" onclick = "other_profile()"/>
+                        <img class="resize" src="{{ user['profile_img']}}" onclick = "other_profile()"/>
                         <form id="view_other_profile" action="/others_profile" enctype="multipart/form-data" method='POST'>
                             <input name="user_to_view" type="hidden" value="{{ user.username }}">
                         </form>

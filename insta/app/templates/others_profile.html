@@ -15,7 +15,7 @@
 
 			<div class="profile-image">
 
-				<img src={{ user.profile_pic }} alt="">
+				<img src={{ user.profile_img }} alt="">
 
 			</div>
 
@@ -33,9 +33,9 @@
 			<div class="profile-stats">
 
 				<ul>
-					<li><span class="profile-stat-count">{{ user['posts']|length }}</span> posts</li>
+					<li><span class="profile-stat-count">{{ user['userposts']|length }}</span> posts</li>
                     <li><span class="profile-stat-count"><button type="button" onclick="window.location.href='{{ url_for('followers') }}';" class="button button_custom"  id="followers"> {{ user['followers']|length }} Followers </button></span></li>
-					<li><span class="profile-stat-count"><button type="button" onclick="window.location.href='{{ url_for('followings') }}';" class="button button_custom"  id="followers"> {{ user['followings']|length }} Followings </button></span></li></span></li>
+					<li><span class="profile-stat-count"><button type="button" onclick="window.location.href='{{ url_for('followings') }}';" class="button button_custom"  id="followers"> {{ user['following']|length }} Followings </button></span></li></span></li>
 				</ul>
 
 			</div>
