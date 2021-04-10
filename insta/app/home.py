@@ -53,6 +53,7 @@ def index():
     this_user = db_handler.get_user_by_name(current_user.username)
     all_followings_posts= {}
     all_followings ={}
+    post_time={}
     for username in this_user[0]['following']:
         #following_user will have all user info from db
         following_user = db_handler.get_user_by_name(username)
@@ -61,9 +62,18 @@ def index():
             all_followings[username] = following_user[0]
             # follwing post will have all posts of a user
             following_post = db_handler.get_posts_by_name(username)
+            for post in following_post:
+                time_diff = int (db_handler.get_timedelta_minute(post['posttime']))
+                if time_diff < 60:
+                    time_diff = str(time_diff) + " min"
+                elif time_diff >= 60 and time_diff <=1440:
+                    time_diff = str(int (time_diff / 60)) + " hr"
+                else:
+                    time_diff = str(int (time_diff / 1440 )) + " day"
+                post_time[post['postid']]= time_diff
         if following_post:
             all_followings_posts[username] = following_post
-    return render_template("index.html", title="Feed", users=all_followings, posts=all_followings_posts, this_user=this_user[0])
+    return render_template("index.html", title="Feed", users=all_followings, posts=all_followings_posts, this_user=this_user[0], post_time=post_time)
 
 
 def update_likes(post_id):

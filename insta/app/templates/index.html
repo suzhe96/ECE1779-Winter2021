@@ -70,7 +70,7 @@
                     <div class="name">{{ users[user]['username'] }}</div>
                     <div class="location">{{ users[user]['loc'] }}</div>
                 </div>
-                <div class ="time">1hr</div>
+                <div class ="time">{{ post_time[post['postid']] }}</div>
                 <div class="image">
                     <img style='height: auto; width: 100%; object-fit: contain' src="{{ post['img'] }}"/>
                 </div>
