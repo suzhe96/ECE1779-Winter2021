@@ -85,7 +85,7 @@
                     </div>
                     <div class="description">
                         <p>
-                            <span>This is wonderful world to live in</span>
+                            <span>{{ post['postcontent'] }}</span>
                         </p>
                     </div>
                     <div class="comments" id="comments{{ post['postid'] }}">
@@ -102,7 +102,7 @@
                     <hr/>
                         <div class="add-comment">
                             <img class="resize" src="{{ this_user['profile_img'] }}"/>
-                            <textarea class="commentBox" style=" width: 400px;" placeholder="Place your comments here" type="textarea"></textarea>
+                            <textarea class="commentBox" id ="box{{ post['postid'] }}" style=" width: 400px;" placeholder="Place your comments here" type="textarea"></textarea>
                             <button id = "post" onclick="leave_comment('{{ current_user.username }}', '{{ post['postid'] }}')">Post</button>
                         </div>
                 </div>
@@ -123,10 +123,13 @@
         };
 
         function leave_comment(cur_user, postid) {
-                var comment = $('.commentBox').val();
-                $('<span class="username" style="display:block;">').text(cur_user + " : " + comment).appendTo('.comments');
-                $('.commentBox').val('');
-                backend_add_comment(cur_user, postid, comment)
+                var box_id = "box".concat(postid);
+                var comment_id = "comments".concat(postid);
+                var comment = document.getElementById(box_id).value;
+                var new_text= $('<span class="username" style="display:block;">').text(cur_user + " : " + comment);
+                new_text.appendTo(document.getElementById(comment_id));
+                document.getElementById(box_id).value = '';
+                 backend_add_comment(cur_user, postid, comment)
 
         };
 

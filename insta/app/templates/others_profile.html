@@ -6,6 +6,16 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
         <title>Profile</title>
+        <style>
+            img.resize {
+                width : 200px;
+                height: 200px;
+                border-radius: 50%;
+                position: relative;
+                margin-right: 5px;
+                margin-left: 5px;
+            }
+        </style>
 </head>
 <header>
 
@@ -15,7 +25,7 @@
 
 			<div class="profile-image">
 
-				<img src={{ user.profile_img }} alt="">
+				<img  class= "resize" src={{ user.profile_img }} alt="">
 
 			</div>
 
