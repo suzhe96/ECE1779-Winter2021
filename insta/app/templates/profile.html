@@ -6,6 +6,9 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
         <title>Profile</title>
+        <style>
+
+        </style>
 </head>
 <header>
 
@@ -68,21 +71,22 @@
             {% for post in posts  %}
 			<div class="gallery-item" tabindex="0">
 
-				<img src={{post['img']}} class="gallery-image" alt="">
+				<img src="{{post['img']}}" class="gallery-image" alt=""/>
 
 				<div class="gallery-item-info">
 
 					<ul>
 						<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> {{ post['likes'] }}</li>
-						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> {{ post['commentOwner']|length }}</li>
+						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true" onclick="view_comments();"></i> {{ post['commentOwner']|length }}</li>
 					</ul>
 
 				</div>
 
 			</div>
+                 <form id="view_comments" action="/view_comments" enctype="multipart/form-data" method='POST'>
+                    <input name="post_id" type="hidden" value="{{ post['postid'] }}">
+                </form>
             {% endfor %}
-
-
 		</div>
 		<!-- End of gallery -->
 
@@ -99,6 +103,11 @@
          function submit_view_followings(){
         $("#view_followings").submit();
         };
+
+         function view_comments(){
+             $("#view_comments").submit();
+         };
+
 
 </script>
 </main>
