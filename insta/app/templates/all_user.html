@@ -33,8 +33,8 @@
             {% if current_user.username != user.username %}
                 <div class="card_index">
                     <div class="image">
-                        <img class="resize" src="{{ user['profile_img']}}" onclick = "other_profile()"/>
-                        <form id="view_other_profile" action="/others_profile" enctype="multipart/form-data" method='POST'>
+                        <img class="resize" src="{{ user['profile_img']}}" onclick = "other_profile('{{ user['username'] }}')"/>
+                        <form id="view_other_profile{{ user['username'] }}" action="/others_profile" enctype="multipart/form-data" method='POST'>
                             <input name="user_to_view" type="hidden" value="{{ user.username }}">
                         </form>
                     </div>
@@ -81,8 +81,9 @@
         $("#result").text(data.result);
       });
     };
-    function other_profile(){
-        $("#view_other_profile").submit();
+    function other_profile(username){
+        var other_id = "view_other_profile".concat(username)
+        document.getElementById(other_id).submit();
     }
 </script>
 {% endblock %}
