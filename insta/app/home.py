@@ -23,7 +23,7 @@ def main():
     else:
         user = db_handler.get_user_by_name(current_user.username)
         user_posts = db_handler.get_posts_by_name(current_user.username)
-        return render_template("profile.html", title = "My Profile", user=user[0], posts=user_posts)
+        return render_template("profile.html", title="My Profile", user=user[0], posts=user_posts)
 
 
 @app.route('/others_profile', methods=['GET', 'POST'])
@@ -208,6 +208,7 @@ def all_user():
     for user in all_users:
         if user['username'] != current_user.username:
             this_user = db_handler.get_user_by_name(user['username'])
+            print(this_user[0]['followers'])
             if current_user.username in this_user[0]['followers']:
                 friendship[user['username']] = True
                 print(user['username'] + "true")
@@ -261,5 +262,6 @@ def post_comment():
 @app.route('/view_comments', methods=['GET', 'POST'])
 def view_comments():
     print("view_comments")
-    user_to_follow = request.form['post_id']
-    return render_template("view_comments.html")
+    post_id= request.form['post_id']
+    post_info = db_handler.get_post_by_postid(post_id)
+    return render_template("view_comments.html", title="view comments", post=post_info[0])

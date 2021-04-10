@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
+    <head>
+         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <title>View Comments</title>
+
+</head>
 <body>
     <section class="container_index">
-     {%  for user in users %}
-        {% if user in posts %}
-            {% for post in posts[user]  %}
-                <form id="view_other_profile" action="/others_profile" enctype="multipart/form-data" method='POST'>
-                            <input name="user_to_view" type="hidden" value="{{ user }}">
-                </form>
             <div class="card_index">
                 <div class="image">
                     <img style='height: auto; width: 100%; object-fit: contain' src="{{ post['img'] }}"/>
@@ -15,7 +17,7 @@
                 <div class = "card-footer">
                     <div class="description">
                         <p>
-                            <span>This is wonderful world to live in</span>
+                            <span>{{ post['postcontent'] }}</span>
                         </p>
                     </div>
                     <div class="comments" id="comments{{ post['postid'] }}">
@@ -26,15 +28,8 @@
                         </p>
                          {% endfor %}
                     </div>
-                    <div class="view-btn-container">
-                        <button class="btn" id="btn{{ post['postid'] }}" onclick = "read_more('comments{{ post['postid']}}' , 'btn{{ post['postid'] }}')">Read Less</button>
-                    </div>
                 </div>
             </div>
-            {% endfor %}
-         {% endif %}
-    {% endfor %}
     </section>
-
 </body>
 {% endblock %}

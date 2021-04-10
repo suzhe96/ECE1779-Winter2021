@@ -77,6 +77,7 @@
 
 		<div class="gallery">
             {% for post in posts  %}
+
 			<div class="gallery-item" tabindex="0">
 
 				<img src="{{post['img']}}" class="gallery-image" alt=""/>
@@ -85,21 +86,20 @@
 
 					<ul>
 						<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> {{ post['likes'] }}</li>
-						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true" onclick="view_comments();"></i> {{ post['commentOwner']|length }}</li>
+						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true" onclick="view_comments('{{ post['postid'] }}');"></i> {{ post['commentOwner']|length }}</li>
 					</ul>
 
 				</div>
 
 			</div>
-                 <form id="view_comments" action="/view_comments" enctype="multipart/form-data" method='POST'>
-                    <input name="post_id" type="hidden" value="{{ post['postid'] }}">
-                </form>
             {% endfor %}
 		</div>
 		<!-- End of gallery -->
-
-
-	</div>
+    {% for post in posts  %}
+       <form id="view_comments{{ post['postid'] }}" action="/view_comments" enctype="multipart/form-data" method='POST'>
+                    <input name="post_id" type="hidden" value="{{ post['postid'] }}">
+       </form>
+    {% endfor %}
 	<!-- End of container -->
 <script>
 
@@ -112,8 +112,9 @@
         $("#view_followings").submit();
         };
 
-         function view_comments(){
-             $("#view_comments").submit();
+        function view_comments(postid){
+              var post_id = "view_comments".concat(postid)
+             document.getElementById(post_id).submit();
          };
 
 
