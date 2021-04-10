@@ -437,6 +437,54 @@ def put_post(A, img):
     )
 
 
+def put_user(A, bio, loc):
+    table = dynamodb.Table('Users')
+    _ = table.put_item(
+        Item = {
+            'username': A,
+            'profile_img': 'https://a1db.s3.amazonaws.com/blank_profile_pic.png',
+            'userposts': [],
+            'bio': bio,
+            'loc': loc,
+            'followers': [],
+            'following': []
+        }
+    )
+
+
+'''
+update user info given username
+'''
+def put_user_info(username, _img=None, _bio=None, _loc=None):
+    table = dynamodb.Table('Users')
+
+    response = table.query(
+            KeyConditionExpression=Key('username').eq(username)
+        )
+    profile_img = response['Items'][0]['profile_img']
+    bio = response['Items'][0]['bio']
+    loc = response['Items'][0]['loc']
+
+    if _img is not None:
+        profile_img = _img
+    if _bio is not None:
+        bio = _bio
+    if _loc is not None:
+        loc = _loc
+
+    _ = table.update_item(
+       Key={
+            'username': username,
+        },
+        UpdateExpression = "set profile_img = :img, bio = :b, loc = :l",
+        ExpressionAttributeValues = {
+           ':img': profile_img,
+           ':b': bio,
+           ':l': loc
+        }
+    )
+
+
 if __name__ == "__main__":
     # delete_table()
     # create_table()
@@ -450,5 +498,7 @@ if __name__ == "__main__":
     # put_post_unlikes(1)
     # put_post_comment("Mike", "2", "ddb test")
     # put_post("Mike", "https://a1db.s3.amazonaws.com/david_post1.jpeg")
+    # put_user("Terry", "I'm terry", "Shanghai")
+    # put_user_info("Terry", _img="https://a1db.s3.amazonaws.com/blank_profile_pic.png", _bio="updated")
     
 

@@ -81,8 +81,9 @@ def get_posts_by_name(username):
     response = table.query(
             KeyConditionExpression=Key('username').eq(username)
         )
-    postid_list = response['Items'][0]['userposts']
-
+    postid_list = []
+    if response['Items'][0]['userposts']:
+        postid_list = response['Items'][0]['userposts']
     # Get all posts
     records = []
     table = dynamodb.Table('Posts')
@@ -123,6 +124,7 @@ def get_user_by_name(username):
 
 '''
 A(username) follows B(username)
+Here the validation reply on caller, make sure A has not yet followed B
 '''
 def put_user_following(A, B):
     table = dynamodb.Table('Users')
@@ -163,6 +165,7 @@ def put_user_following(A, B):
 
 '''
 A(username) unfollows B(username)
+Here the validation reply on caller, make sure A has already followed B
 '''
 def put_user_unfollowing(A, B):
     table = dynamodb.Table('Users')
@@ -205,6 +208,7 @@ def put_user_unfollowing(A, B):
 
 '''
 Like a post given by postid
+Here the validation reply on caller, make sure postid existed
 '''
 def put_post_likes(postid):
     table = dynamodb.Table('Posts')
@@ -232,6 +236,7 @@ def put_post_likes(postid):
 
 '''
 Unlike a post given by postid
+Here the validation reply on caller, make sure postid existed
 '''
 def put_post_unlikes(postid):
     table = dynamodb.Table('Posts')
@@ -259,6 +264,7 @@ def put_post_unlikes(postid):
 
 '''
 A(username) comments on a post given by postid and content
+Here the validation reply on caller, make sure postid existed
 '''
 def put_post_comment(A, postid, content):
     table = dynamodb.Table('Posts')
@@ -289,6 +295,7 @@ def put_post_comment(A, postid, content):
 
 '''
 A(username) posts new img(path to s3)
+Here the validation reply on caller, make sure user A existed
 '''
 def put_post(A, img):
     # Update post
@@ -326,6 +333,59 @@ def put_post(A, img):
            ':u': userposts,
         }
     )
+
+
+'''
+New user A registered with blank profile img(path to s3), loc, bio
+'''
+def put_user(A, bio, loc):
+    table = dynamodb.Table('Users')
+    _ = table.put_item(
+        Item = {
+            'username': A,
+            'profile_img': 'https://a1db.s3.amazonaws.com/blank_profile_pic.png',
+            'userposts': [],
+            'bio': bio,
+            'loc': loc,
+            'followers': [],
+            'following': []
+        }
+    )
+
+
+'''
+update user info given username
+'''
+def put_user_info(username, _img=None, _bio=None, _loc=None):
+    table = dynamodb.Table('Users')
+
+    response = table.query(
+            KeyConditionExpression=Key('username').eq(username)
+        )
+    profile_img = response['Items'][0]['profile_img']
+    bio = response['Items'][0]['bio']
+    loc = response['Items'][0]['loc']
+
+    if _img is not None:
+        profile_img = _img
+    if _bio is not None:
+        bio = _bio
+    if _loc is not None:
+        loc = _loc
+
+    _ = table.update_item(
+       Key={
+            'username': username,
+        },
+        UpdateExpression = "set profile_img = :img, bio = :b, loc = :l",
+        ExpressionAttributeValues = {
+           ':img': profile_img,
+           ':b': bio,
+           ':l': loc
+        }
+    )
+
+    
 
 
 
