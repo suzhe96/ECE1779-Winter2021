@@ -397,9 +397,9 @@ def put_post_comment(A, postid, content):
 
 
 '''
-A(username) posts new img(path to s3)
+A(username) posts new img(path to s3) with description
 '''
-def put_post(A, img):
+def put_post(A, img, description):
     # Update post
     table = dynamodb.Table('Posts')
     dt = datetime.utcnow()
@@ -413,6 +413,7 @@ def put_post(A, img):
             'img': img,
             'likes': 0,
             'posttime': posttime,
+            'postcontent': description,
             'commentOwner': [],
             'commentContent': []
         }
@@ -485,6 +486,21 @@ def put_user_info(username, _img=None, _bio=None, _loc=None):
     )
 
 
+'''
+Get post given postid
+'''
+def get_post_by_postid(postid):
+    table = dynamodb.Table('Posts')
+    records = []
+    response = table.query(
+            KeyConditionExpression=Key('postid').eq(postid)
+        )
+    for i in response['Items']:
+        records.append(i)
+
+    return records
+
+
 if __name__ == "__main__":
     # delete_table()
     # create_table()
@@ -497,8 +513,9 @@ if __name__ == "__main__":
     # put_post_likes(1)
     # put_post_unlikes(1)
     # put_post_comment("Mike", "2", "ddb test")
-    # put_post("Mike", "https://a1db.s3.amazonaws.com/david_post1.jpeg")
+    # put_post("Mike", "https://a1db.s3.amazonaws.com/david_post1.jpeg", "Hey!")
     # put_user("Terry", "I'm terry", "Shanghai")
     # put_user_info("Terry", _img="https://a1db.s3.amazonaws.com/blank_profile_pic.png", _bio="updated")
+    # print(get_post_by_postid("1"))
     
 

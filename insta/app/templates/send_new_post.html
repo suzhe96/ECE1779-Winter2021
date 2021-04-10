@@ -3,11 +3,11 @@
  <div class="main">
      <p class="sign" align="center">Send New Post</p>
         <form class="form1" enctype="multipart/form-data" action="" method="post" novalidate>
-                <input class="pass" accept=".png, .jpg, .jpeg" type="file" name="Image Upload" onchange="readURL(this);"><br/>
+                <input class="pass" accept=".png, .jpg, .jpeg" type="file" name="upload_image" onchange="readURL(this);"><br/>
                 <img id="blah" src=""/>
                  <div class="form-group">
-                    <textarea class="form-control status-box" rows="3" placeholder="Enter your description here..."></textarea>
-                  </div>
+                    <textarea class="form-control status-box" rows="3" placeholder="Enter your description here..." name="upload_text"></textarea>
+                </div>
                 <input type="submit" value="Upload"><br/>
         </form>
         <p align="center">

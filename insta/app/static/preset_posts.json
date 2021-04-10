@@ -4,8 +4,9 @@
         "postowner": "David",
         "info": {
             "img": "https://a1db.s3.amazonaws.com/david_post1.jpeg",
+            "postcontent": "This is wonderful world to live in!",
             "likes": 10,
-            "posttime": "timestamp",
+            "posttime": "841559",
             "commentOwner": ["Mike", "Mike"],
             "commentContent": ["Nice Post", "wow"]
         }
@@ -15,8 +16,9 @@
         "postowner": "David",
         "info": {
             "img": "https://a1db.s3.amazonaws.com/david_post2.jpeg",
+            "postcontent": "Nice.",
             "likes": 5,
-            "posttime": "timestamp",
+            "posttime": "841559",
             "commentOwner": ["Mike"],
             "commentContent": ["What a post!"]
         }

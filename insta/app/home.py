@@ -1,9 +1,16 @@
-from flask import render_template, redirect, url_for, jsonify, request
+from flask import render_template, redirect, url_for, jsonify, request, flash
 from app import app
 from app import ddb_handler as db_handler
 from flask_login import current_user
 import json
 import os
+import tempfile
+import uuid
+import boto3
+from wand.image import Image
+
+AWS_S3_DOMAIN = "https://a1db.s3.amazonaws.com/"
+AWS_S3_BUCKET = "a1db"
 
 
 '''
@@ -166,9 +173,32 @@ def followings():
 for current user to send new post
 '''
 @app.route('/new_post', methods=['GET', 'POST'])
-def new_post():
+def send_new_post():
     # need to change the bio for current user in the db
-    return render_template("send_new_post.html", title="New Post")
+    if request.method == 'POST':
+        image_file = request.files['upload_image']
+        image_text = request.form['upload_text']
+
+        if image_file.filename == '':
+            flash('Empty image', 'danger')
+            return render_template("send_new_post.html", title="New Post")
+
+        file_handle, path = tempfile.mkstemp()
+        filename_original = path+"_original.jpeg"
+        with Image(file=image_file) as img:
+            img.save(filename=filename_original)
+        s3_image_key = str(uuid.uuid4())+".png"
+        s3_image_data = open(filename_original, "rb").read()
+        s3_cli = boto3.client('s3', region_name='us-east-1')
+        s3_cli.put_object(Bucket=AWS_S3_BUCKET, Key=s3_image_key, Body=s3_image_data, ACL='public-read')
+
+        db_handler.put_post(current_user.username, AWS_S3_DOMAIN+s3_image_key, image_text)
+
+        os.remove(path)
+        os.remove(filename_original)
+        return redirect(url_for('main'))
+    else:
+        return render_template("send_new_post.html", title="New Post")
 
 
 @app.route('/all_user', methods=['GET', 'POST'])
@@ -190,9 +220,30 @@ def all_user():
 '''
 update the actual profile picture
 '''
-@app.route('/profile_pic_upload', methods=['GET', 'POST'])
-def profile_pic_upload():
-    return render_template("upload_profile_pic.html", title="Upload Profile Picture")
+@app.route('/upload_profile_pic', methods=['GET', 'POST'])
+def upload_profile_pic():
+    if request.method == 'POST':
+        image_file = request.files['upload_profile']
+        if image_file.filename == '':
+            flash('Empty profile image', 'danger')
+            return render_template("upload_profile_pic.html", title="Upload Profile Picture")
+        file_handle, path = tempfile.mkstemp()
+        filename_original = path+"_original.jpeg"
+        with Image(file=image_file) as img:
+            img.save(filename=filename_original)
+
+        s3_image_key = str(uuid.uuid4())+".png"
+        s3_image_data = open(filename_original, "rb").read()
+        s3_cli = boto3.client('s3', region_name='us-east-1')
+        s3_cli.put_object(Bucket=AWS_S3_BUCKET, Key=s3_image_key, Body=s3_image_data, ACL='public-read')
+
+        db_handler.put_user_info(current_user.username, _img=AWS_S3_DOMAIN+s3_image_key)
+        os.remove(path)
+        os.remove(filename_original)
+        return redirect(url_for('main'))
+
+    else:
+        return render_template("upload_profile_pic.html", title="Upload Profile Picture")
 
 '''
 post new comment by followers

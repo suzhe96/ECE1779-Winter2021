@@ -71,7 +71,8 @@ RETURN FORMAT
         'commentOwner': ['Mike'],
         'postid': Decimal('2'),
         'posttime': 'timestamp',
-        'postowner': 'David'
+        'postowner': 'David',
+        'postcontent': 'This is wonderful world to live in!'
     }
 ]
 '''
@@ -96,6 +97,21 @@ def get_posts_by_name(username):
 
     return records
 
+
+
+'''
+Get post given postid
+'''
+def get_post_by_postid(postid):
+    table = dynamodb.Table('Posts')
+    records = []
+    response = table.query(
+            KeyConditionExpression=Key('postid').eq(postid)
+        )
+    for i in response['Items']:
+        records.append(i)
+
+    return records
 
 '''
 [
@@ -294,10 +310,10 @@ def put_post_comment(A, postid, content):
 
 
 '''
-A(username) posts new img(path to s3)
+A(username) posts new img(path to s3) with description
 Here the validation reply on caller, make sure user A existed
 '''
-def put_post(A, img):
+def put_post(A, img, description):
     # Update post
     table = dynamodb.Table('Posts')
     dt = datetime.utcnow()
@@ -311,6 +327,7 @@ def put_post(A, img):
             'img': img,
             'likes': 0,
             'posttime': posttime,
+            'postcontent': description,
             'commentOwner': [],
             'commentContent': []
         }
@@ -384,6 +401,7 @@ def put_user_info(username, _img=None, _bio=None, _loc=None):
            ':l': loc
         }
     )
+
 
     
 

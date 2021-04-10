@@ -30,7 +30,7 @@
                   {% else %}
                       <li><a href="{{ url_for('main') }}"><i class="fa fa-user" aria-hidden="true"></i> My Profile</a></li>
                       <li><a href="{{ url_for('index') }}"><i class="fa fa-rss" aria-hidden="true"></i> Feed</a></li>
-                      <li><a href="{{ url_for('new_post') }}"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send New Post</a></li>
+                      <li><a href="{{ url_for('send_new_post') }}"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send New Post</a></li>
                       <li><a href="{{ url_for('logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
                       <li><a href="{{ url_for('all_user') }}"><i class="fa fa-users" aria-hidden="true"></i> All Users</a></li>
                   {% endif %}

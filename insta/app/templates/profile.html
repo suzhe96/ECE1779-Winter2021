@@ -24,7 +24,7 @@
 				<h1 class="profile-user-name">{{ user.username }}</h1>
 
                 {% if current_user.username == user.username %}
-				    <button onclick="window.location.href='{{ url_for('edit_profile') }}';" class="btn profile-edit-btn">Edit Profile</button>
+				    <button onclick="window.location.href='{{ url_for('upload_profile_pic') }}';" class="btn profile-edit-btn">Edit Profile</button>
                     <button onclick="window.location.href='{{ url_for('my_account') }}';" class="btn profile-settings-btn" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button>
                 {% endif %}
 

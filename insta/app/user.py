@@ -3,6 +3,7 @@ from app import app, db
 from app.form import LoginForm, RegistrationForm, ChangePasswordForm, RequestResetPasswordForm, ResetPasswordForm, DeletionForm
 from app.models import Users
 from flask_login import current_user, login_user, logout_user, login_required
+from app import ddb_handler as db_handler
 from werkzeug.urls import url_parse
 from flask_mail import Mail, Message
 from threading import Thread
@@ -149,6 +150,8 @@ def register():
         user.is_admin = user.username in current_app.config["ADMIN_USER"]
         db.session.add(user)
         db.session.commit()
+
+        db_handler.put_user(user.username, "", "")
         flash('Congratulations, you Have Successfully Registered!', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
