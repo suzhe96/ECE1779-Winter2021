@@ -205,3 +205,10 @@ def post_comment():
     comment = request.args.get('comment')
     db_handler.put_post_comment(cur_user, postid, comment)
     return jsonify(result="True")
+
+
+@app.route('/view_comments', methods=['GET', 'POST'])
+def view_comments():
+    print("view_comments")
+    user_to_follow = request.form['post_id']
+    return render_template("view_comments.html")
