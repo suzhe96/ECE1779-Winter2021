@@ -58,17 +58,16 @@
 </head>
 <body>
     <section class="container_index">
-     {%  for user in users %}
-        {% if user in posts %}
-            {% for post in posts[user]  %}
+     {%  for time_stamp, posts in posts.items() %}
+         {% for user, post in posts.items() %}
                 <form id="view_other_profile" action="/others_profile" enctype="multipart/form-data" method='POST'>
                             <input name="user_to_view" type="hidden" value="{{ user }}">
                 </form>
             <div class="card_index">
-                    <img class="resize" src="{{  users[user]['profile_img'] }}" onclick = "other_profile()"/>
+                    <img class="resize" src="{{  users[post['postowner']]['profile_img'] }}" onclick = "other_profile()"/>
                 <div class="profile-info">
-                    <div class="name">{{ users[user]['username'] }}</div>
-                    <div class="location">{{ users[user]['loc'] }}</div>
+                    <div class="name">{{ users[post['postowner']]['username'] }}</div>
+                    <div class="location">{{ users[post['postowner']]['loc'] }}</div>
                 </div>
                 <div class ="time">{{ post_time[post['postid']] }}</div>
                 <div class="image">
@@ -107,8 +106,7 @@
                         </div>
                 </div>
             </div>
-            {% endfor %}
-         {% endif %}
+             {% endfor %}
     {% endfor %}
     </section>
 

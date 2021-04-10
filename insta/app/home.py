@@ -64,6 +64,7 @@ def index():
             following_post = db_handler.get_posts_by_name(username)
             for post in following_post:
                 time_diff = int (db_handler.get_timedelta_minute(post['posttime']))
+                time_order = time_diff
                 if time_diff < 60:
                     time_diff = str(time_diff) + " min"
                 elif time_diff >= 60 and time_diff <=1440:
@@ -71,9 +72,13 @@ def index():
                 else:
                     time_diff = str(int (time_diff / 1440 )) + " day"
                 post_time[post['postid']]= time_diff
-        if following_post:
-            all_followings_posts[username] = following_post
-    return render_template("index.html", title="Feed", users=all_followings, posts=all_followings_posts, this_user=this_user[0], post_time=post_time)
+                if following_post:
+                    all_followings_posts[time_order] = {username: post}
+        sorted_dict={}
+        sorted_time = sorted(all_followings_posts)
+        for time in sorted_time:
+            sorted_dict[time] = all_followings_posts[time]
+    return render_template("index.html", title="Feed", users=all_followings, posts=sorted_dict, this_user=this_user[0], post_time=post_time)
 
 
 def update_likes(post_id):
