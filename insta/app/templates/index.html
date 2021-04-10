@@ -42,6 +42,18 @@
                     transform: rotate(0deg) scale(1);
                 }
             }
+
+            section textarea {
+                width: 100%;
+                height: 70px;
+                padding: 5px;
+                outline: none;
+                font-size: 80%;
+                resize: vertical;
+                margin-bottom: 20px;
+                border: 1px solid #0EBFE9;
+                border-bottom: 4px solid #63D1F4;
+            }
         </style>
 </head>
 <body>
@@ -49,8 +61,11 @@
      {%  for user in users %}
         {% if user in posts %}
             {% for post in posts[user]  %}
+                <form id="view_other_profile" action="/others_profile" enctype="multipart/form-data" method='POST'>
+                            <input name="user_to_view" type="hidden" value="{{ user }}">
+                </form>
             <div class="card_index">
-                    <img class="resize" src="{{  users[user]['profile_img'] }}"/>
+                    <img class="resize" src="{{  users[user]['profile_img'] }}" onclick = "other_profile()"/>
                 <div class="profile-info">
                     <div class="name">{{ users[user]['username'] }}</div>
                     <div class="location">{{ users[user]['loc'] }}</div>
@@ -77,7 +92,7 @@
                         {% for comment in post['commentContent']  %}
                         <p>
                             <span class="username">{{ post['commentOwner'][loop.index-1 ] }}</span>:
-                            <span>{{ comment }}</span>
+                            <span class="username">{{ comment }}</span>
                         </p>
                          {% endfor %}
                     </div>
@@ -87,7 +102,8 @@
                     <hr/>
                         <div class="add-comment">
                             <img class="resize" src="{{ this_user['profile_img'] }}"/>
-                            <input type="text" placeholder="add comment" />
+                            <textarea class="commentBox" style=" width: 400px;" placeholder="Place your comments here" type="textarea"></textarea>
+                            <button id = "post" onclick="leave_comment('{{ current_user.username }}', '{{ post['postid'] }}')">Post</button>
                         </div>
                 </div>
             </div>
@@ -97,5 +113,35 @@
     </section>
 
 </body>
+
+    <script>
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+        function add_comments(post_id, cur_username){
+
+            $("#add_comment").submit();
+
+        };
+
+        function leave_comment(cur_user, postid) {
+                var comment = $('.commentBox').val();
+                $('<span class="username" style="display:block;">').text(cur_user + " : " + comment).appendTo('.comments');
+                $('.commentBox').val('');
+                backend_add_comment(cur_user, postid, comment)
+
+        };
+
+        function backend_add_comment (cur_user, postid, comment){
+            $.getJSON($SCRIPT_ROOT + '/post_comment', {
+            cur_user: cur_user,
+            postid: postid,
+            comment: comment
+            },function(data) {
+            $("#result").text(data.result);
+      });
+    };
+        function other_profile(){
+        $("#view_other_profile").submit();
+    }
+    </script>
 
 {% endblock %}

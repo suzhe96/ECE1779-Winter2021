@@ -193,3 +193,15 @@ update the actual profile picture
 @app.route('/profile_pic_upload', methods=['GET', 'POST'])
 def profile_pic_upload():
     return render_template("upload_profile_pic.html", title="Upload Profile Picture")
+
+'''
+post new comment by followers
+'''
+@app.route('/post_comment', methods=['GET', 'POST'])
+def post_comment():
+    print("post_comment")
+    cur_user = request.args.get('cur_user')
+    postid = request.args.get('postid')
+    comment = request.args.get('comment')
+    db_handler.put_post_comment(cur_user, postid, comment)
+    return jsonify(result="True")
