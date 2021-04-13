@@ -35,11 +35,11 @@
             {%  for username in user['followers'] %}
                 {% if username in all_users %}
                     <div class="card_index">
-                        <form id="view_other_profile" action="/others_profile" enctype="multipart/form-data" method='POST'>
+                        <form id="view_other_profile{{ username }}" action="/others_profile" enctype="multipart/form-data" method='POST'>
                             <input name="user_to_view" type="hidden" value="{{ all_users[username]['username'] }}">
                         </form>
                         <div class="image">
-                            <img class="resize" src="{{ all_users[username]['profile_img']}}" onclick = "other_profile()"/>
+                            <img class="resize" src="{{ all_users[username]['profile_img']}}" onclick = "other_profile('{{ username }}')"/>
                         </div>
                         <span class="profile-info">
                             <div class="name">{{ all_users[username]['username'] }}</div>
@@ -53,8 +53,9 @@
     </section>
     <script>
 
-        function other_profile(){
-            $("#view_other_profile").submit();
+        function other_profile(user){
+            user_profile= document.getElementById("view_other_profile".concat(user));
+            user_profile.submit();
         }
     </script>
 {% endblock %}

@@ -81,16 +81,21 @@ def index():
     return render_template("index.html", title="Feed", users=all_followings, posts=sorted_dict, this_user=this_user[0], post_time=post_time)
 
 
-def update_likes(post_id):
-    filename = os.path.join(app.static_folder, 'current_user.json')
-    print("in update likes")
-    with open(filename, "r+") as json_file:
-        all_posts = json.load(json_file)
-        for p in all_posts['posts']:
-            if p['post_id'] == post_id:
-                print("found")
-                p['likes'] = p['likes']+1
-        redirect(url_for('index'))
+@app.route('/increase_likes', methods=['GET', 'POST'])
+def increase_likes():
+    print("increase_likes")
+    postid = request.args.get('postid')
+    db_handler.put_post_likes(postid)
+    likes = db_handler.get_post_by_postid(postid)[0]['likes']
+    return jsonify(result=str(likes))
+
+@app.route('/decrease_likes', methods=['GET', 'POST'])
+def decrease_likes():
+    print("decrease_likes")
+    postid = request.args.get('postid')
+    db_handler.put_post_unlikes(postid)
+    likes = db_handler.get_post_by_postid(postid)[0]['likes']
+    return jsonify(result=str(likes))
 
 '''
 the follow and unfollow function are used for jquery in all_user tab only
@@ -226,10 +231,10 @@ def all_user():
             print(this_user[0]['followers'])
             if current_user.username in this_user[0]['followers']:
                 friendship[user['username']] = True
-                print(user['username'] + "true")
+                print(user['username'] + " true")
             else:
                 friendship[user['username']] = False
-                print(user['username'] + "false")
+                print(user['username'] + " false")
     return render_template("all_user.html", title="All Register users", user=all_users, friendship=friendship)
 
 

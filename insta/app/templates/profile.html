@@ -95,12 +95,13 @@
             {% endfor %}
 		</div>
 		<!-- End of gallery -->
-    {% for post in posts  %}
+	<!-- End of container -->
+    </div>
+ {% for post in posts  %}
        <form id="view_comments{{ post['postid'] }}" action="/view_comments" enctype="multipart/form-data" method='POST'>
                     <input name="post_id" type="hidden" value="{{ post['postid'] }}">
        </form>
     {% endfor %}
-	<!-- End of container -->
 <script>
 
 

@@ -22,7 +22,8 @@
             a{
                 color: #00000030;
             }
-            .heart i.fa-heart{
+            /**
+            .heart i{
                 color: #f44336;
             }
             .heart{
@@ -42,6 +43,7 @@
                     transform: rotate(0deg) scale(1);
                 }
             }
+            **/
 
             section textarea {
                 width: 100%;
@@ -60,11 +62,11 @@
     <section class="container_index">
      {%  for time_stamp, posts in posts.items() %}
          {% for user, post in posts.items() %}
-                <form id="view_other_profile" action="/others_profile" enctype="multipart/form-data" method='POST'>
+                <form id="view_other_profile{{ user }}" action="/others_profile" enctype="multipart/form-data" method='POST'>
                             <input name="user_to_view" type="hidden" value="{{ user }}">
                 </form>
             <div class="card_index">
-                    <img class="resize" src="{{  users[post['postowner']]['profile_img'] }}" onclick = "other_profile()"/>
+                    <img class="resize" src="{{  users[post['postowner']]['profile_img'] }}" onclick = "other_profile('{{ user }}')"/>
                 <div class="profile-info">
                     <div class="name">{{ users[post['postowner']]['username'] }}</div>
                     <div class="location">{{ users[post['postowner']]['loc'] }}</div>
@@ -75,11 +77,10 @@
                 </div>
                 <div class = "card-footer">
                     <div>
-                        <span id="post{{ post ['postid'] }}">
-                            <button class="likes">
-                                <i class="fa fa-heart" aria-hidden="true" ></i>
+                        <span>
+                            <button class="likes fa fa-heart" aria-hidden="true" id="like{{ post ['postid'] }}" style="color: black" onclick="toggle_like('{{ post['postid'] }}')">
                             </button>
-                            <div class = "name"> {{ post['likes'] }} likes </div>
+                            <div class = "name" id="like_num{{ post['postid'] }}"> {{ post['likes'] }} likes </div>
                         </span>
                     </div>
                     <div class="description">
@@ -127,7 +128,7 @@
                 var new_text= $('<span class="username" style="display:block;">').text(cur_user + " : " + comment);
                 new_text.appendTo(document.getElementById(comment_id));
                 document.getElementById(box_id).value = '';
-                 backend_add_comment(cur_user, postid, comment)
+                 backend_add_comment(cur_user, postid, comment);
 
         };
 
@@ -140,9 +141,42 @@
             $("#result").text(data.result);
       });
     };
-        function other_profile(){
-        $("#view_other_profile").submit();
+        function other_profile(user){
+            user_profile= document.getElementById("view_other_profile".concat(user));
+            user_profile.submit();
+    };
+
+    function toggle_like(post_id) {
+        var like = "like".concat(post_id);
+        like_id = document.getElementById(like);
+        color = like_id.style.color;
+        like_num_id = document.getElementById("like_num".concat(post_id));
+        if(color == "black"){
+             $(like_id).css('color', "red");
+             put_like(post_id);
+        }else{
+            $(like_id).css('color', "black");
+            put_unlike(post_id);
+        };
+    };
+
+    function put_like(post_id){
+        like_num_id = document.getElementById("like_num".concat(post_id));
+        $.getJSON($SCRIPT_ROOT + '/increase_likes', {
+            postid: post_id
+            },function(data) {
+                 $(like_num_id).text(data.result.concat(" likes"));
+        });
+    };
+    function put_unlike(post_id){
+        like_num_id = document.getElementById("like_num".concat(post_id));
+        $.getJSON($SCRIPT_ROOT + '/decrease_likes', {
+            postid: post_id
+            },function(data) {
+                 $(like_num_id).text(data.result.concat(" likes"));
+             });
     }
+
     </script>
 
 {% endblock %}
