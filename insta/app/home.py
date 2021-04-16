@@ -24,6 +24,7 @@ def main():
         user = db_handler.get_user_by_name(current_user.username)
         user_posts = db_handler.get_posts_by_name(current_user.username)
         return render_template("profile.html", title="My Profile", user=user[0], posts=user_posts)
+        #return render_template("upload_profile_pic.html")
 
 
 @app.route('/others_profile', methods=['GET', 'POST'])
@@ -227,6 +228,7 @@ def all_user():
     friendship ={}
     for user in all_users:
         if user['username'] != current_user.username:
+            print(user['username'])
             this_user = db_handler.get_user_by_name(user['username'])
             print(this_user[0]['followers'])
             if current_user.username in this_user[0]['followers']:

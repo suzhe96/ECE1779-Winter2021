@@ -78,7 +78,11 @@
                 <div class = "card-footer">
                     <div>
                         <span>
-                            <button class="likes fa fa-heart" aria-hidden="true" id="like{{ post ['postid'] }}" style="color: black" onclick="toggle_like('{{ post['postid'] }}')">
+                            {% if post['postid'] in this_user['userlikes'] %}
+                                <button class="likes fa fa-heart" aria-hidden="true" id="like{{ post ['postid'] }}" style="color: red" onclick="toggle_like('{{ post['postid'] }}')">
+                            {% else %}
+                                <button class="likes fa fa-heart" aria-hidden="true" id="like{{ post ['postid'] }}" style="color: black" onclick="toggle_like('{{ post['postid'] }}')">
+                            {% endif %}
                             </button>
                             <div class = "name" id="like_num{{ post['postid'] }}"> {{ post['likes'] }} likes </div>
                         </span>
