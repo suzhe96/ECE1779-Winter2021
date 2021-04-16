@@ -60,6 +60,28 @@ def create_table():
         }
     )
 
+    logTable = dynamodb.create_table(
+        TableName='Logs',
+        KeySchema=[
+            {
+                'AttributeName': 'actionTime',
+                'KeyType': 'HASH'  #Partition key
+            }
+        ],
+        AttributeDefinitions=[
+            {
+                'AttributeName': 'actionTime',
+                'AttributeType': 'S'
+            },
+
+        ],
+        ProvisionedThroughput={
+            'ReadCapacityUnits': 10,
+            'WriteCapacityUnits': 10
+        }
+    )
+    
+
 
 def delete_table():
     dynamodb = boto3.client('dynamodb', region_name='us-east-1')
@@ -68,6 +90,9 @@ def delete_table():
     )
     response = dynamodb.delete_table(
         TableName='Posts'
+    )
+    response = dynamodb.delete_table(
+        TableName='Logs'
     )
 
 
@@ -113,6 +138,26 @@ def import_data():
                Item = item
             )
     print("Finished import posts")
+
+    print("Import logs")
+    table = dynamodb.Table('Logs')
+    with open("app/static/preset_logs.json") as json_file:
+        logs = json.load(json_file)
+        for log in logs:
+            actionTime = log['actionTime']
+            info = log['info']
+
+            print("Adding log with actionTime {}".format(actionTime))
+
+            item = {
+                'actionTime': actionTime,
+            }
+            item.update(info)
+
+            table.put_item(
+               Item = item
+            )
+    print("Finished import logs")
 
 
 
@@ -315,7 +360,7 @@ def put_user_unfollowing(A, B):
 '''
 Like a post given by postid
 '''
-def put_post_likes(postid):
+def put_post_likes(postid, username):
     table = dynamodb.Table('Posts')
 
     # Get likes
@@ -338,11 +383,27 @@ def put_post_likes(postid):
         }
     )
 
+    table = dynamodb.Table('Users')
+    response = table.query(
+            KeyConditionExpression=Key('username').eq(username)
+        )
+    userlikes = response['Items'][0]['userlikes']
+    userlikes.append(postid)
+    _ = table.update_item(
+       Key={
+            'username': username,
+        },
+        UpdateExpression = "set userlikes = :ul",
+        ExpressionAttributeValues = {
+           ':ul': userlikes,
+        }
+    )
+
 
 '''
 Unlike a post given by postid
 '''
-def put_post_unlikes(postid):
+def put_post_unlikes(postid, username):
     table = dynamodb.Table('Posts')
 
     # Get likes
@@ -362,6 +423,23 @@ def put_post_unlikes(postid):
         UpdateExpression = "set likes = :l",
         ExpressionAttributeValues = {
            ':l': likes
+        }
+    )
+
+
+    table = dynamodb.Table('Users')
+    response = table.query(
+            KeyConditionExpression=Key('username').eq(username)
+        )
+    userlikes = response['Items'][0]['userlikes']
+    userlikes.remove(postid)
+    _ = table.update_item(
+       Key={
+            'username': username,
+        },
+        UpdateExpression = "set userlikes = :ul",
+        ExpressionAttributeValues = {
+           ':ul': userlikes,
         }
     )
 
@@ -501,6 +579,29 @@ def get_post_by_postid(postid):
     return records
 
 
+def get_all_logs():
+    table = dynamodb.Table('Logs')
+    pe = "actionTime, actionType, actionDescription"
+    response = table.scan(
+        ProjectionExpression=pe,
+    )
+
+    records = []
+
+    for i in response['Items']:
+        records.append(i)
+
+    while 'LastEvaluatedKey' in response:
+        response = table.scan(
+            ProjectionExpression=pe,
+            ExclusiveStartKey=response['LastEvaluatedKey']
+            )
+        for i in response['Items']:
+            records.append(i)
+
+    return records
+
+
 if __name__ == "__main__":
     # delete_table()
     # create_table()
@@ -508,14 +609,15 @@ if __name__ == "__main__":
     # print(get_posts_by_name("David"))
     # print(get_user_by_name("David"))
     # print(get_all_users())
+    # print(get_all_logs())
     # put_user_following("Mike", "David")
     # put_user_unfollowing("Mike", "David")
-    # put_post_likes(1)
-    # put_post_unlikes(1)
-    # put_post_comment("Mike", "2", "ddb test")
-    # put_post("Mike", "https://a1db.s3.amazonaws.com/david_post1.jpeg", "Hey!")
-    # put_user("Terry", "I'm terry", "Shanghai")
-    # put_user_info("Terry", _img="https://a1db.s3.amazonaws.com/blank_profile_pic.png", _bio="updated")
+    # put_post_likes("1", "Mike")
+    # put_post_unlikes("1", "Mike")
+    # put_post_comment("Mike", "2", "ddb test2")
+    # put_post("SUZHE", "https://a1db.s3.amazonaws.com/david_post1.jpeg", "SUZHE TESTING4")
+    # put_user("SUZHE", "I'm ZHE", "Shanghai")
+    # put_user_info("Terry2", _img="https://a1db.s3.amazonaws.com/blank_profile_pic.png", _bio="updated")
     # print(get_post_by_postid("1"))
     
 

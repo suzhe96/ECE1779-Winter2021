@@ -85,7 +85,7 @@ def index():
 def increase_likes():
     print("increase_likes")
     postid = request.args.get('postid')
-    db_handler.put_post_likes(postid)
+    db_handler.put_post_likes(postid, current_user.username)
     likes = db_handler.get_post_by_postid(postid)[0]['likes']
     return jsonify(result=str(likes))
 
@@ -93,7 +93,7 @@ def increase_likes():
 def decrease_likes():
     print("decrease_likes")
     postid = request.args.get('postid')
-    db_handler.put_post_unlikes(postid)
+    db_handler.put_post_unlikes(postid, current_user.username)
     likes = db_handler.get_post_by_postid(postid)[0]['likes']
     return jsonify(result=str(likes))
 

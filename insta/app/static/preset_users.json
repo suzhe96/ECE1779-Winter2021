@@ -4,6 +4,7 @@
         "info" : {
             "profile_img": "https://a1db.s3.amazonaws.com/david_profile.jpeg",
             "userposts": ["1", "2"],
+            "userlikes": [],
             "bio": "Today is good",
             "loc": "Toronto",
             "followers": [
@@ -20,6 +21,7 @@
         "info": {
             "profile_img": "https://a1db.s3.amazonaws.com/mike_profile.jpeg",
             "userposts": [],
+            "userlikes": [],
             "bio": "Today is good",
             "loc": "Beijing",
             "followers": [

@@ -1,0 +1,30 @@
+[
+    {
+        "actionTime": "2021-04-16 08:47:20.322396",
+        "info" : {
+            "actionDescription": "New user registered: David",
+            "actionType": "INSERT"
+        }
+    },
+    {
+        "actionTime": "2021-04-16 08:48:20.322396",
+        "info" : {
+            "actionDescription": "New user registered: Mike",
+            "actionType": "INSERT"
+        }
+    },
+    {
+        "actionTime": "2021-04-16 08:49:20.322396",
+        "info" : {
+            "actionDescription": "New post from David: postid = 1",
+            "actionType": "INSERT"
+        }
+    },
+    {
+        "actionTime": "2021-04-16 08:50:20.322396",
+        "info" : {
+            "actionDescription": "New post from David: postid = 2",
+            "actionType": "INSERT"
+        }
+    }
+]

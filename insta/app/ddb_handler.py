@@ -120,6 +120,7 @@ def get_post_by_postid(postid):
         'profile_img': 'https://a1db.s3.amazonaws.com/david_profile.jpeg',
         'userposts': [Decimal('1'), Decimal('2')],
         'followers': ['Marry'],
+        'userlikes': ['1']
         'bio': 'Today is good',
         'username': 'David',
         'loc': 'Toronto'
@@ -223,10 +224,10 @@ def put_user_unfollowing(A, B):
 
 
 '''
-Like a post given by postid
+Like a post given by postid and username
 Here the validation reply on caller, make sure postid existed
 '''
-def put_post_likes(postid):
+def put_post_likes(postid, username):
     table = dynamodb.Table('Posts')
 
     # Get likes
@@ -249,12 +250,28 @@ def put_post_likes(postid):
         }
     )
 
+    table = dynamodb.Table('Users')
+    response = table.query(
+            KeyConditionExpression=Key('username').eq(username)
+        )
+    userlikes = response['Items'][0]['userlikes']
+    userlikes.append(postid)
+    _ = table.update_item(
+       Key={
+            'username': username,
+        },
+        UpdateExpression = "set userlikes = :ul",
+        ExpressionAttributeValues = {
+           ':ul': userlikes,
+        }
+    )
+
 
 '''
-Unlike a post given by postid
+Unlike a post given by postid and username
 Here the validation reply on caller, make sure postid existed
 '''
-def put_post_unlikes(postid):
+def put_post_unlikes(postid, username):
     table = dynamodb.Table('Posts')
 
     # Get likes
@@ -274,6 +291,23 @@ def put_post_unlikes(postid):
         UpdateExpression = "set likes = :l",
         ExpressionAttributeValues = {
            ':l': likes
+        }
+    )
+
+
+    table = dynamodb.Table('Users')
+    response = table.query(
+            KeyConditionExpression=Key('username').eq(username)
+        )
+    userlikes = response['Items'][0]['userlikes']
+    userlikes.remove(postid)
+    _ = table.update_item(
+       Key={
+            'username': username,
+        },
+        UpdateExpression = "set userlikes = :ul",
+        ExpressionAttributeValues = {
+           ':ul': userlikes,
         }
     )
 
@@ -403,7 +437,42 @@ def put_user_info(username, _img=None, _bio=None, _loc=None):
     )
 
 
-    
+
+'''
+[
+    {
+        'actionTime': '2021-04-16 08:47:20.322396',
+        'actionDescription': 'New user registered: David',
+        'actionType': 'INSERT'
+    },
+    {
+        'actionTime': '2021-04-16 08:48:20.322396',
+        'actionDescription': 'New user registered: Mike',
+        'actionType': 'INSERT'
+    }
+]
+'''
+def get_all_logs():
+    table = dynamodb.Table('Logs')
+    pe = "actionTime, actionType, actionDescription"
+    response = table.scan(
+        ProjectionExpression=pe,
+    )
+
+    records = []
+
+    for i in response['Items']:
+        records.append(i)
+
+    while 'LastEvaluatedKey' in response:
+        response = table.scan(
+            ProjectionExpression=pe,
+            ExclusiveStartKey=response['LastEvaluatedKey']
+            )
+        for i in response['Items']:
+            records.append(i)
+
+    return records
 
 
 
