@@ -20,6 +20,8 @@ show the current loged in user profile
 def main():
     if current_user.is_anonymous:
         return render_template("home.html")
+    elif current_user.is_admin:
+        return redirect(url_for('manager'))
     else:
         user = db_handler.get_user_by_name(current_user.username)
         user_posts = db_handler.get_posts_by_name(current_user.username)
@@ -287,3 +289,11 @@ def view_comments():
     post_id= request.form['post_id']
     post_info = db_handler.get_post_by_postid(post_id)
     return render_template("view_comments.html", title="view comments", post=post_info[0])
+
+
+@app.route('/manager', methods=['GET', 'POST'])
+def manager():
+    records ={}
+    records =db_handler.get_all_logs()
+    print(records)
+    return render_template("manager.html", title="manager", records = records)

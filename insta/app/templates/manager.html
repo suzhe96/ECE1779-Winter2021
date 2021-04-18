@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <style>
+        div.home_text_box{
+        background-color:whitesmoke;
+        height: auto;
+        width: 1300px;
+        text-align: center;
+        margin: 7em auto;
+        border-radius: 1.5em;
+        }
+        table {
+          border-collapse: separate;
+          border-spacing: 0 15px;
+        }
+
+        th {
+          background-color: #4287f5;
+          color: white;
+        }
+
+        th,
+        td {
+          width: auto;
+          text-align: center;
+          border: 1px solid black;
+          padding: 5px;
+        }
+    </style>
+    <div class="home_text_box">
+        <div class="container">
+          <div class="card border-0 shadow my-5">
+            <div class="card-body p-5">
+              <h1 class="font-weight-light">Hi {{ current_user.username }}!</h1>
+                    <p class="lead">You can view all the records</p>
+            </div>
+            <table style = "margin-left:auto;margin-right:auto">
+              {% for record in records %}
+                <tr>
+                    {% for item in record %}
+                    <td>{{ record[item]}}</td>
+                    {% endfor %}
+                </tr>
+              {% endfor %}
+            </table>
+          </div>
+        </div>
+    </div>
+
+
+{% endblock %}

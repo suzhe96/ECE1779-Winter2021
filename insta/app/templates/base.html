@@ -21,13 +21,17 @@
         <nav class="navbar navbar-inverse navbar-fixed-top">
           <div class="container-fluid">
             <div class="navbar-header">
-              <a class="navbar-brand" href="#">ECE1779 A3 Instagram</a>
             </div>
             <ul class="nav navbar-nav">
-                  {% if current_user.is_anonymous %}
+                   {% if current_user.is_admin %}
+                       <a class="navbar-brand" href="#">ECE1779 A3 Instagram Manager</a>
+                        <li><a href="{{ url_for('logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
+                  {% elif current_user.is_anonymous %}
+                       <a class="navbar-brand" href="#">ECE1779 A3 Instagram</a>
                       <li><a href="{{ url_for('login') }}"> <i class="fa fa-sign-in" aria-hidden="true"></i> Login</a><li>
                       <li><a href="{{ url_for('register') }}"><i class="fa fa-user-plus" aria-hidden="true"></i>Register</a></li>
                   {% else %}
+                       <a class="navbar-brand" href="#">ECE1779 A3 Instagram</a>
                       <li><a href="{{ url_for('main') }}"><i class="fa fa-user" aria-hidden="true"></i> My Profile</a></li>
                       <li><a href="{{ url_for('index') }}"><i class="fa fa-rss" aria-hidden="true"></i> Feed</a></li>
                       <li><a href="{{ url_for('send_new_post') }}"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send New Post</a></li>
