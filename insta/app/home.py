@@ -76,11 +76,15 @@ def index():
                     time_diff = str(int (time_diff / 1440 )) + " day"
                 post_time[post['postid']]= time_diff
                 if following_post:
+                    if time_order in all_followings_posts:
+                        time_order = time_order + 0.1
                     all_followings_posts[time_order] = {username: post}
         sorted_dict={}
         sorted_time = sorted(all_followings_posts)
         for time in sorted_time:
             sorted_dict[time] = all_followings_posts[time]
+        print (all_followings_posts)
+        print (sorted_dict)
     return render_template("index.html", title="Feed", users=all_followings, posts=sorted_dict, this_user=this_user[0], post_time=post_time)
 
 
