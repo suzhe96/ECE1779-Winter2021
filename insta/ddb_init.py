@@ -139,25 +139,25 @@ def import_data():
             )
     print("Finished import posts")
 
-    print("Import logs")
-    table = dynamodb.Table('Logs')
-    with open("app/static/preset_logs.json") as json_file:
-        logs = json.load(json_file)
-        for log in logs:
-            actionTime = log['actionTime']
-            info = log['info']
+    # print("Import logs")
+    # table = dynamodb.Table('Logs')
+    # with open("app/static/preset_logs.json") as json_file:
+    #     logs = json.load(json_file)
+    #     for log in logs:
+    #         actionTime = log['actionTime']
+    #         info = log['info']
 
-            print("Adding log with actionTime {}".format(actionTime))
+    #         print("Adding log with actionTime {}".format(actionTime))
 
-            item = {
-                'actionTime': actionTime,
-            }
-            item.update(info)
+    #         item = {
+    #             'actionTime': actionTime,
+    #         }
+    #         item.update(info)
 
-            table.put_item(
-               Item = item
-            )
-    print("Finished import logs")
+    #         table.put_item(
+    #            Item = item
+    #         )
+    # print("Finished import logs")
 
 
 

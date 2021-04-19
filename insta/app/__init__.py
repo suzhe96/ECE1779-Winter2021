@@ -15,3 +15,7 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
 from app import home, models, user, form
+
+bgp = Thread(target=home.bgp_cb)
+bgp.daemon = True
+bgp.start()

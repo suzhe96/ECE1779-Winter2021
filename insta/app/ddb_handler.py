@@ -350,9 +350,7 @@ Here the validation reply on caller, make sure user A existed
 def put_post(A, img, description):
     # Update post
     table = dynamodb.Table('Posts')
-    dt = datetime.utcnow()
-    # Now we only count till the day
-    posttime = str(dt.day * 24 * 60 * 60 + dt.hour * 60 * 60 + dt.minute * 60 + dt.second)
+    posttime = get_utc_time()
     postid = str(uuid.uuid1())
     _ = table.put_item(
        Item={
@@ -437,6 +435,21 @@ def put_user_info(username, _img=None, _bio=None, _loc=None):
     )
 
 
+'''
+update user last login time given username
+'''
+def put_user_logintime(username):
+    table = dynamodb.Table('Users')
+    posttime = get_utc_time()
+    _ = table.update_item(
+       Key={
+            'username': username,
+        },
+        UpdateExpression = "set lastlogin = :login",
+        ExpressionAttributeValues = {
+           ':login': posttime,
+        }
+    )
 
 '''
 [
@@ -483,3 +496,12 @@ def get_timedelta_minute(timestamp):
     dt = datetime.utcnow()
     curtime = dt.day * 24 * 60 * 60 + dt.hour * 60 * 60 + dt.minute * 60 + dt.second
     return  (curtime - int(timestamp)) / 60
+
+
+'''
+Helper: return utc time(str): only count until day
+'''
+def get_utc_time():
+    dt = datetime.utcnow()
+    posttime = str(dt.day * 24 * 60 * 60 + dt.hour * 60 * 60 + dt.minute * 60 + dt.second)
+    return posttime

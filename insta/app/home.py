@@ -7,10 +7,24 @@ import os
 import tempfile
 import uuid
 import boto3
+import uuid
+import time
 from wand.image import Image
 
 AWS_S3_DOMAIN = "https://a1db.s3.amazonaws.com/"
 AWS_S3_BUCKET = "a1db"
+AWS_S3_BUCKET_BGP = "s3lambdazhev2"
+
+
+
+def bgp_cb():
+    while True:
+        time.sleep(120)
+        s3 = boto3.resource('s3', region_name='us-east-1')
+        content = str(uuid.uuid1())
+        filename = "{}.txt".format(content)
+        s3.Object(AWS_S3_BUCKET_BGP, filename).put(Body=content)
+
 
 
 '''
@@ -25,6 +39,7 @@ def main():
     else:
         user = db_handler.get_user_by_name(current_user.username)
         user_posts = db_handler.get_posts_by_name(current_user.username)
+        db_handler.put_user_logintime(current_user.username)
         return render_template("profile.html", title="My Profile", user=user[0], posts=user_posts)
         #return render_template("upload_profile_pic.html")
 
@@ -295,5 +310,4 @@ def view_comments():
 def manager():
     records ={}
     records =db_handler.get_all_logs()
-    print(records)
     return render_template("manager.html", title="manager", records = records)

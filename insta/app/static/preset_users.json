@@ -7,11 +7,11 @@
             "userlikes": [],
             "bio": "Today is good",
             "loc": "Toronto",
+            "lastlogin": "1655226",
             "followers": [
-                "Marry"
+                "Mike"
             ],
             "following": [
-                "Terry",
                 "Mike"
             ]
         }
@@ -24,12 +24,43 @@
             "userlikes": [],
             "bio": "Today is good",
             "loc": "Beijing",
+            "lastlogin": "1655226",
             "followers": [
                 "David"
             ],
             "following": [
-                "Terry"
+                "David"
             ]
         }
-    }  
+    },
+    {
+        "username": "Zombie1",
+        "info": {
+            "profile_img": "https://a1db.s3.amazonaws.com/blank_profile_pic.png",
+            "userposts": ["3"],
+            "userlikes": [],
+            "bio": "I'm zombie 1",
+            "loc": "Area 51",
+            "lastlogin": "641559",
+            "followers": [
+            ],
+            "following": [
+            ]
+        }
+    },
+    {
+        "username": "Zombie2",
+        "info": {
+            "profile_img": "https://a1db.s3.amazonaws.com/blank_profile_pic.png",
+            "userposts": [],
+            "userlikes": [],
+            "bio": "I'm zombie 2",
+            "loc": "Area 51",
+            "lastlogin": "641559",
+            "followers": [
+            ],
+            "following": [
+            ]
+        }
+    }
 ]

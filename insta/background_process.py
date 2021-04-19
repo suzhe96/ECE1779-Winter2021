@@ -39,19 +39,17 @@ def parse_records(records):
         # now only handle two actions: insert or modify
         # case insert:
         if actionType == "INSERT" and table == "Posts":
-            print("INSERT POSTS")
             postowner = record['dynamodb']['Keys']['postowner']['S']
             postid = record['dynamodb']['Keys']['postid']['S']
             content = "{} new post: postid = {}".format(postowner, postid)
             ret.append([actionType, content])
         if actionType == "INSERT" and table == "Users":
-            print("INSERT USERS")
             username = record['dynamodb']['Keys']['username']['S']
             content = "new registered user {}".format(username)
             ret.append([actionType, content])
+        # case modify:
         if actionType == "MODIFY" and table == "Posts":
             # we care about the new comment on the post
-            print("MODIFY POSTS")
             postowner = record['dynamodb']['Keys']['postowner']['S']
             postid = record['dynamodb']['Keys']['postid']['S']
             newImageComment = record['dynamodb']['NewImage']
@@ -61,10 +59,7 @@ def parse_records(records):
                 commentContent = newImageComment['commentContent']['L'][-1]['S']
                 content = "{} comment on {}'s post({}): {}".format(commentOwner, postowner, postid, commentContent)
                 ret.append([actionType, content])
-
         if actionType == "MODIFY" and table == "Users":
-            print("MODIFY USERS")
-            print(record)
             username = record['dynamodb']['Keys']['username']['S']
             newImage = record['dynamodb']['NewImage']
             oldImage = record['dynamodb']['OldImage']
@@ -108,6 +103,17 @@ def parse_records(records):
                 oldlikes = oldImage['userlikes']['L'][-1]['S']
                 content = "{} unlikes the post {}".format(username, oldlikes)
                 ret.append([actionType, content])
+        # case remove:
+        if actionType == "REMOVE" and table == "Posts":
+            oldImage = record['dynamodb']['OldImage']
+            postowner = oldImage['postowner']['S']
+            postid = oldImage['postid']['S']
+            content = "{}'s post has been deleted: postid = {}".format(postowner, postid)
+            ret.append([actionType, content])
+        if actionType == "REMOVE" and table == "Users":
+            username = record['dynamodb']['OldImage']['username']['S']
+            content = "User {} has been deleted".format(username)
+            ret.append([actionType, content])
     return ret
         
 
