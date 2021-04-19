@@ -9,7 +9,7 @@ import uuid
 import boto3
 import uuid
 import time
-from wand.image import Image
+from PIL import Image as PILImage
 
 AWS_S3_DOMAIN = "https://a1db.s3.amazonaws.com/"
 AWS_S3_BUCKET = "a1db"
@@ -223,8 +223,8 @@ def send_new_post():
 
         file_handle, path = tempfile.mkstemp()
         filename_original = path+"_original.jpeg"
-        with Image(file=image_file) as img:
-            img.save(filename=filename_original)
+        with PILImage.open(image_file) as img:
+            img.save(filename_original)
         s3_image_key = str(uuid.uuid4())+".png"
         s3_image_data = open(filename_original, "rb").read()
         s3_cli = boto3.client('s3', region_name='us-east-1')
@@ -269,8 +269,8 @@ def upload_profile_pic():
             return render_template("upload_profile_pic.html", title="Upload Profile Picture")
         file_handle, path = tempfile.mkstemp()
         filename_original = path+"_original.jpeg"
-        with Image(file=image_file) as img:
-            img.save(filename=filename_original)
+        with PILImage(image_file) as img:
+            img.save(filename_original)
 
         s3_image_key = str(uuid.uuid4())+".png"
         s3_image_data = open(filename_original, "rb").read()

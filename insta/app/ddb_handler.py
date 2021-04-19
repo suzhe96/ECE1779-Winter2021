@@ -454,7 +454,7 @@ def put_user_logintime(username):
 '''
 [
     {
-        'actionTime': '2021-04-16 08:47:20.322396',
+        'actionTime': '2021-11-16 08:47:20.322396',
         'actionDescription': 'New user registered: David',
         'actionType': 'INSERT'
     },
@@ -485,7 +485,7 @@ def get_all_logs():
         for i in response['Items']:
             records.append(i)
 
-    return records
+    return sorted(records, key=lambda k: k['actionTime])
 
 
 
