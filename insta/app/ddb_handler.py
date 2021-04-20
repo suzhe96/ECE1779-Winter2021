@@ -485,7 +485,7 @@ def get_all_logs():
         for i in response['Items']:
             records.append(i)
 
-    return sorted(records, key=lambda k: k['actionTime])
+    return sorted(records, key=lambda k: k['actionTime'])
 
 
 
