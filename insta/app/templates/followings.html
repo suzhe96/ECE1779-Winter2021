@@ -35,7 +35,7 @@
             {%  for username in user['following'] %}
                 {% if username in all_users %}
                     <div class="card_index">
-                        <form id="view_other_profile{{ username }}" action="/others_profile" enctype="multipart/form-data" method='POST'>
+                        <form id="view_other_profile{{ username }}" action="{{url_for('others_profile')}}" enctype="multipart/form-data" method='POST'>
                             <input name="user_to_view" type="hidden" value="{{ all_users[username]['username'] }}">
                         </form>
                         <div class="image">

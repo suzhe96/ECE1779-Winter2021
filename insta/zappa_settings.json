@@ -3,7 +3,7 @@
         "app_function": "app.app",
         "aws_region": "us-east-1",
         "profile_name": "default",
-        "project_name": "insta",
+        "project_name": "instaZheV2",
         "runtime": "python3.8",
         "s3_bucket": "ece1779-a3-zhe-deploy",
         "http_methods": ["GET","POST"],

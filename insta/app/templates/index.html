@@ -62,7 +62,7 @@
     <section class="container_index">
      {%  for time_stamp, posts in posts.items() %}
          {% for user, post in posts.items() %}
-                <form id="view_other_profile{{ user }}" action="/others_profile" enctype="multipart/form-data" method='POST'>
+                <form id="view_other_profile{{ user }}" action="{{url_for('others_profile')}}" enctype="multipart/form-data" method='POST'>
                             <input name="user_to_view" type="hidden" value="{{ user }}">
                 </form>
             <div class="card_index">

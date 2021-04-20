@@ -44,10 +44,10 @@
 			<div class="profile-stats">
 
 				<ul>
-                    <form id="view_followers" action="/followers" enctype="multipart/form-data" method='POST'>
+                    <form id="view_followers" action="{{url_for('followers')}}" enctype="multipart/form-data" method='POST'>
                             <input name="user_to_view_followers" type="hidden" value="{{ user.username }}">
                     </form>
-                    <form id="view_followings" action="/followings" enctype="multipart/form-data" method='POST'>
+                    <form id="view_followings" action="{{url_for('followings')}}" enctype="multipart/form-data" method='POST'>
                             <input name="user_to_view_followings" type="hidden" value="{{ user.username }}">
                     </form>
 					<li><span class="profile-stat-count">{{ user['userposts']|length }}</span> posts</li>
@@ -98,7 +98,7 @@
 	<!-- End of container -->
     </div>
  {% for post in posts  %}
-       <form id="view_comments{{ post['postid'] }}" action="/view_comments" enctype="multipart/form-data" method='POST'>
+       <form id="view_comments{{ post['postid'] }}" action="{{url_for('view_comments')}}" enctype="multipart/form-data" method='POST'>
                     <input name="post_id" type="hidden" value="{{ post['postid'] }}">
        </form>
     {% endfor %}
