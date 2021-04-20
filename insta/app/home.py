@@ -7,9 +7,9 @@ import os
 import tempfile
 import uuid
 import boto3
-import uuid
 import time
 from PIL import Image as PILImage
+from threading import Thread
 
 AWS_S3_DOMAIN = "https://a1db.s3.amazonaws.com/"
 AWS_S3_BUCKET = "a1db"
@@ -17,13 +17,18 @@ AWS_S3_BUCKET_BGP = "s3lambdazhev2"
 
 
 
-def bgp_cb():
-    while True:
-        time.sleep(120)
-        s3 = boto3.resource('s3', region_name='us-east-1')
-        content = str(uuid.uuid1())
-        filename = "{}.txt".format(content)
-        s3.Object(AWS_S3_BUCKET_BGP, filename).put(Body=content)
+# def bgp_cb():
+#     while True:
+#         time.sleep(120)
+#         s3 = boto3.resource('s3', region_name='us-east-1')
+#         content = str(uuid.uuid1())
+#         filename = "{}.txt".format(content)
+#         s3.Object(AWS_S3_BUCKET_BGP, filename).put(Body=content)
+
+# bgp = Thread(target=bgp_cb)
+# bgp.daemon = True
+# bgp.start()
+# print("Zombie users cleaning thread has been started")
 
 
 
